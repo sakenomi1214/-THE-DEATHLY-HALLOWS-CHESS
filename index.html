@@ -1299,7 +1299,7 @@
             </span>
             <div class="mode-en">Single Player</div>
             <h3>一人游戏</h3>
-            <p>与「另一位勇士」对弈。对手会依照局面选择落子，也会在无路可走时停手。</p>
+            <p>与「另一位勇士」对弈。对手会依照局面选择落子，也会在无路可走时获得任意棋。</p>
             <div class="mode-foot">
               <span class="diff-pill" id="solo-difficulty">难度 · 标准</span>
               <span class="arrow" aria-hidden="true">→</span>
@@ -1508,10 +1508,10 @@
         <p>率先达成 <strong>3 点圣器共鸣</strong>的一方立即获胜。</p>
       </div>
       <div class="rule-section">
-        <h3><span class="rule-num">04</span>停一手与任意棋</h3>
-        <p>若当前玩家在规则指定的所有落点内都无法落子（例如缺少所需图案，或目标格已满），则该玩家<strong>停一手</strong>，由对手获得一次<strong>任意棋</strong>机会；对手落子后，后续玩家重新受这枚新棋子的规则约束。</p>
+        <h3><span class="rule-num">04</span>无法落子与任意棋</h3>
+        <p>若当前玩家在规则指定的所有落点内都无法落子（例如缺少所需图案，或目标格已满），则该玩家立即获得一次<strong>任意棋</strong>机会，而不是停一手；该玩家落子后，后续玩家重新受这枚新棋子的规则约束。</p>
         <p>三角棋的特殊判定：只有上、下、左、右四个方向都<strong>无法落子</strong>时才算无法落子；只要还有任一方向可以合法落子，就必须在其中落子。</p>
-        <p>系统会自动检测并执行停一手，同时在“对局记录”和提示中说明。</p>
+        <p>系统会自动检测，并直接使当前玩家获得任意棋，同时在“对局记录”和提示中说明。</p>
       </div>
       <div class="rule-section">
         <h3><span class="rule-num">05</span>计时与超时</h3>
@@ -1534,7 +1534,7 @@
         <p>轮到己方时，先在下方选择棋子，再点击棋盘上的高亮落点。上一手落下的棋子会以黄圈标出，所在格右上角也标有“上一手”，便于确认当前轮次的约束来源。选择箭头棋后点击落点，会出现四方向罗盘，只显示不会指向棋盘外的方向。双方各有“认输”按钮，认输前会二次确认。</p>
       </div>
       <div class="note-block">
-        <b>本作采用的补充约定：</b>箭头仅支持上、下、左、右四个正交方向；每格只计一次共鸣分（即使之后放入三枚同方棋子也不重复计分）；停手由系统自动执行；一方棋子耗尽时若双方同分，则判平局；弹窗打开期间暂停回合计时。这些约定在处理原始规则未明确之处时使用。
+        <b>本作采用的补充约定：</b>箭头仅支持上、下、左、右四个正交方向；每格只计一次共鸣分（即使之后放入三枚同方棋子也不重复计分）；无法依约落子时由系统自动给予当前玩家任意棋；一方棋子耗尽时若双方同分，则判平局；弹窗打开期间暂停回合计时。这些约定在处理原始规则未明确之处时使用。
       </div>
     </div>
     <div class="modal-actions">
@@ -2167,10 +2167,10 @@
       <p>The first champion to reach <strong>3 Hallow Resonances</strong> wins immediately.</p>
     </div>
     <div class="rule-section">
-      <h3><span class="rule-num">04</span>Passing and Free Moves</h3>
-      <p>If the current player has no legal placement among the squares allowed by the rule—because they lack the required shape or the target is full—they <strong>pass</strong>. The opponent then receives one <strong>free move</strong>; after that move, the following player is bound by the new piece's rule.</p>
+      <h3><span class="rule-num">04</span>Blocked Moves and Free Moves</h3>
+      <p>If the current player has no legal placement among the squares allowed by the rule—because they lack the required shape or the target is full—they immediately receive one <strong>free move</strong> instead of passing. After that move, the following player is bound by the new piece's rule.</p>
       <p>Special rule for Triangles: a player is considered unable to move only if all four orthogonal directions are <strong>unavailable</strong>. If any direction has a legal placement, they must place there.</p>
-      <p>The game detects and applies passes automatically, and explains them in the Match Log and prompts.</p>
+      <p>The game detects this automatically, grants the current player a free move, and explains it in the Match Log and prompts.</p>
     </div>
     <div class="rule-section">
       <h3><span class="rule-num">05</span>Timing and Timeouts</h3>
@@ -2193,7 +2193,7 @@
       <p>On your turn, choose a shape below, then click a highlighted square. The last piece placed is marked with a gold ring and a <strong>Last move</strong> tag. When you choose an Arrow, the compass shows only directions that stay on the board. Each side has a Resign button with a confirmation step.</p>
     </div>
     <div class="note-block">
-      <b>House conventions:</b> Arrows use only the four orthogonal directions; a square awards at most one resonance point (even if three same-side pieces later occupy it); passes are automatic; if both sides are tied when a side runs out of pieces, the game is a draw; and the turn clock pauses while any modal is open. These conventions resolve points the original rules leave open.
+      <b>House conventions:</b> Arrows use only the four orthogonal directions; a square awards at most one resonance point (even if three same-side pieces later occupy it); when a player cannot follow the last rule, the game automatically grants that player a free move; if both sides are tied when a side runs out of pieces, the game is a draw; and the turn clock pauses while any modal is open. These conventions resolve points the original rules leave open.
     </div>`;
 
   const STATIC_I18N = [
@@ -2215,7 +2215,7 @@
     { sel: '#screen-mode .subscreen h2', en: 'The Triwizard Tournament' },
     { sel: '#screen-mode .subscreen > .subtitle', en: 'The first move is chosen at random. Red begins; Blue follows.' },
     { sel: '#mode-solo h3', en: 'Single Player' },
-    { sel: '#mode-solo p', en: 'Face the Other Champion. Your opponent reads the board and passes when no legal move remains.' },
+    { sel: '#mode-solo p', en: 'Face the Other Champion. Your opponent reads the board and receives a free move when no legal move remains.' },
     { sel: '#mode-duo h3', en: 'Two Players' },
     { sel: '#mode-duo p', en: 'Two champions take turns on one screen. Every move defines where the next player may place.' },
     { sel: '#mode-duo .diff-pill', en: 'Shared Screen · Alternate Turns' },
@@ -3011,12 +3011,12 @@
     const beneficiary = otherColor(color);
     state.turn = beneficiary;
     state.freeMove = true;
-    const timeoutZh = `${fullDisplayNameIn(color, 'zh')}本手超过 60 秒，停一手；${fullDisplayNameIn(beneficiary, 'zh')}获得任意棋。`;
-    const timeoutEn = `${fullDisplayNameIn(color, 'en')} exceeded 60 seconds and passes; ${fullDisplayNameIn(beneficiary, 'en')} receives a free move.`;
+    const timeoutZh = `${fullDisplayNameIn(color, 'zh')}本手超过 60 秒，回合跳过；${fullDisplayNameIn(beneficiary, 'zh')}获得任意棋。`;
+    const timeoutEn = `${fullDisplayNameIn(color, 'en')} exceeded 60 seconds; the turn is skipped and ${fullDisplayNameIn(beneficiary, 'en')} receives a free move.`;
     setEventText(timeoutZh, timeoutEn);
     showToast(tr(
-      `${displayName(color)}本手超时，停一手；${displayName(beneficiary)}获得任意棋。`,
-      `${displayName(color)} timed out and passes; ${displayName(beneficiary)} receives a free move.`
+      `${displayName(color)}本手超时，回合跳过；${displayName(beneficiary)}获得任意棋。`,
+      `${displayName(color)} timed out; the turn is skipped and ${displayName(beneficiary)} receives a free move.`
     ), 'error', 3300);
     playSound('error');
     renderAll();
@@ -3531,34 +3531,33 @@
     if (checkGameEnd()) return;
 
     state.turn = otherColor(color);
-    resolveForcedPasses();
+    resolveForcedFreeMove();
     renderAll();
     startTurnClock();
     maybeScheduleAI();
   }
 
-  function resolveForcedPasses() {
-    let guard = 0;
-    while (!state.gameOver && getLegalMoves(state.turn).length === 0) {
-      const stuck = state.turn;
-      const beneficiary = otherColor(stuck);
-      state.turn = beneficiary;
-      state.freeMove = true;
-      setEventText(
-        `${fullDisplayNameIn(stuck, 'zh')}在所有可用落点都无法落子，停一手；${fullDisplayNameIn(beneficiary, 'zh')}获得任意棋。`,
-        `${fullDisplayNameIn(stuck, 'en')} has no legal placement and passes; ${fullDisplayNameIn(beneficiary, 'en')} receives a free move.`
-      );
-      showToast(tr(
-        `${displayName(stuck)}无法落子，停一手；${displayName(beneficiary)}获得任意棋。`,
-        `${displayName(stuck)} cannot place a piece and passes; ${displayName(beneficiary)} receives a free move.`
-      ), 'pass', 3000);
-      playSound('pass');
-      guard += 1;
-      if (guard > 4) {
-        endGame(null, tr('双方均无合法落点，本局平局。', 'Neither side has a legal move. The game is a draw.'));
-        return;
-      }
+  function resolveForcedFreeMove() {
+    if (state.gameOver) return;
+    if (getLegalMoves(state.turn).length > 0) return;
+    const stuck = state.turn;
+    state.freeMove = true;
+    if (getLegalMoves(stuck).length === 0) {
+      endGame(null, tr(
+        '当前玩家没有任何可落子的位置，本局平局。',
+        'The current player has no legal placement. The game is a draw.'
+      ));
+      return;
     }
+    setEventText(
+      `${fullDisplayNameIn(stuck, 'zh')}无法依约落子，获得任意棋。`,
+      `${fullDisplayNameIn(stuck, 'en')} cannot follow the last rule and receives a free move.`
+    );
+    showToast(tr(
+      `${displayName(stuck)}无法依约落子，获得任意棋。`,
+      `${displayName(stuck)} cannot follow the last rule and receives a free move.`
+    ), 'pass', 3000);
+    playSound('pass');
   }
 
   /* ============================================================
@@ -3768,14 +3767,14 @@
       state.isAiThinking = false;
       const moves = getLegalMoves(state.turn);
       if (moves.length === 0) {
-        resolveForcedPasses();
+        resolveForcedFreeMove();
         renderAll();
         maybeScheduleAI();
         return;
       }
       const move = chooseAiMove(moves);
       if (!move) {
-        resolveForcedPasses();
+        resolveForcedFreeMove();
         renderAll();
         maybeScheduleAI();
         return;
