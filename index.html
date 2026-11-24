@@ -178,7 +178,7 @@
   .back-link:hover{color:var(--gold-bright)}
   .subscreen h2{font-family:var(--serif);font-weight:500;font-size:clamp(29px,4vw,42px);letter-spacing:.16em;margin:0 0 12px;color:#f4ead4;padding-left:.16em}
   .subtitle{color:var(--muted);font-size:12.5px;letter-spacing:.12em;line-height:1.8;margin:0}
-  .mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:36px;text-align:left}
+  .mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:36px;text-align:left}
   .mode-card{
     position:relative;border:1px solid rgba(216,182,108,.19);border-radius:22px;
     background:linear-gradient(145deg,rgba(26,31,53,.82),rgba(12,15,28,.9));
@@ -200,6 +200,35 @@
   .mode-note{margin-top:28px;color:var(--muted-2);font-size:10.5px;letter-spacing:.08em;line-height:1.9}
   .mode-note b{color:var(--gold);font-weight:400}
 
+  /* ---------- custom room ---------- */
+  #screen-custom{align-items:center;justify-content:center;padding:clamp(22px,4vh,48px) 22px 46px}
+  .custom-sheet{width:min(820px,100%);text-align:center}
+  .custom-sheet h2{font-family:var(--serif);font-weight:500;font-size:clamp(30px,4.2vw,44px);letter-spacing:.15em;margin:0 0 12px;color:#f6ecd9;padding-left:.15em}
+  .custom-sheet .subtitle{max-width:600px;margin-left:auto;margin-right:auto}
+  .custom-card{
+    margin-top:27px;text-align:left;padding:8px 24px 22px;border:1px solid rgba(216,182,108,.18);
+    border-radius:20px;background:linear-gradient(145deg,rgba(23,28,48,.82),rgba(10,13,24,.92));
+    box-shadow:0 18px 45px rgba(0,0,0,.24);
+  }
+  .custom-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 0;border-bottom:1px solid rgba(216,182,108,.08)}
+  .custom-row:last-of-type{border-bottom:0}
+  .custom-row .setting-info{max-width:530px}
+  .custom-row .setting-info strong{font-size:13px}
+  .custom-row .setting-info span{font-size:10px}
+  .custom-field-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+  .custom-count-field{display:flex;flex-direction:column;gap:7px;padding:12px;border:1px solid rgba(216,182,108,.16);border-radius:13px;background:rgba(7,10,20,.42)}
+  .custom-count-field span{font-size:9px;letter-spacing:.06em;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .custom-count-field input,.custom-number{
+    width:100%;min-width:0;border:1px solid rgba(216,182,108,.18);border-radius:8px;background:rgba(4,7,14,.55);
+    color:#f4e8d2;padding:8px 9px;font-family:var(--serif);font-size:16px;outline:none;
+  }
+  .custom-count-field input:focus,.custom-number:focus{border-color:rgba(216,182,108,.58);box-shadow:0 0 0 2px rgba(216,182,108,.08)}
+  .custom-summary{margin:15px 0 0;color:var(--muted);font-size:10.5px;letter-spacing:.04em;line-height:1.7}
+  .custom-summary b{color:var(--gold);font-weight:500}
+  .custom-actions{display:flex;justify-content:center;margin-top:19px}
+  .custom-actions .btn-primary{min-width:250px}
+  .custom-inline-note{margin:9px 0 0;color:var(--muted-2);font-size:9px;line-height:1.7;letter-spacing:.03em}
+
   /* ---------- name entry ---------- */
   #screen-names{align-items:center;justify-content:center;padding:clamp(22px,4vh,48px) 22px 46px}
   .name-sheet{width:min(760px,100%);text-align:center;position:relative}
@@ -208,6 +237,18 @@
   .name-eyebrow{font-size:9px;letter-spacing:.38em;color:var(--gold);text-transform:uppercase;margin:0 0 13px;padding-left:.38em}
   .name-sheet h2{font-family:var(--serif);font-weight:500;font-size:clamp(29px,4.2vw,44px);letter-spacing:.15em;margin:0 0 12px;color:#f6ecd9;padding-left:.15em}
   .name-sheet .subtitle{max-width:520px;margin-left:auto;margin-right:auto}
+  .playstyle-picker{width:min(650px,100%);margin:20px auto 0;text-align:left;padding:14px;border:1px solid rgba(216,182,108,.16);border-radius:15px;background:linear-gradient(145deg,rgba(23,28,48,.72),rgba(10,13,24,.82))}
+  .playstyle-copy{display:flex;flex-direction:column;gap:3px}
+  .playstyle-copy>span:first-child{font-size:9px;letter-spacing:.16em;color:var(--gold);text-transform:uppercase}
+  .playstyle-desc{font-size:9.5px;line-height:1.65;color:var(--muted-2);letter-spacing:.02em}
+  .playstyle-options{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+  .playstyle-option{
+    appearance:none;border:1px solid rgba(216,182,108,.18);border-radius:10px;background:rgba(7,10,20,.42);
+    color:var(--muted);padding:9px 10px;font-size:11px;letter-spacing:.08em;cursor:pointer;transition:.22s;
+  }
+  .playstyle-option:hover{border-color:rgba(216,182,108,.42);color:var(--gold-bright)}
+  .playstyle-option.active{border-color:rgba(216,182,108,.62);background:rgba(216,182,108,.12);color:var(--gold-bright);box-shadow:inset 0 0 0 1px rgba(216,182,108,.1)}
+  .playstyle-picker + .name-form{margin-top:18px}
   .name-form{width:min(650px,100%);margin:29px auto 0;text-align:left}
   .name-fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}
   .name-fields.single{grid-template-columns:1fr 1fr}
@@ -359,7 +400,7 @@
   .board-frame::before{left:5px;top:5px;border-width:1px 0 0 1px;border-radius:8px 0 0 0}
   .board-frame::after{right:5px;bottom:5px;border-width:0 1px 1px 0;border-radius:0 0 8px 0}
   .board-watermark{position:absolute;left:50%;top:50%;width:70%;height:70%;transform:translate(-50%,-50%);color:var(--gold);opacity:.035;pointer-events:none}
-  .board{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:7px;aspect-ratio:1;isolation:isolate}
+  .board{position:relative;display:grid;grid-template-columns:repeat(var(--board-size,5),1fr);gap:7px;aspect-ratio:1;isolation:isolate}
   .cell{
     appearance:none;border:1px solid rgba(216,182,108,.12);border-radius:9px;padding:0;margin:0;
     position:relative;background:
@@ -392,6 +433,14 @@
     opacity:.88;pointer-events:none;
   }
   .cell.coord-selected{border-color:var(--gold-bright);box-shadow:inset 0 0 0 1px rgba(246,227,165,.4)}
+  .cell.shift-start{border-color:var(--blue-bright);box-shadow:inset 0 0 0 2px rgba(156,183,255,.65),0 0 18px rgba(112,150,255,.28)}
+  .cell.shift-target{box-shadow:inset 0 0 0 1px rgba(246,213,105,.26),0 0 12px rgba(246,213,105,.06)}
+  .shift-cost{
+    position:absolute;right:4px;bottom:4px;z-index:3;min-width:14px;height:14px;padding:0 3px;
+    display:grid;place-items:center;border-radius:4px;border:1px solid rgba(216,182,108,.3);
+    background:rgba(8,11,20,.78);color:#f6d569;font-size:8px;line-height:1;font-family:var(--sans);
+  }
+  .shift-cost.expensive{border-color:rgba(229,104,109,.45);color:var(--red-bright)}
   .cell.scored-red{box-shadow:inset 0 -22px 35px -26px rgba(229,104,109,.9)}
   .cell.scored-blue{box-shadow:inset 0 -22px 35px -26px rgba(112,150,255,.9)}
   .cell.scored-red.scored-blue{box-shadow:inset 22px -22px 35px -28px rgba(229,104,109,.85),inset -22px -22px 35px -28px rgba(112,150,255,.85)}
@@ -1132,6 +1181,13 @@
     .mode-card{min-height:198px;padding:23px 22px}
     #screen-mode{padding-top:22px}
     #screen-names{padding-top:22px}
+    #screen-custom{padding-top:22px}
+    .custom-card{padding:6px 16px 18px}
+    .custom-row{flex-direction:column;align-items:stretch;gap:9px}
+    .custom-row .setting-select{width:100%}
+    .custom-field-grid{grid-template-columns:1fr}
+    .custom-actions .btn-primary{width:100%;min-width:0}
+    .shift-cost{right:3px;bottom:3px;min-width:12px;height:12px;font-size:7px}
     .name-fields,.name-fields.single{grid-template-columns:1fr}
     .name-form{margin-top:23px}
     .name-seal{width:46px;height:46px;margin-bottom:14px}
@@ -1287,7 +1343,7 @@
       <div class="subscreen">
         <button class="back-link" id="btn-mode-back"><span aria-hidden="true">←</span> 返回首页</button>
         <h2>三强争霸赛</h2>
-        <p class="subtitle">先手由系统随机决定。执红者先行，执蓝者随后。</p>
+        <p class="subtitle">先手由系统随机决定；自定义房间可单独设置。执红者先行，执蓝者随后。</p>
         <div class="mode-grid">
           <button class="mode-card" id="mode-solo">
             <span class="mode-icon">
@@ -1299,7 +1355,7 @@
             </span>
             <div class="mode-en">Single Player</div>
             <h3>一人游戏</h3>
-            <p>与「另一位勇士」对弈。对手会依照局面选择落子，也会在无路可走时获得任意棋。</p>
+            <p>与随机编号的勇士对弈。对手会依照局面选择落子，也会在无路可走时获得任意棋。</p>
             <div class="mode-foot">
               <span class="diff-pill" id="solo-difficulty">难度 · 标准</span>
               <span class="arrow" aria-hidden="true">→</span>
@@ -1321,8 +1377,86 @@
               <span class="arrow" aria-hidden="true">→</span>
             </div>
           </button>
+          <button class="mode-card" id="mode-custom">
+            <span class="mode-icon">
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+                <path d="M4 9h24M4 23h24" stroke-linecap="round"/>
+                <circle cx="12" cy="9" r="3"/>
+                <circle cx="21" cy="23" r="3"/>
+                <path d="M12 3v3M21 17v3" stroke-linecap="round" opacity=".55"/>
+              </svg>
+            </span>
+            <div class="mode-en">Custom Room</div>
+            <h3>自定义房间</h3>
+            <p>自行选择棋盘大小、先手、每种棋子数量，并可启用「移形换影」箭头规则。</p>
+            <div class="mode-foot">
+              <span class="diff-pill">私人规则 · 双人同屏</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </div>
+          </button>
         </div>
-        <p class="mode-note">先手由系统随机决定，并执<b>红棋</b>。第一手为任意棋；从第二手起，落点由上一枚棋子的规则决定。每手限时 <b>60 秒</b>。</p>
+        <p class="mode-note">先手由系统随机决定，并执<b>红棋</b>；自定义房间可单独设置先手。一人与两人游戏可在姓名页选择经典玩法或移形换影。第一手为任意棋；从第二手起，落点由上一枚棋子的规则决定。每手限时 <b>60 秒</b>。</p>
+      </div>
+    </section>
+
+    <!-- 自定义房间 -->
+    <section class="screen" id="screen-custom">
+      <div class="custom-sheet">
+        <button class="back-link" id="btn-custom-back"><span aria-hidden="true">←</span> 返回对局方式</button>
+        <p class="name-eyebrow">Custom Room</p>
+        <h2>自定义房间</h2>
+        <p class="subtitle" id="custom-subtitle">自定义棋盘、棋子与先手；所有规则改动只在本局生效。</p>
+        <form class="custom-card" id="custom-form" novalidate>
+          <div class="custom-row">
+            <div class="setting-info">
+              <strong id="custom-arrow-label">移形换影</strong>
+              <span id="custom-arrow-desc">箭头棋不再只指向相邻格。选择起点后，整行整列都会亮起；选择终点并消耗与距离相同的箭头棋，使对手下一步只能落在终点。</span>
+            </div>
+            <button class="switch" id="custom-arrow" type="button" role="switch" aria-checked="false" aria-label="移形换影开关"></button>
+          </div>
+          <div class="custom-row">
+            <div class="setting-info">
+              <strong id="custom-first-label">先手玩家</strong>
+              <span id="custom-first-desc">先手玩家执红并先行。可选择玩家一、玩家二或随机决定。</span>
+            </div>
+            <select class="setting-select" id="custom-first" aria-label="先手玩家">
+              <option value="p1">玩家一先手</option>
+              <option value="p2">玩家二先手</option>
+              <option value="random">随机先手</option>
+            </select>
+          </div>
+          <div class="custom-row">
+            <div class="setting-info">
+              <strong id="custom-size-label">棋盘大小</strong>
+              <span id="custom-size-desc">使用 n × n 方阵，n 可选 3 到 8。</span>
+            </div>
+            <select class="setting-select" id="custom-size" aria-label="棋盘大小">
+              <option value="3">3 × 3</option>
+              <option value="4">4 × 4</option>
+              <option value="5">5 × 5</option>
+              <option value="6">6 × 6</option>
+              <option value="7">7 × 7</option>
+              <option value="8">8 × 8</option>
+            </select>
+          </div>
+          <div class="custom-row" style="display:block">
+            <div class="setting-info">
+              <strong id="custom-pieces-label">棋子数量</strong>
+              <span id="custom-pieces-desc">为每位玩家设置三角、圆圈、箭头数量。每种棋子不少于 0、不超过棋盘格数。</span>
+            </div>
+            <div class="custom-field-grid">
+              <label class="custom-count-field"><span><i class="name-orb"></i><b id="custom-triangle-label">三角</b></span><input class="custom-number" id="custom-triangle" type="number" min="0" step="1" inputmode="numeric" aria-label="三角棋数量"></label>
+              <label class="custom-count-field"><span><i class="name-orb"></i><b id="custom-circle-label">圆圈</b></span><input class="custom-number" id="custom-circle" type="number" min="0" step="1" inputmode="numeric" aria-label="圆圈棋数量"></label>
+              <label class="custom-count-field"><span><i class="name-orb"></i><b id="custom-arrow-count-label">箭头</b></span><input class="custom-number" id="custom-arrow-count" type="number" min="0" step="1" inputmode="numeric" aria-label="箭头棋数量"></label>
+            </div>
+          </div>
+          <p class="custom-summary" id="custom-summary"></p>
+          <p class="custom-inline-note" id="custom-note">提示：移形换影只在起点落下一枚箭头，其余消耗的箭头作为距离代价。例如在 5 × 5 棋盘中从 C3 选择 C1，会消耗 2 枚箭头棋，并让对手只能在 C1 落子。</p>
+          <p class="name-error" id="custom-error" role="alert"></p>
+          <div class="custom-actions">
+            <button class="btn btn-primary" type="submit" id="custom-next">下一步：写下名字</button>
+          </div>
+        </form>
       </div>
     </section>
 
@@ -1340,6 +1474,16 @@
         <p class="name-eyebrow">The Goblet of Fire</p>
         <h2>将名字投入火焰杯</h2>
         <p class="subtitle" id="name-subtitle">将写有名字的纸条投入火焰杯，等待它选出参加三强争霸赛的勇士。</p>
+        <div class="playstyle-picker" id="playstyle-picker">
+          <div class="playstyle-copy">
+            <span id="playstyle-title">玩法</span>
+            <span class="playstyle-desc" id="playstyle-desc"></span>
+          </div>
+          <div class="playstyle-options">
+            <button class="playstyle-option active" type="button" data-style="classic" id="playstyle-classic">经典玩法</button>
+            <button class="playstyle-option" type="button" data-style="shift" id="playstyle-shift">移形换影</button>
+          </div>
+        </div>
         <form class="name-form" id="names-form" novalidate>
           <div class="name-fields" id="name-fields"></div>
           <p class="name-error" id="name-error" role="alert"></p>
@@ -1484,12 +1628,12 @@
       </svg>
       <h2 id="rules-title">三强争霸赛规则</h2>
     </div>
-    <p class="modal-sub">三种圣器，二十五格棋盘，先取得三点圣器共鸣者胜。</p>
+    <p class="modal-sub">标准对局：三种圣器，二十五格棋盘，先取得三点圣器共鸣者胜。</p>
     <div class="modal-divider"></div>
     <div class="rules-body">
       <div class="rule-section">
         <h3><span class="rule-num">01</span>棋盘与棋子</h3>
-        <p>棋盘为 <strong>5 × 5</strong> 方格。红、蓝双方各拥有 <strong>三角、圆圈、箭头各 5 枚</strong>，共 15 枚棋子。每枚箭头棋落子时单独选择朝向，因此双方的箭头朝向可以各不相同。</p>
+        <p>标准对局棋盘为 <strong>5 × 5</strong> 方格。经典玩法中红、蓝双方各拥有 <strong>三角、圆圈、箭头各 5 枚</strong>，共 15 枚棋子；移形换影玩法中箭头基础数量提升至 7 枚。自定义房间的棋盘与棋子数量以设置为准。每枚箭头棋落子时单独选择朝向，因此双方的箭头朝向可以各不相同。</p>
         <p>每个格子中，<strong>三角、圆圈、箭头最多各存在一枚</strong>，无论属于哪一方。也就是说，同一格中的同种图案是全局唯一的。</p>
       </div>
       <div class="rule-section">
@@ -1498,7 +1642,7 @@
         <ul class="rule-list">
           <li><strong>三角棋：</strong>下一步只能落在它上、下、左、右相邻的格子里；若该方向在棋盘外，则该方向不可用。</li>
           <li><strong>圆圈棋：</strong>下一步只能落在它所在的<strong>这一格</strong>内。</li>
-          <li><strong>箭头棋：</strong>下一步只能落在箭头所指的、与它相邻的格子内。箭头仅有上、下、左、右四个可选朝向，但不能指向棋盘外；落子后朝向固定。</li>
+          <li><strong>箭头棋（经典玩法）：</strong>下一步只能落在箭头所指的、与它相邻的格子内。箭头仅有上、下、左、右四个可选朝向，但不能指向棋盘外；落子后朝向固定。移形换影中的箭头规则见第 08 节。</li>
         </ul>
         <p>同时，玩家只能选择自己仍有剩余、且该格中尚未出现的图案。若目标格已有圆圈，则只能从三角和箭头中选择。</p>
       </div>
@@ -1522,7 +1666,7 @@
         <h3><span class="rule-num">06</span>终局判定</h3>
         <ul class="rule-list">
           <li>一方率先达成 3 点圣器共鸣，立即获胜。</li>
-          <li>当任意一方<strong>15 枚棋子全部用完</strong>时，比较双方当前分数，分高者获胜。</li>
+          <li>当任意一方<strong>棋子全部用完</strong>时，比较双方当前分数，分高者获胜。</li>
           <li>若此时双方同分，则本局为平局，无论是否还有剩余棋子。</li>
           <li>若同一手同时达成“率先 3 点圣器共鸣”与“棋子耗尽”，优先按率先 3 点共鸣判定胜利。</li>
           <li>任一方认输，对方立即获胜；任一方累计三次超时，对方立即获胜。</li>
@@ -1530,11 +1674,17 @@
       </div>
       <div class="rule-section">
         <h3><span class="rule-num">07</span>操作说明</h3>
-        <p>参加三强争霸赛时，先选择一人或两人模式，再将勇士的名字投入火焰杯。人机对战时只需为人类勇士命名；选择“再来一局”会沿用上一局的名称。</p>
-        <p>轮到己方时，先在下方选择棋子，再点击棋盘上的高亮落点。上一手落下的棋子会以黄圈标出，所在格右上角也标有“上一手”，便于确认当前轮次的约束来源。选择箭头棋后点击落点，会出现四方向罗盘，只显示不会指向棋盘外的方向。双方各有“认输”按钮，认输前会二次确认。</p>
+        <p>参加三强争霸赛时，先选择一人或两人模式，并选择经典玩法或移形换影，再将勇士的名字投入火焰杯。人机对战时需为人类勇士命名，也可以自定义人机名称；人机名称也会投入火焰杯。选择“再来一局”会沿用上一局的名称与玩法。</p>
+        <p>轮到己方时，先在下方选择棋子，再点击棋盘上的高亮落点。上一手落下的棋子会以黄圈标出，所在格右上角也标有“上一手”，便于确认当前轮次的约束来源。经典玩法中选择箭头棋后点击落点，会出现四方向罗盘；移形换影的终点选择方式见第 08 节。双方各有“认输”按钮，认输前会二次确认。</p>
+      </div>
+      <div class="rule-section">
+        <h3><span class="rule-num">08</span>移形换影（进阶玩法）</h3>
+        <p>一人游戏、两人同屏与自定义房间都可以选择移形换影。一人游戏与两人同屏中，经典玩法箭头基础数量为 5 枚，移形换影提升为 7 枚；自定义房间的箭头数量以设置为准。</p>
+        <p>使用移形换影时，选择箭头棋后先确定起点：若上一步是三角棋，从高亮的相邻格中选择一个作为起点；其他情况下若只有一个合法起点，系统会直接采用该格。起点的整行与整列都会高亮，随后选择同一行或同一列的终点。箭头只能沿上、下、左、右直线延伸，不能拐弯。</p>
+        <p>落子时，只在起点落下一枚箭头棋；其余消耗的箭头棋数量等于起点到终点的距离。例如在 5 × 5 棋盘中从 C3 选择 C1，会消耗 2 枚箭头棋。对手下一步只能落在该终点；若对手在终点无法落子，则按第 04 节规则由对手获得任意棋。</p>
       </div>
       <div class="note-block">
-        <b>本作采用的补充约定：</b>箭头仅支持上、下、左、右四个正交方向；每格只计一次共鸣分（即使之后放入三枚同方棋子也不重复计分）；无法依约落子时由系统自动给予当前玩家任意棋；一方棋子耗尽时若双方同分，则判平局；弹窗打开期间暂停回合计时。这些约定在处理原始规则未明确之处时使用。
+        <b>本作采用的补充约定：</b>箭头仅支持上、下、左、右四个正交方向；每格只计一次共鸣分（即使之后放入三枚同方棋子也不重复计分）；无法依约落子时由系统自动给予当前玩家任意棋；移形换影玩法中箭头基础数量为 7 枚（自定义房间以设置的棋子数量为准）；一方棋子耗尽时若双方同分，则判平局；弹窗打开期间暂停回合计时。这些约定在处理原始规则未明确之处时使用。
       </div>
     </div>
     <div class="modal-actions">
@@ -1885,7 +2035,10 @@
   /* ============================================================
      基础数据
   ============================================================ */
-  const SIZE = 5;
+  let SIZE = 5;
+  const BOARD_LETTERS = 'ABCDEFGH';
+  const CUSTOM_SIZE_MIN = 3;
+  const CUSTOM_SIZE_MAX = 8;
   const COLORS = ['red', 'blue'];
   const SHAPES = ['triangle', 'circle', 'arrow'];
   let UI_LANG = 'zh';
@@ -1927,6 +2080,12 @@
 
   let settings = loadSettings();
   UI_LANG = settings.language === 'en' ? 'en' : 'zh';
+  let customConfig = {
+    size: 5,
+    arrowVariant: false,
+    firstPlayer: 'random',
+    counts: { triangle: 5, circle: 5, arrow: 5 }
+  };
 
   /* ============================================================
      状态
@@ -1934,6 +2093,11 @@
   const state = {
     screen: 'home',
     mode: null,
+    size: 5,
+    arrowVariant: false,
+    playStyle: 'classic',
+    pendingPlayStyle: 'classic',
+    pendingShift: null,
     board: emptyBoard(),
     players: makePlayers(),
     scored: new Set(),
@@ -1988,10 +2152,13 @@
     return { triangle: 5, circle: 5, arrow: 5 };
   }
 
-  function makePlayers() {
+  function makePlayers(counts = null) {
+    const base = counts
+      ? { triangle: Number(counts.triangle) || 0, circle: Number(counts.circle) || 0, arrow: Number(counts.arrow) || 0 }
+      : emptyPieces();
     return {
-      red: { pieces: emptyPieces(), score: 0 },
-      blue: { pieces: emptyPieces(), score: 0 }
+      red: { pieces: { ...base }, score: 0 },
+      blue: { pieces: { ...base }, score: 0 }
     };
   }
 
@@ -2022,9 +2189,6 @@
 
   function displayNameIn(color, lang) {
     const name = state.labels[color];
-    if (name === '另一位勇士' || name === 'The Other Champion') {
-      return lang === 'en' ? 'The Other Champion' : '另一位勇士';
-    }
     return name || colorNameIn(color, lang);
   }
 
@@ -2058,7 +2222,7 @@
   }
 
   function coordName(r, c) {
-    return 'ABCDE'[c] + (r + 1);
+    return BOARD_LETTERS[c] + (r + 1);
   }
 
   function escapeAttribute(value) {
@@ -2148,7 +2312,7 @@
   const EN_RULES_BODY = `
     <div class="rule-section">
       <h3><span class="rule-num">01</span>Board and Pieces</h3>
-      <p>The board is a <strong>5 × 5</strong> grid. Red and Blue each command <strong>5 Triangles, 5 Circles and 5 Arrows</strong>—15 pieces per side. Each Arrow's facing is chosen when it is placed, so the two sides' Arrows may point in different directions.</p>
+      <p>A standard board is a <strong>5 × 5</strong> grid. In Classic play Red and Blue each command <strong>5 Triangles, 5 Circles and 5 Arrows</strong>—15 pieces per side. Shifting Arrow raises the base Arrow count to 7; Custom Room uses its configured board and piece counts. Each Arrow's facing is chosen when it is placed, so the two sides' Arrows may point in different directions.</p>
       <p>Each square may contain <strong>at most one Triangle, one Circle and one Arrow</strong>, regardless of owner. In other words, each shape is globally unique within a square.</p>
     </div>
     <div class="rule-section">
@@ -2157,7 +2321,7 @@
       <ul class="rule-list">
         <li><strong>Triangle:</strong> The next piece must be placed on one of the four orthogonally adjacent squares—up, down, left or right. A direction that leaves the board is unavailable.</li>
         <li><strong>Circle:</strong> The next piece must be placed in <strong>the same square</strong> as the Circle.</li>
-        <li><strong>Arrow:</strong> The next piece must be placed on the adjacent square the Arrow points to. An Arrow may face only up, down, left or right, and may never point off the board; its facing is fixed once placed.</li>
+        <li><strong>Arrow (Classic):</strong> The next piece must be placed on the adjacent square the Arrow points to. An Arrow may face only up, down, left or right, and may never point off the board; its facing is fixed once placed. See section 08 for Shifting Arrow.</li>
       </ul>
       <p>A player may only choose a shape they still have, and that is not already present in the target square. If the target already holds a Circle, only a Triangle or an Arrow may be chosen.</p>
     </div>
@@ -2181,7 +2345,7 @@
       <h3><span class="rule-num">06</span>End of the Game</h3>
       <ul class="rule-list">
         <li>A champion wins immediately upon reaching 3 Hallow Resonances.</li>
-        <li>When either side has <strong>used all 15 pieces</strong>, compare scores; the higher score wins.</li>
+        <li>When either side has <strong>used all of its pieces</strong>, compare scores; the higher score wins.</li>
         <li>If the scores are tied at that point, the game is a draw, regardless of any pieces remaining.</li>
         <li>If a move simultaneously reaches 3 resonances and exhausts a side's pieces, the third resonance takes priority.</li>
         <li>Resignation or a third timeout immediately gives the opponent the win.</li>
@@ -2189,11 +2353,17 @@
     </div>
     <div class="rule-section">
       <h3><span class="rule-num">07</span>How to Play</h3>
-      <p>Choose Single Player or Two Players, then cast the champions' names into the Goblet. In Single Player only the human champion needs a name; Play Again keeps the previous names.</p>
-      <p>On your turn, choose a shape below, then click a highlighted square. The last piece placed is marked with a gold ring and a <strong>Last move</strong> tag. When you choose an Arrow, the compass shows only directions that stay on the board. Each side has a Resign button with a confirmation step.</p>
+      <p>Choose Single Player or Two Players, choose Classic or Shifting Arrow, then cast the champions' names into the Goblet. In Single Player, name the human champion and optionally customize the AI opponent; both names are cast into the Goblet. Play Again keeps the previous names and playstyle.</p>
+      <p>On your turn, choose a shape below, then click a highlighted square. The last piece placed is marked with a gold ring and a <strong>Last move</strong> tag. In Classic play, choosing an Arrow opens a four-direction compass; see section 08 for Shifting Arrow destinations. Each side has a Resign button with a confirmation step.</p>
+    </div>
+    <div class="rule-section">
+      <h3><span class="rule-num">08</span>Shifting Arrow (Advanced)</h3>
+      <p>Shifting Arrow is available in Single Player, Two Players and Custom Room. In Single Player and Two Players, Classic uses 5 base Arrows while Shifting Arrow uses 7; Custom Room uses its configured Arrow count.</p>
+      <p>With Shifting Arrow, select an Arrow and choose its start. If the previous piece was a Triangle, choose one of the highlighted adjacent squares as the start; otherwise, if there is only one legal start, the game uses it automatically. The start's entire row and column are highlighted. Choose a destination in the same row or column. The Arrow may only extend up, down, left or right—it cannot turn.</p>
+      <p>Only one Arrow is placed at the start; additional Arrows are spent equal to the distance from the start to the destination. For example, on a 5 × 5 board, choosing C1 from C3 spends 2 Arrows. The opponent's next move must be played at that destination. If the opponent cannot play there, section 04 grants the opponent a free move.</p>
     </div>
     <div class="note-block">
-      <b>House conventions:</b> Arrows use only the four orthogonal directions; a square awards at most one resonance point (even if three same-side pieces later occupy it); when a player cannot follow the last rule, the game automatically grants that player a free move; if both sides are tied when a side runs out of pieces, the game is a draw; and the turn clock pauses while any modal is open. These conventions resolve points the original rules leave open.
+      <b>House conventions:</b> Arrows use only the four orthogonal directions; a square awards at most one resonance point (even if three same-side pieces later occupy it); when a player cannot follow the last rule, the game automatically grants that player a free move; Shifting Arrow play uses 7 base Arrows (Custom Room uses its configured piece counts); if both sides are tied when a side runs out of pieces, the game is a draw; and the turn clock pauses while any modal is open. These conventions resolve points the original rules leave open.
     </div>`;
 
   const STATIC_I18N = [
@@ -2213,13 +2383,41 @@
     { sel: '#screen-home .home-meta span:nth-child(3)', html: true, en: '<i></i>Random First Move' },
     { sel: '#btn-mode-back', html: true, en: '<span aria-hidden="true">←</span> Back to Home' },
     { sel: '#screen-mode .subscreen h2', en: 'The Triwizard Tournament' },
-    { sel: '#screen-mode .subscreen > .subtitle', en: 'The first move is chosen at random. Red begins; Blue follows.' },
+    { sel: '#screen-mode .subscreen > .subtitle', en: 'The first move is chosen at random; Custom Room can override it. Red begins; Blue follows.' },
     { sel: '#mode-solo h3', en: 'Single Player' },
-    { sel: '#mode-solo p', en: 'Face the Other Champion. Your opponent reads the board and receives a free move when no legal move remains.' },
+    { sel: '#mode-solo p', en: 'Face a numbered Warrior. Your opponent reads the board and receives a free move when no legal move remains.' },
     { sel: '#mode-duo h3', en: 'Two Players' },
     { sel: '#mode-duo p', en: 'Two champions take turns on one screen. Every move defines where the next player may place.' },
     { sel: '#mode-duo .diff-pill', en: 'Shared Screen · Alternate Turns' },
-    { sel: '.mode-note', html: true, en: 'The first move is chosen at random and plays <b>Red</b>. The opening move may be any piece; from the second move on, the last piece determines the next target. Each turn lasts <b>60 seconds</b>.' },
+    { sel: '#mode-custom h3', en: 'Custom Room' },
+    { sel: '#mode-custom p', en: 'Set the board size, first player and piece counts, and optionally enable the Shifting Arrow rule.' },
+    { sel: '#mode-custom .diff-pill', en: 'Private Rules · Local Duo' },
+    { sel: '.mode-note', html: true, en: 'The first move is chosen at random and plays <b>Red</b>; Custom Room can set the first player separately. Single Player and Two Players can choose Classic or Shifting Arrow on the name page. The opening move may be any piece; from the second move on, the last piece determines the next target. Each turn lasts <b>60 seconds</b>.' },
+    { sel: '#btn-custom-back', html: true, en: '<span aria-hidden="true">←</span> Back to Mode' },
+    { sel: '#screen-custom h2', en: 'Custom Room' },
+    { sel: '#custom-subtitle', en: 'Customize the board, pieces and first player. Changes apply to this match only.' },
+    { sel: '#custom-arrow-label', en: 'Shifting Arrow' },
+    { sel: '#custom-arrow-desc', en: 'Arrows are no longer limited to adjacent squares. Choose a start, then a destination in the same row or column. Spend arrow pieces equal to the distance to force the opponent\'s next move to the destination.' },
+    { sel: '#custom-arrow', attr: 'aria-label', en: 'Shifting Arrow toggle' },
+    { sel: '#custom-first-label', en: 'First Player' },
+    { sel: '#custom-first-desc', en: 'The first player takes Red and moves first. Choose Player One, Player Two or random.' },
+    { sel: '#custom-first', attr: 'aria-label', en: 'First player' },
+    { sel: '#custom-first option[value="p1"]', en: 'Player One First' },
+    { sel: '#custom-first option[value="p2"]', en: 'Player Two First' },
+    { sel: '#custom-first option[value="random"]', en: 'Random First' },
+    { sel: '#custom-size-label', en: 'Board Size' },
+    { sel: '#custom-size-desc', en: 'Use an n × n square, where n can be 3 to 8.' },
+    { sel: '#custom-size', attr: 'aria-label', en: 'Board size' },
+    { sel: '#custom-pieces-label', en: 'Piece Counts' },
+    { sel: '#custom-pieces-desc', en: 'Set each player\'s Triangles, Circles and Arrows. Each type can be 0 to the number of board squares.' },
+    { sel: '#custom-triangle-label', en: 'Triangle' },
+    { sel: '#custom-circle-label', en: 'Circle' },
+    { sel: '#custom-arrow-count-label', en: 'Arrow' },
+    { sel: '#custom-triangle', attr: 'aria-label', en: 'Triangle count' },
+    { sel: '#custom-circle', attr: 'aria-label', en: 'Circle count' },
+    { sel: '#custom-arrow-count', attr: 'aria-label', en: 'Arrow count' },
+    { sel: '#custom-note', en: 'Tip: a Shifting Arrow places one Arrow at the start; any extra Arrows are spent as range. On a 5 × 5 board, choosing C1 from C3 spends 2 Arrows and makes C1 the opponent\'s only target.' },
+    { sel: '#custom-next', en: 'Continue to Names' },
     { sel: '#btn-names-back', html: true, en: '<span aria-hidden="true">←</span> Back to Mode' },
     { sel: '#screen-names h2', en: 'Cast Your Name into the Goblet' },
     { sel: '#names-form button[type="submit"]', en: 'Cast into the Goblet · Begin' },
@@ -2239,7 +2437,7 @@
     { sel: '#shape-picker [data-shape="arrow"] .so-name', en: 'Arrow' },
     { sel: '#modal-rules .modal-close', attr: 'aria-label', en: 'Close rules' },
     { sel: '#rules-title', en: 'Triwizard Tournament Rules' },
-    { sel: '#modal-rules .modal-sub', en: 'Three Hallows. Twenty-five squares. First to three Hallow Resonances wins.' },
+    { sel: '#modal-rules .modal-sub', en: 'Standard match: three Hallows, twenty-five squares. First to three Hallow Resonances wins.' },
     { sel: '.rules-body', html: true, en: EN_RULES_BODY },
     { sel: '#modal-rules .modal-actions .btn', en: 'Got it' },
     { sel: '#modal-settings .modal-close', attr: 'aria-label', en: 'Close settings' },
@@ -2327,9 +2525,6 @@
     const changed = UI_LANG !== next;
     UI_LANG = next;
     settings.language = next;
-    if (state.mode === 'solo' && state.aiColor) {
-      state.labels[state.aiColor] = tr('另一位勇士', 'The Other Champion');
-    }
     if (persist) saveSettings();
     document.documentElement.lang = isEn() ? 'en' : 'zh-CN';
     document.title = isEn() ? 'The Deathly Hallows Chess' : '死亡圣棋 · The Deathly Hallows Chess';
@@ -2343,6 +2538,8 @@
       updateTurnTimerUI();
     } else if (state.screen === 'names' && changed) {
       refreshNameEntry();
+    } else if (state.screen === 'custom') {
+      renderCustomSetup();
     }
     if (state.screen !== 'game') {
       setEventText('三强争霸赛即将开始。', 'The Triwizard Tournament is about to begin.');
@@ -2353,7 +2550,7 @@
       const mode = state.pendingMode;
       if (mode) {
         $('#entry-sub').textContent = mode === 'solo'
-          ? tr('写有勇士姓名的纸条落入火焰杯……', 'The slip bearing the champion\'s name falls into the Goblet…')
+          ? tr('两张写有勇士与人机对手姓名的纸条依次落入火焰杯……', 'The slips bearing the champion\'s and the AI opponent\'s names fall into the Goblet one after another…')
           : tr('两张写有姓名的纸条依次落入火焰杯……', 'Two name slips fall into the Goblet one after another…');
       }
     }
@@ -2448,6 +2645,10 @@
   ============================================================ */
   function targetCellsFrom(lastPiece) {
     if (!lastPiece) return allCoords();
+    if (lastPiece.shape === 'arrow' && lastPiece.arrowTarget) {
+      const target = lastPiece.arrowTarget;
+      return inBounds(target.r, target.c) ? [{ r: target.r, c: target.c }] : [];
+    }
     if (lastPiece.shape === 'triangle') {
       return [
         { r: lastPiece.r - 1, c: lastPiece.c },
@@ -2476,6 +2677,19 @@
 
   function getTargetKeys() {
     return new Set(getTargetCells().map(pos => `${pos.r},${pos.c}`));
+  }
+
+  function shiftEndpointCells() {
+    if (!state.pendingShift) return [];
+    const { r, c } = state.pendingShift;
+    const cells = [];
+    for (let i = 0; i < SIZE; i++) {
+      if (i !== c) cells.push({ r, c: i, cost: Math.abs(i - c) });
+    }
+    for (let i = 0; i < SIZE; i++) {
+      if (i !== r) cells.push({ r: i, c, cost: Math.abs(i - r) });
+    }
+    return cells;
   }
 
   function collectLegalMoves(board, pieces, color, freeMove, lastPiece) {
@@ -2540,6 +2754,13 @@
       );
     }
     if (piece.shape === 'arrow') {
+      if (piece.arrowTarget) {
+        const target = coordName(piece.arrowTarget.r, piece.arrowTarget.c);
+        return tr(
+          `${owner}的移形换影箭头 · 只能落在 ${target}`,
+          `${owner}'s Shifting Arrow · Next move must be ${target}`
+        );
+      }
       const dir = DIRS[piece.dir];
       const nr = piece.r + dir.dr;
       const nc = piece.c + dir.dc;
@@ -2566,6 +2787,12 @@
       );
     }
     if (piece.shape === 'arrow') {
+      if (piece.arrowTarget) {
+        return tr(
+          `本回合必须落在移形换影指定的 ${coordName(piece.arrowTarget.r, piece.arrowTarget.c)} 格内`,
+          `This turn must be played on ${coordName(piece.arrowTarget.r, piece.arrowTarget.c)}, the Shifting Arrow's target`
+        );
+      }
       const dir = DIRS[piece.dir];
       return tr(
         `本回合必须落在上一枚箭头所指的 ${coordName(piece.r + dir.dr, piece.c + dir.dc)} 格内`,
@@ -2603,12 +2830,18 @@
   function renderBoard() {
     const boardEl = $('#board');
     if (!boardEl) return;
+    boardEl.style.setProperty('--board-size', String(SIZE));
+    boardEl.setAttribute('aria-label', isEn() ? `${SIZE} by ${SIZE} Hallows board` : `${SIZE}乘${SIZE}圣器棋盘`);
     boardEl.innerHTML = '';
     const targetKeys = new Set(getTargetCells().map(pos => `${pos.r},${pos.c}`));
     const legalMoves = state.gameOver ? [] : getLegalMoves();
     const selected = state.selectedShape;
     const relevantMoves = selected ? legalMoves.filter(move => move.shape === selected) : legalMoves;
     const playableKeys = new Set(relevantMoves.map(move => `${move.r},${move.c}`));
+    const shiftMode = !!state.pendingShift;
+    const shiftCells = shiftMode
+      ? new Map(shiftEndpointCells().map(item => [`${item.r},${item.c}`, item.cost]))
+      : null;
     const lastRuleKey = state.lastPiece ? `${state.lastPiece.r},${state.lastPiece.c}` : null;
     const lastPlacedKey = state.lastPlaced ? `${state.lastPlaced.r},${state.lastPlaced.c}` : null;
     const fresh = state.lastPlaced && Date.now() - state.lastPlaced.at < 700 ? state.lastPlaced : null;
@@ -2622,8 +2855,12 @@
         cellEl.dataset.r = String(r);
         cellEl.dataset.c = String(c);
         const key = `${r},${c}`;
-        if (targetKeys.has(key) && !state.gameOver) cellEl.classList.add('target');
-        if (settings.hints && playableKeys.has(key) && !state.gameOver) cellEl.classList.add('playable');
+        const isShiftStart = shiftMode && state.pendingShift.r === r && state.pendingShift.c === c;
+        const shiftCost = shiftCells ? shiftCells.get(key) : undefined;
+        if (!shiftMode && targetKeys.has(key) && !state.gameOver) cellEl.classList.add('target');
+        if (!shiftMode && settings.hints && playableKeys.has(key) && !state.gameOver) cellEl.classList.add('playable');
+        if (shiftMode && shiftCost !== undefined) cellEl.classList.add('target', 'playable', 'shift-target');
+        if (isShiftStart) cellEl.classList.add('shift-start');
         if (lastRuleKey === key) cellEl.classList.add('last-rule');
         if (lastPlacedKey === key) cellEl.classList.add('coord-selected');
         if (isScored(r, c, 'red')) cellEl.classList.add('scored-red');
@@ -2636,7 +2873,10 @@
             && state.lastPiece.c === c
             && state.lastPiece.owner === piece.owner
             && state.lastPiece.shape === piece.shape;
-          const title = `${displayName(piece.owner)} · ${shapeLabel(piece.shape, true, piece.dir)}${isLastMove ? tr(' · 上一手', ' · Last move') : ''}`;
+          const targetText = piece.arrowTarget
+            ? ` → ${coordName(piece.arrowTarget.r, piece.arrowTarget.c)}`
+            : '';
+          const title = `${displayName(piece.owner)} · ${shapeLabel(piece.shape, true, piece.dir)}${targetText}${isLastMove ? tr(' · 上一手', ' · Last move') : ''}`;
           return `<span class="chip owner-${piece.owner}${isFresh ? ' chip-new' : ''}${isLastMove ? ' last-move' : ''}" title="${escapeAttribute(title)}">${shapeSvg(piece.shape, piece.dir)}</span>`;
         }).join('');
 
@@ -2650,13 +2890,18 @@
           : tr('空', 'Empty');
         const ariaParts = [`${coordName(r, c)}`, piecesText];
         if (lastRuleKey === key && state.lastPiece) ariaParts.push(tr('上一手落子', 'Last move placed'));
-        if (settings.hints && playableKeys.has(key) && !state.gameOver) ariaParts.push(tr('可以落子', 'Can place'));
+        if (!shiftMode && settings.hints && playableKeys.has(key) && !state.gameOver) ariaParts.push(tr('可以落子', 'Can place'));
+        if (shiftMode && shiftCost !== undefined) {
+          ariaParts.push(tr(`移形换影终点，消耗 ${shiftCost} 枚箭头棋`, `Shifting Arrow target, costs ${shiftCost} Arrows`));
+        }
+        if (isShiftStart) ariaParts.push(tr('移形换影起点，再次点击取消', 'Shifting Arrow start; click again to cancel'));
         cellEl.setAttribute('aria-label', ariaParts.join(isEn() ? ', ' : '，'));
 
         cellEl.innerHTML = `
           <span class="cell-coord">${coordName(r, c)}</span>
           <span class="chips">${chipHtml}</span>
           <span class="score-marks">${scoreMarks}</span>
+          ${shiftCost !== undefined ? `<span class="shift-cost${shiftCost > state.players[state.turn].pieces.arrow ? ' expensive' : ''}">${shiftCost}</span>` : ''}
         `;
         boardEl.appendChild(cellEl);
       }
@@ -2698,9 +2943,11 @@
       const piecesEl = $(`#pieces-${color}`);
       piecesEl.innerHTML = SHAPES.map(shape => {
         const count = player.pieces[shape];
-        const dots = Array.from({ length: 5 }, (_, i) =>
-          `<span class="pr-dot${i < count ? ' on' : ''}"></span>`
-        ).join('');
+        const dots = count <= 5
+          ? Array.from({ length: 5 }, (_, i) =>
+            `<span class="pr-dot${i < count ? ' on' : ''}"></span>`
+          ).join('')
+          : '';
         return `<div class="piece-row${count === 0 ? ' empty' : ''}">
           <span class="pr-icon">${shapeSvg(shape)}</span>
           <span class="pr-name">${SHAPE_META[shape].label}</span>
@@ -2745,7 +2992,11 @@
         : `第 ${state.moveCount + 1} 手 · ${mode}`;
     }
     $('#constraint-text').textContent = constraintText();
-    $('#mode-tag').textContent = state.mode === 'solo' ? tr('一人游戏', 'Single Player') : tr('两人游戏', 'Two Players');
+    $('#mode-tag').textContent = state.mode === 'solo'
+      ? tr('一人游戏', 'Single Player')
+      : state.mode === 'custom'
+        ? tr('自定义房间', 'Custom Room')
+        : tr('两人游戏', 'Two Players');
     $('#event-text').textContent = state.eventText;
   }
 
@@ -2762,7 +3013,13 @@
     let hint = '';
     let badge = '';
 
-    if (state.gameOver) {
+    if (state.pendingShift) {
+      title = tr('移形换影', 'Shifting Arrow');
+      sub = tr('选择同一行或同一列的终点', 'Choose a destination in the same row or column');
+      hint = tr('消耗与距离相同的箭头棋；再次点击起点可取消。', 'Spend Arrows equal to the distance; click the start again to cancel.');
+      badge = tr('移形换影', 'Shifting Arrow');
+      hintEl.classList.remove('alert');
+    } else if (state.gameOver) {
       title = tr('对局结束', 'Match Over');
       sub = state.winner
         ? tr(`${displayName(state.winner)}已取得胜利`, `${displayName(state.winner)} wins`)
@@ -2771,13 +3028,13 @@
       badge = tr('终局', 'Final');
       hintEl.classList.remove('alert');
     } else if (isAi) {
-      title = tr('另一位勇士正在思考', 'The Other Champion is thinking');
+      title = tr(`${displayName(state.aiColor)}正在思考`, `${displayName(state.aiColor)} is thinking`);
       sub = tr('对手会依照局面选择落子', 'Your opponent is reading the board');
       hint = tr('请稍候，对手正在思考下一步。', 'Please wait while your opponent chooses a move.');
       badge = tr('对手回合', 'AI Turn');
       hintEl.classList.remove('alert');
     } else {
-      title = state.mode === 'duo'
+      title = state.mode !== 'solo'
         ? tr(`${displayName(state.turn)}的回合`, `${displayName(state.turn)}'s Turn`)
         : tr('轮到你', 'Your Turn');
       sub = state.freeMove
@@ -2837,6 +3094,163 @@
     $('#solo-difficulty').textContent = isEn()
       ? `Difficulty · ${DIFFICULTY_LABEL[settings.difficulty]}`
       : `难度 · ${DIFFICULTY_LABEL[settings.difficulty]}`;
+  }
+
+  function updatePlaystylePicker() {
+    const picker = $('#playstyle-picker');
+    if (!picker) return;
+    const visible = state.pendingMode === 'solo' || state.pendingMode === 'duo';
+    picker.classList.toggle('hidden', !visible);
+    if (!visible) return;
+    $('#playstyle-title').textContent = tr('玩法', 'Playstyle');
+    $('#playstyle-classic').textContent = tr('经典玩法', 'Classic');
+    $('#playstyle-shift').textContent = tr('移形换影', 'Shifting Arrow');
+    $$('.playstyle-option', picker).forEach(button => {
+      button.classList.toggle('active', button.dataset.style === state.pendingPlayStyle);
+    });
+    $('#playstyle-desc').textContent = state.pendingPlayStyle === 'shift'
+      ? tr(
+        '进阶：箭头基础数量提升至 7 枚，可指定同一直线上的任意终点，消耗与距离相同的箭头棋，迫使对手在终点落子。',
+        'Advanced: base Arrows increase to 7; choose any destination along the arrow\'s row or column, spend Arrows equal to the distance, and force the opponent to play there.'
+      )
+      : tr(
+        '经典：箭头只有 5 枚，且只能迫使对手落在相邻格。',
+        'Classic: 5 Arrows, and an Arrow only forces the opponent onto an adjacent square.'
+      );
+  }
+
+  function setPlayStyle(style) {
+    if (!['classic', 'shift'].includes(style)) return;
+    state.pendingPlayStyle = style;
+    updatePlaystylePicker();
+    playSound('click');
+  }
+
+  /* ============================================================
+     自定义房间
+  ============================================================ */
+  function customCells(size = customConfig.size) {
+    return size * size;
+  }
+
+  function defaultCustomCounts() {
+    return { triangle: 5, circle: 5, arrow: 5 };
+  }
+
+  function customTotal(counts = customConfig.counts) {
+    return SHAPES.reduce((sum, shape) => sum + (Number(counts[shape]) || 0), 0);
+  }
+
+  function customCountInput(shape) {
+    return $(`#custom-${shape === 'arrow' ? 'arrow-count' : shape}`);
+  }
+
+  function renderCustomSetup() {
+    const sizeSelect = $('#custom-size');
+    if (!sizeSelect) return;
+    customConfig.size = Math.max(CUSTOM_SIZE_MIN, Math.min(CUSTOM_SIZE_MAX, Number(customConfig.size) || 5));
+    sizeSelect.value = String(customConfig.size);
+    $('#custom-first').value = customConfig.firstPlayer;
+    const toggle = $('#custom-arrow');
+    toggle.classList.toggle('on', !!customConfig.arrowVariant);
+    toggle.setAttribute('aria-checked', String(!!customConfig.arrowVariant));
+    const cells = customCells();
+    SHAPES.forEach(shape => {
+      const input = customCountInput(shape);
+      if (!input) return;
+      input.max = String(cells);
+      input.value = String(customConfig.counts[shape]);
+    });
+    $('#custom-error').textContent = '';
+    updateCustomSummary();
+  }
+
+  function updateCustomSummary() {
+    const cells = customCells();
+    const total = customTotal();
+    const summary = $('#custom-summary');
+    if (!summary) return;
+    summary.innerHTML = isEn()
+      ? `Each player: <b>${total}</b> pieces · Board: <b>${cells}</b> squares`
+      : `每位玩家：<b>${total}</b> 枚棋子 · 棋盘：<b>${cells}</b> 格`;
+  }
+
+  function customCountsValid(counts, cells) {
+    return SHAPES.every(shape => {
+      const value = Number(counts[shape]);
+      return Number.isInteger(value) && value >= 0 && value <= cells;
+    });
+  }
+
+  function openCustomSetup() {
+    renderCustomSetup();
+    showScreen('custom');
+  }
+
+  function changeCustomSize() {
+    const nextSize = Number($('#custom-size').value);
+    customConfig.size = nextSize;
+    const cells = customCells();
+    if (!customCountsValid(customConfig.counts, cells)) {
+      customConfig.counts = defaultCustomCounts();
+    }
+    renderCustomSetup();
+  }
+
+  function readCustomDraft() {
+    const size = Number($('#custom-size').value);
+    const firstPlayer = $('#custom-first').value;
+    const counts = {};
+    SHAPES.forEach(shape => {
+      counts[shape] = Number(customCountInput(shape).value);
+    });
+    return {
+      size,
+      firstPlayer,
+      arrowVariant: $('#custom-arrow').classList.contains('on'),
+      counts
+    };
+  }
+
+  function handleCustomSubmit(event) {
+    event.preventDefault();
+    const draft = readCustomDraft();
+    const errorEl = $('#custom-error');
+    errorEl.textContent = '';
+    if (!Number.isInteger(draft.size) || draft.size < CUSTOM_SIZE_MIN || draft.size > CUSTOM_SIZE_MAX) {
+      errorEl.textContent = tr('棋盘大小必须在 3 到 8 之间。', 'Board size must be between 3 and 8.');
+      return;
+    }
+    if (!['p1', 'p2', 'random'].includes(draft.firstPlayer)) {
+      errorEl.textContent = tr('请选择有效的先手玩家。', 'Choose a valid first player.');
+      return;
+    }
+    const cells = draft.size * draft.size;
+    for (const shape of SHAPES) {
+      const value = draft.counts[shape];
+      if (!Number.isInteger(value) || value < 0 || value > cells) {
+        errorEl.textContent = tr(
+          `${SHAPE_META[shape].label}棋数量必须在 0 到 ${cells} 之间。`,
+          `${SHAPE_META[shape].label} count must be between 0 and ${cells}.`
+        );
+        return;
+      }
+    }
+    if (customTotal(draft.counts) === 0) {
+      errorEl.textContent = tr(
+        '请至少为每位玩家配置一枚棋子，否则无法开始对局。',
+        'Configure at least one piece per player to start the match.'
+      );
+      return;
+    }
+    customConfig = {
+      size: draft.size,
+      arrowVariant: draft.arrowVariant,
+      firstPlayer: draft.firstPlayer,
+      counts: draft.counts
+    };
+    renderCustomSetup();
+    openNameEntry('custom');
   }
 
   function renderSettingsUI() {
@@ -2994,6 +3408,7 @@
     state.timeouts[color] = Math.min(TIMEOUT_LIMIT, (state.timeouts[color] || 0) + 1);
     state.selectedShape = null;
     state.pendingArrow = null;
+    state.pendingShift = null;
     const count = state.timeouts[color];
     if (count >= TIMEOUT_LIMIT) {
       const timeoutZh = `${fullDisplayNameIn(color, 'zh')}累计三次超时，本局被判负。`;
@@ -3057,6 +3472,14 @@
     return Array.from(text).slice(0, 10).join('');
   }
 
+  function generateAiName(avoid = '') {
+    let name;
+    do {
+      name = `勇士${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
+    } while (name === avoid);
+    return name;
+  }
+
   function clearEntryTimers() {
     entryRun += 1;
     entryTimers.forEach(timer => clearTimeout(timer));
@@ -3076,7 +3499,7 @@
   function buildEntrySlips(mode, names) {
     const layer = $('#entry-slips');
     if (!layer) return;
-    const list = mode === 'solo' ? [names.human] : [names.p1, names.p2];
+    const list = mode === 'solo' ? [names.human, names.ai] : [names.p1, names.p2];
     layer.innerHTML = '';
     list.filter(Boolean).forEach(name => {
       const slip = document.createElement('div');
@@ -3103,7 +3526,7 @@
     const scene = $('#entry-scene');
     scene.className = 'entry-scene';
     $('#entry-sub').textContent = mode === 'solo'
-      ? tr('写有勇士姓名的纸条落入火焰杯……', 'The slip bearing the champion\'s name falls into the Goblet…')
+      ? tr('两张写有勇士与人机对手姓名的纸条依次落入火焰杯……', 'The slips bearing the champion\'s and the AI opponent\'s names fall into the Goblet one after another…')
       : tr('两张写有姓名的纸条依次落入火焰杯……', 'Two name slips fall into the Goblet one after another…');
     buildEntrySlips(mode, names);
     openModal('modal-entry');
@@ -3115,8 +3538,7 @@
       scheduleEntry(() => scene.classList.add('is-rising'), 30);
       scheduleEntry(() => scene.classList.add('is-flaming'), 260);
       scheduleEntry(() => scene.classList.add('is-throwing'), 760);
-      const count = mode === 'solo' ? 1 : 2;
-      const finishDelay = 760 + (count - 1) * 950 + 2000 + 480;
+      const finishDelay = 760 + 950 + 2000 + 480;
       scheduleEntry(finishGobletEntry, finishDelay);
     }
     setTimeout(() => {
@@ -3136,32 +3558,45 @@
     entryTimers = [];
     setTimeout(() => {
       closeModal('modal-entry', { resume: false });
-      if (mode) startGame(mode, names);
+      if (mode) startGame(mode, names, state.pendingPlayStyle);
     }, 340);
   }
 
   function openNameEntry(mode, presetValues = {}) {
     state.pendingMode = mode;
     const isSolo = mode === 'solo';
+    const isCustom = mode === 'custom';
     const en = isEn();
+    updatePlaystylePicker();
+    const aiDefault = isSolo ? (presetValues.ai || generateAiName(presetValues.human || '')) : '';
     $('#name-subtitle').textContent = isSolo
       ? tr(
         '写下名字，投入火焰杯，等待它选出参加三强争霸赛的勇士。',
         'Write your name, cast it into the Goblet, and let it choose the champion of the Triwizard Tournament.'
       )
-      : tr(
-        '两位勇士各自写下名字，将纸条一同投入火焰杯。',
-        'Both champions write their names and cast the slips into the Goblet together.'
-      );
+      : isCustom
+        ? tr(
+          '两位勇士写下名字，进入这场由你们亲自定制的对局。',
+          'Both champions enter their names for this custom-built match.'
+        )
+        : tr(
+          '两位勇士各自写下名字，将纸条一同投入火焰杯。',
+          'Both champions write their names and cast the slips into the Goblet together.'
+        );
     $('#name-note').innerHTML = isSolo
       ? tr(
-        '先手由系统随机决定；你的对手是「<b>另一位勇士</b>」。',
-        'The first move is chosen at random; your opponent is <b>The Other Champion</b>.'
+        '先手由系统随机决定；人机对手默认名为「勇士###」，你也可以自定义。',
+        'The first move is chosen at random. The AI opponent is a numbered Warrior by default; you can give them a custom name.'
       )
-      : tr(
-        '红蓝阵营与先手将在进入棋盘时随机分配；两张姓名纸条会一同投入火焰杯。',
-        'Red and Blue, along with the first move, are randomly assigned when you enter the board; both slips are cast into the Goblet together.'
-      );
+      : isCustom
+        ? tr(
+          '棋盘大小、棋子数量与先手均已确定；先手玩家执红并先行。',
+          'Board size, piece counts and the first player are set; the first player takes Red and moves first.'
+        )
+        : tr(
+          '红蓝阵营与先手将在进入棋盘时随机分配；两张姓名纸条会一同投入火焰杯。',
+          'Red and Blue, along with the first move, are randomly assigned when you enter the board; both slips are cast into the Goblet together.'
+        );
     const fields = $('#name-fields');
     if (isSolo) {
       fields.className = 'name-fields single';
@@ -3172,22 +3607,22 @@
           <span class="name-input-row"><span class="name-orb"></span><input class="name-input" id="name-human" data-slot="human" type="text" maxlength="10" autocomplete="off" spellcheck="false" placeholder="Enter your name" aria-label="Your name"></span>
           <span class="name-field-foot">You will be randomly assigned Red or Blue when you enter the board.</span>
         </label>
-        <div class="name-field locked">
-          <span class="name-field-kicker">Opponent</span>
-          <span class="name-input-row"><span class="name-orb ai"></span><span class="name-fixed">The Other Champion</span><span class="name-lock">AI</span></span>
-          <span class="name-field-foot">Only you need a name in Single Player. The Other Champion needs no slip.</span>
-        </div>`
+        <label class="name-field">
+          <span class="name-field-kicker">Opponent · AI</span>
+          <span class="name-input-row"><span class="name-orb ai"></span><input class="name-input" id="name-ai" data-slot="ai" type="text" maxlength="10" autocomplete="off" spellcheck="false" placeholder="AI opponent name" aria-label="AI opponent name"><span class="name-lock">AI</span></span>
+          <span class="name-field-foot">Auto-generated by default; you can customize it. The AI's name is also cast into the Goblet.</span>
+        </label>`
         : `
         <label class="name-field">
           <span class="name-field-kicker">Your Name · 勇士姓名</span>
           <span class="name-input-row"><span class="name-orb"></span><input class="name-input" id="name-human" data-slot="human" type="text" maxlength="10" autocomplete="off" spellcheck="false" placeholder="输入你的名字" aria-label="你的名字"></span>
           <span class="name-field-foot">你将在进入棋盘时随机执红或执蓝。</span>
         </label>
-        <div class="name-field locked">
-          <span class="name-field-kicker">Opponent · 对手</span>
-          <span class="name-input-row"><span class="name-orb ai"></span><span class="name-fixed">另一位勇士</span><span class="name-lock">人机</span></span>
-          <span class="name-field-foot">人机对战只需你自拟名称，另一位勇士不需要投名。</span>
-        </div>`;
+        <label class="name-field">
+          <span class="name-field-kicker">Opponent · 人机对手</span>
+          <span class="name-input-row"><span class="name-orb ai"></span><input class="name-input" id="name-ai" data-slot="ai" type="text" maxlength="10" autocomplete="off" spellcheck="false" placeholder="人机名称" aria-label="人机名称"><span class="name-lock">AI</span></span>
+          <span class="name-field-foot">默认自动生成，可自定义；人机名称也会投入火焰杯。</span>
+        </label>`;
     } else {
       fields.className = 'name-fields';
       fields.innerHTML = en
@@ -3214,8 +3649,10 @@
           <span class="name-field-foot">双方的名字不可相同。</span>
         </label>`;
     }
+    const values = { ...presetValues };
+    if (isSolo && !values.ai) values.ai = aiDefault;
     $$('#name-fields input').forEach(input => {
-      const value = presetValues[input.dataset.slot];
+      const value = values[input.dataset.slot];
       if (typeof value === 'string') input.value = value;
     });
     $('#name-error').textContent = '';
@@ -3238,18 +3675,27 @@
     errorEl.textContent = '';
     if (mode === 'solo') {
       const input = $('#name-human');
+      const aiInput = $('#name-ai');
       const human = normalizeName(input ? input.value : '');
+      let ai = normalizeName(aiInput ? aiInput.value : '');
       if (!human) {
         errorEl.textContent = tr('请先留下你的名字。', 'Please enter your name first.');
         input && input.focus();
         return;
       }
-      if (human === '另一位勇士' || human.toLowerCase() === 'the other champion') {
-        errorEl.textContent = tr('「另一位勇士」是对手的称呼，请换一个名字。', '"The Other Champion" is your opponent. Please choose another name.');
-        input.select();
+      if (!ai) {
+        ai = generateAiName(human);
+        if (aiInput) aiInput.value = ai;
+      }
+      if (ai === human) {
+        errorEl.textContent = tr('人机名称不能与你的名字相同。', 'The AI name must be different from your own.');
+        if (aiInput) {
+          aiInput.focus();
+          aiInput.select();
+        }
         return;
       }
-      state.activeNames = { human };
+      state.activeNames = { human, ai };
       beginGobletEntry('solo', state.activeNames);
     } else {
       const input1 = $('#name-p1');
@@ -3273,7 +3719,7 @@
         return;
       }
       state.activeNames = { p1, p2 };
-      beginGobletEntry('duo', state.activeNames);
+      beginGobletEntry(mode, state.activeNames);
     }
   }
 
@@ -3281,16 +3727,27 @@
     if (state.mode === 'solo') {
       const humanRed = Math.random() < 0.5;
       const humanName = state.activeNames && state.activeNames.human ? state.activeNames.human : tr('无名勇士', 'Unnamed Champion');
+      const aiName = state.activeNames && state.activeNames.ai ? state.activeNames.ai : generateAiName(humanName);
+      if (state.activeNames) state.activeNames.ai = aiName;
       state.humanColor = humanRed ? 'red' : 'blue';
       state.aiColor = humanRed ? 'blue' : 'red';
       state.labels = {};
       state.labels[state.humanColor] = humanName;
-      state.labels[state.aiColor] = tr('另一位勇士', 'The Other Champion');
+      state.labels[state.aiColor] = aiName;
       state.player1Color = null;
     } else {
-      const p1Red = Math.random() < 0.5;
       const p1Name = state.activeNames && state.activeNames.p1 ? state.activeNames.p1 : tr('玩家一', 'Player One');
       const p2Name = state.activeNames && state.activeNames.p2 ? state.activeNames.p2 : tr('玩家二', 'Player Two');
+      let p1Red;
+      if (state.mode === 'custom') {
+        p1Red = customConfig.firstPlayer === 'p1'
+          ? true
+          : customConfig.firstPlayer === 'p2'
+            ? false
+            : Math.random() < 0.5;
+      } else {
+        p1Red = Math.random() < 0.5;
+      }
       state.player1Color = p1Red ? 'red' : 'blue';
       state.humanColor = null;
       state.aiColor = null;
@@ -3301,7 +3758,7 @@
     }
   }
 
-  function startGame(mode, names = state.activeNames) {
+  function startGame(mode, names = state.activeNames, playStyle = null) {
     clearTimeout(aiTimer);
     aiTimer = null;
     clearVictoryTimers();
@@ -3309,9 +3766,18 @@
     closeAllModals();
     state.gameId += 1;
     state.mode = mode;
+    const isCustom = mode === 'custom';
+    const selectedStyle = isCustom
+      ? (customConfig.arrowVariant ? 'shift' : 'classic')
+      : (playStyle || state.playStyle || 'classic');
+    state.playStyle = selectedStyle;
+    state.arrowVariant = selectedStyle === 'shift';
+    SIZE = isCustom ? customConfig.size : 5;
+    state.size = SIZE;
     if (names) state.activeNames = names;
     state.board = emptyBoard();
-    state.players = makePlayers();
+    const standardCounts = { triangle: 5, circle: 5, arrow: state.arrowVariant ? 7 : 5 };
+    state.players = makePlayers(isCustom ? customConfig.counts : standardCounts);
     state.scored = new Set();
     state.turn = 'red';
     state.freeMove = true;
@@ -3319,6 +3785,7 @@
     state.lastPlaced = null;
     state.selectedShape = null;
     state.pendingArrow = null;
+    state.pendingShift = null;
     state.gameOver = false;
     state.winner = null;
     state.endReason = '';
@@ -3353,6 +3820,13 @@
     }
     state.selectedShape = shape;
     state.pendingArrow = null;
+    state.pendingShift = null;
+    if (shape === 'arrow' && state.arrowVariant && isHumanTurn()) {
+      const starts = getTargetCells().filter(pos => !cellHasShape(state.board[pos.r][pos.c], 'arrow'));
+      if (starts.length === 1) {
+        state.pendingShift = { r: starts[0].r, c: starts[0].c };
+      }
+    }
     playSound('click');
     renderAction();
     renderBoard();
@@ -3361,10 +3835,17 @@
   function onBoardClick(r, c) {
     if (state.screen !== 'game' || state.gameOver) return;
     if (state.mode === 'solo' && state.turn === state.aiColor) {
-      showToast(tr('另一位勇士正在思考，请稍候。', 'The Other Champion is thinking. Please wait.'), 'info');
+      showToast(tr(
+        `${displayName(state.aiColor)}正在思考，请稍候。`,
+        `${displayName(state.aiColor)} is thinking. Please wait.`
+      ), 'info');
       return;
     }
     if (!isHumanTurn()) return;
+    if (state.pendingShift) {
+      handleShiftEndpoint(r, c);
+      return;
+    }
     if (!state.selectedShape) {
       showToast(tr('请先在下方选择一种棋子。', 'Choose a shape below first.'), 'error');
       playSound('error');
@@ -3393,6 +3874,14 @@
       return;
     }
     if (shape === 'arrow') {
+      if (state.arrowVariant) {
+        state.pendingShift = { r, c };
+        state.pendingArrow = null;
+        playSound('click');
+        renderBoard();
+        renderAction();
+        return;
+      }
       const validDirs = validArrowDirections(r, c);
       if (validDirs.length === 0) {
         showToast(tr('该格无法选择任何朝内的箭头方向，请换一个落点。', 'No arrow direction stays on the board from this square. Choose another square.'), 'error');
@@ -3404,6 +3893,50 @@
       return;
     }
     commitMove({ r, c, shape, dir: null });
+  }
+
+  function cancelPendingShift() {
+    if (!state.pendingShift) return;
+    state.pendingShift = null;
+    renderAll();
+  }
+
+  function handleShiftEndpoint(r, c) {
+    if (!state.pendingShift) return;
+    const start = state.pendingShift;
+    if (r === start.r && c === start.c) {
+      cancelPendingShift();
+      return;
+    }
+    if (r !== start.r && c !== start.c) {
+      showToast(tr('终点必须与起点位于同一行或同一列。', 'The destination must be in the same row or column as the start.'), 'error');
+      playSound('error');
+      return;
+    }
+    const distance = Math.abs(r - start.r) + Math.abs(c - start.c);
+    const available = state.players[state.turn].pieces.arrow;
+    if (distance > available) {
+      showToast(tr(
+        `箭头棋不足：到达该终点需要 ${distance} 枚，当前只有 ${available} 枚。`,
+        `Not enough Arrows: this destination costs ${distance}, but only ${available} ${available === 1 ? 'remains' : 'remain'}.`
+      ), 'error');
+      playSound('error');
+      return;
+    }
+    let dir = 0;
+    if (r < start.r) dir = 0;
+    else if (c > start.c) dir = 1;
+    else if (r > start.r) dir = 2;
+    else dir = 3;
+    state.pendingShift = null;
+    commitMove({
+      r: start.r,
+      c: start.c,
+      shape: 'arrow',
+      dir,
+      shiftTarget: { r, c },
+      shiftCost: distance
+    });
   }
 
   function validArrowDirections(r, c) {
@@ -3488,17 +4021,35 @@
 
     const { r, c, shape } = move;
     const dir = shape === 'arrow' ? move.dir : null;
+    const shiftTarget = shape === 'arrow' && move.shiftTarget ? { ...move.shiftTarget } : null;
+    const shiftCost = shiftTarget ? Math.max(1, Number(move.shiftCost) || 1) : 1;
     const player = state.players[color];
+    if (player.pieces[shape] < shiftCost) {
+      state.pendingShift = null;
+      state.selectedShape = null;
+      showToast(tr(
+        `箭头棋不足：这次移形换影需要 ${shiftCost} 枚。`,
+        `Not enough Arrows: this Shifting Arrow costs ${shiftCost}.`
+      ), 'error');
+      playSound('error');
+      renderAll();
+      return;
+    }
     const cell = state.board[r][c];
     const piece = { owner: color, shape, dir };
+    if (shiftTarget) {
+      piece.arrowTarget = shiftTarget;
+      piece.shiftCost = shiftCost;
+    }
     cell.push(piece);
-    player.pieces[shape] -= 1;
+    player.pieces[shape] -= shiftCost;
     state.moveCount += 1;
-    state.lastPiece = { owner: color, shape, dir, r, c };
-    state.lastPlaced = { owner: color, shape, dir, r, c, at: Date.now() };
+    state.lastPiece = { owner: color, shape, dir, r, c, ...(shiftTarget ? { arrowTarget: shiftTarget, shiftCost } : {}) };
+    state.lastPlaced = { owner: color, shape, dir, r, c, at: Date.now(), ...(shiftTarget ? { arrowTarget: shiftTarget, shiftCost } : {}) };
     state.freeMove = false;
     state.selectedShape = null;
     state.pendingArrow = null;
+    state.pendingShift = null;
 
     let gained = 0;
     if (!isScored(r, c, color) && countOwned(cell, color) >= 2) {
@@ -3507,10 +4058,18 @@
       gained = 1;
     }
 
-    const zhDir = shape === 'arrow' ? `，指向${directionNameIn(dir, 'zh')}` : '';
-    const enDir = shape === 'arrow' ? `, facing ${directionNameIn(dir, 'en')}` : '';
-    const zhEvent = `${fullDisplayNameIn(color, 'zh')}在 ${coordName(r, c)} 落下${shapeNameIn(shape, 'zh', true)}${zhDir}${gained ? '，双器共鸣，计分 +1！' : '。'}`;
-    const enEvent = `${fullDisplayNameIn(color, 'en')} placed ${shapeNameIn(shape, 'en', true)} on ${coordName(r, c)}${enDir}${gained ? '. Hallow Resonance! +1 point.' : '.'}`;
+    let zhEvent;
+    let enEvent;
+    if (shiftTarget) {
+      const target = coordName(shiftTarget.r, shiftTarget.c);
+      zhEvent = `${fullDisplayNameIn(color, 'zh')}在 ${coordName(r, c)} 使用移形换影，消耗 ${shiftCost} 枚箭头棋，指定对手下一步只能落在 ${target}${gained ? '，并引发圣器共鸣，计分 +1！' : '。'}`;
+      enEvent = `${fullDisplayNameIn(color, 'en')} used Shifting Arrow from ${coordName(r, c)}, spent ${shiftCost} Arrows, and forced the next move to ${target}${gained ? '. Hallow Resonance! +1 point.' : '.'}`;
+    } else {
+      const zhDir = shape === 'arrow' ? `，指向${directionNameIn(dir, 'zh')}` : '';
+      const enDir = shape === 'arrow' ? `, facing ${directionNameIn(dir, 'en')}` : '';
+      zhEvent = `${fullDisplayNameIn(color, 'zh')}在 ${coordName(r, c)} 落下${shapeNameIn(shape, 'zh', true)}${zhDir}${gained ? '，双器共鸣，计分 +1！' : '。'}`;
+      enEvent = `${fullDisplayNameIn(color, 'en')} placed ${shapeNameIn(shape, 'en', true)} on ${coordName(r, c)}${enDir}${gained ? '. Hallow Resonance! +1 point.' : '.'}`;
+    }
     setEventText(zhEvent, enEvent);
     renderAll();
 
@@ -3608,6 +4167,7 @@
     state.endReason = reason;
     state.selectedShape = null;
     state.pendingArrow = null;
+    state.pendingShift = null;
     state.isAiThinking = false;
     stopTurnClock();
     clearVictoryTimers();
@@ -3772,12 +4332,15 @@
         maybeScheduleAI();
         return;
       }
-      const move = chooseAiMove(moves);
+      let move = chooseAiMove(moves);
       if (!move) {
         resolveForcedFreeMove();
         renderAll();
         maybeScheduleAI();
         return;
+      }
+      if (move.shape === 'arrow' && state.arrowVariant) {
+        move = chooseAiShiftMove(move);
       }
       commitMove(move);
     }, delay);
@@ -3797,6 +4360,66 @@
     const best = scored[0].value;
     const pool = scored.filter(item => item.value >= best - 0.001);
     return pool[Math.floor(Math.random() * pool.length)].move;
+  }
+
+  function chooseAiShiftMove(move) {
+    const ai = state.turn;
+    const opponent = otherColor(ai);
+    const available = state.players[ai].pieces.arrow;
+    const directions = [
+      { dr: -1, dc: 0, dir: 0 },
+      { dr: 0, dc: 1, dir: 1 },
+      { dr: 1, dc: 0, dir: 2 },
+      { dr: 0, dc: -1, dir: 3 }
+    ];
+    const options = [];
+    for (const direction of directions) {
+      for (let distance = 1; distance <= available; distance++) {
+        const target = { r: move.r + direction.dr * distance, c: move.c + direction.dc * distance };
+        if (!inBounds(target.r, target.c)) break;
+        const simulatedBoard = cloneBoard(state.board);
+        simulatedBoard[move.r][move.c].push({
+          owner: ai,
+          shape: 'arrow',
+          dir: direction.dir,
+          arrowTarget: target,
+          shiftCost: distance
+        });
+        const lastPiece = {
+          owner: ai,
+          shape: 'arrow',
+          dir: direction.dir,
+          r: move.r,
+          c: move.c,
+          arrowTarget: target,
+          shiftCost: distance
+        };
+        const opponentMoves = collectLegalMoves(
+          simulatedBoard,
+          state.players[opponent].pieces,
+          opponent,
+          false,
+          lastPiece
+        );
+        let value = -opponentMoves.length * 20;
+        if (opponentMoves.length === 0) value -= 5000;
+        const targetCell = simulatedBoard[target.r][target.c];
+        if (!isScored(target.r, target.c, opponent) && countOwned(targetCell, opponent) >= 1) {
+          value -= 1500;
+        }
+        value += Math.random() * 6;
+        options.push({
+          ...move,
+          dir: direction.dir,
+          shiftTarget: { ...target },
+          shiftCost: distance,
+          _value: value
+        });
+      }
+    }
+    if (!options.length) return move;
+    options.sort((a, b) => b._value - a._value);
+    return options[0];
   }
 
   function evaluateAiMove(move) {
@@ -3883,6 +4506,7 @@
     clearVictoryTimers();
     clearEntryTimers();
     state.isAiThinking = false;
+    state.pendingShift = null;
     stopTurnClock();
     closeAllModals();
     showScreen('home');
@@ -3953,8 +4577,45 @@
     $('#btn-exit').addEventListener('click', confirmExitGame);
     $('#brand-home').addEventListener('click', confirmExitGame);
 
-    $('#mode-solo').addEventListener('click', () => { playSound('click'); openNameEntry('solo'); });
-    $('#mode-duo').addEventListener('click', () => { playSound('click'); openNameEntry('duo'); });
+    $('#mode-solo').addEventListener('click', () => {
+      playSound('click');
+      state.pendingPlayStyle = 'classic';
+      openNameEntry('solo');
+    });
+    $('#mode-duo').addEventListener('click', () => {
+      playSound('click');
+      state.pendingPlayStyle = 'classic';
+      openNameEntry('duo');
+    });
+    $('#mode-custom').addEventListener('click', () => { playSound('click'); openCustomSetup(); });
+    $$('#playstyle-picker .playstyle-option').forEach(button => {
+      button.addEventListener('click', () => setPlayStyle(button.dataset.style));
+    });
+    $('#btn-custom-back').addEventListener('click', () => { playSound('click'); showScreen('mode'); });
+    $('#custom-form').addEventListener('submit', handleCustomSubmit);
+    $('#custom-arrow').addEventListener('click', () => {
+      customConfig.arrowVariant = !customConfig.arrowVariant;
+      const toggle = $('#custom-arrow');
+      toggle.classList.toggle('on', customConfig.arrowVariant);
+      toggle.setAttribute('aria-checked', String(customConfig.arrowVariant));
+      playSound('click');
+    });
+    $('#custom-first').addEventListener('change', event => {
+      customConfig.firstPlayer = event.target.value;
+    });
+    $('#custom-size').addEventListener('change', () => {
+      changeCustomSize();
+      playSound('click');
+    });
+    SHAPES.forEach(shape => {
+      const input = customCountInput(shape);
+      if (!input) return;
+      input.addEventListener('input', () => {
+        customConfig.counts[shape] = Number(input.value);
+        $('#custom-error').textContent = '';
+        updateCustomSummary();
+      });
+    });
 
     $('#board').addEventListener('click', event => {
       const cell = event.target.closest('.cell');
@@ -4017,7 +4678,7 @@
       const mode = state.mode;
       const names = state.activeNames;
       closeAllModals();
-      startGame(mode, names);
+      startGame(mode, names, state.playStyle);
     });
     $('#btn-go-home').addEventListener('click', () => {
       closeAllModals();
@@ -4061,6 +4722,10 @@
       if (event.key !== 'Escape') return;
       const openLayers = $$('.modal-layer.open');
       if (!openLayers.length) {
+        if (state.pendingShift) {
+          cancelPendingShift();
+          return;
+        }
         if (state.screen === 'game' && !state.gameOver) confirmExitGame();
         return;
       }
