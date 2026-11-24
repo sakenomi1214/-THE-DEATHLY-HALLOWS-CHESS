@@ -344,6 +344,13 @@
   .player-panel.active::before{opacity:1;background:linear-gradient(90deg,transparent,var(--side),transparent)}
   .player-panel.winner{border-color:rgba(216,182,108,.52);box-shadow:0 0 0 1px rgba(216,182,108,.2),0 0 50px rgba(216,182,108,.13)}
   .panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .panel-actions{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:wrap}
+  .undo{
+    appearance:none;border:1px solid rgba(216,182,108,.28);border-radius:999px;background:rgba(216,182,108,.06);
+    color:var(--gold);padding:4px 8px;font-size:8.5px;letter-spacing:.05em;cursor:pointer;transition:.2s;white-space:nowrap;
+  }
+  .undo:hover{border-color:rgba(216,182,108,.58);background:rgba(216,182,108,.13);color:var(--gold-bright)}
+  .undo:disabled{opacity:.3;cursor:not-allowed}
   .player-id{display:flex;align-items:center;gap:9px;min-width:0}
   .side-gem{width:9px;height:9px;flex:none;border-radius:50%;background:var(--side);box-shadow:0 0 12px var(--side-soft)}
   .p-name{font-family:var(--serif);font-size:17px;letter-spacing:.1em;color:#f4ead7;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1361,7 +1368,7 @@
             </span>
             <div class="mode-en">Single Player</div>
             <h3>一人游戏</h3>
-            <p>与随机编号的勇士对弈。对手会依照局面选择落子，也会在无路可走时获得任意棋。</p>
+            <p>与随机编号的勇士对弈。对手会依照局面思考落子；无法落子时，目标格已满则由其获得任意棋，棋子耗尽则由对方获得任意棋。</p>
             <div class="mode-foot">
               <span class="diff-pill" id="solo-difficulty">难度 · 标准</span>
               <span class="arrow" aria-hidden="true">→</span>
@@ -1429,6 +1436,24 @@
               <option value="p1">玩家一先手</option>
               <option value="p2">玩家二先手</option>
               <option value="random">随机先手</option>
+            </select>
+          </div>
+          <div class="custom-row">
+            <div class="setting-info">
+              <strong id="custom-ai-label">玩家二由人机控制</strong>
+              <span id="custom-ai-desc">勾选后，玩家二由人机代战，并使用下方相同的棋盘与棋子数量设定。人机不会提出悔棋。</span>
+            </div>
+            <button class="switch" id="custom-ai" type="button" role="switch" aria-checked="false" aria-label="玩家二由人机控制"></button>
+          </div>
+          <div class="custom-row hidden" id="custom-ai-difficulty-row">
+            <div class="setting-info">
+              <strong id="custom-ai-difficulty-label">人机难度</strong>
+              <span id="custom-ai-difficulty-desc">轻松会引导你取胜，标准攻守均衡，困难以取胜为目标并会预判后续回合；开始后不可更改。</span>
+            </div>
+            <select class="setting-select" id="custom-ai-difficulty" aria-label="人机难度">
+              <option value="easy">轻松</option>
+              <option value="normal">标准</option>
+              <option value="hard">困难</option>
             </select>
           </div>
           <div class="custom-row">
@@ -1548,7 +1573,10 @@
                   <div class="p-sub" id="sub-red">红方 · 先手</div>
                 </div>
               </div>
-              <button class="surrender" id="surrender-red">认输</button>
+              <div class="panel-actions">
+                <button class="undo" id="undo-red" type="button">悔棋 3</button>
+                <button class="surrender" id="surrender-red">认输</button>
+              </div>
             </div>
             <div class="score-panel">
               <div class="score-top"><span>圣器共鸣</span><span class="score-value"><b id="score-red">0</b><span>/ 3</span></span></div>
@@ -1609,7 +1637,10 @@
                   <div class="p-sub" id="sub-blue">蓝方 · 后手</div>
                 </div>
               </div>
-              <button class="surrender" id="surrender-blue">认输</button>
+              <div class="panel-actions">
+                <button class="undo" id="undo-blue" type="button">悔棋 3</button>
+                <button class="surrender" id="surrender-blue">认输</button>
+              </div>
             </div>
             <div class="score-panel">
               <div class="score-top"><span>圣器共鸣</span><span class="score-value"><b id="score-blue">0</b><span>/ 3</span></span></div>
@@ -1670,9 +1701,13 @@
       </div>
       <div class="rule-section">
         <h3><span class="rule-num">04</span>无法落子与任意棋</h3>
-        <p>若当前玩家在规则指定的所有落点内都无法落子（例如缺少所需图案，或目标格已满），则该玩家立即获得一次<strong>任意棋</strong>机会，而不是停一手；该玩家落子后，后续玩家重新受这枚新棋子的规则约束。</p>
-        <p>三角棋的特殊判定：只有上、下、左、右四个方向都<strong>无法落子</strong>时才算无法落子；只要还有任一方向可以合法落子，就必须在其中落子。</p>
-        <p>系统会自动检测，并直接使当前玩家获得任意棋，同时在“对局记录”和提示中说明。</p>
+        <p>若当前玩家在规则指定的所有落点内都无法落子，系统会按原因分别判罚：</p>
+        <ul class="rule-list">
+          <li><strong>己方可用棋子耗尽：</strong>只要还有未满的目标格，但当前玩家已经没有可放入其中的棋子（例如目标格已有三角棋和圆圈棋，而己方的箭头棋已经用尽），则由<strong>对手获得一次任意棋</strong>；当前玩家本轮被迫<strong>停一手</strong>，由对手落子。</li>
+          <li><strong>目标格已满：</strong>若规则指定的目标格都已被三种棋子填满，则由<strong>当前玩家获得一次任意棋</strong>，不会停手。</li>
+        </ul>
+        <p>若既有未满目标格、又有已满目标格，仍按“己方可用棋子耗尽”处理，因为无法落子的原因仍是没有可用的棋子。三角棋的特殊判定：只有上、下、左、右四个方向都<strong>无法落子</strong>时才算无法落子；只要还有任一方向可以合法落子，就必须在其中落子。</p>
+        <p>系统会自动检测原因并执行相应判罚，同时在“对局记录”和提示中说明。</p>
       </div>
       <div class="rule-section">
         <h3><span class="rule-num">05</span>计时与超时</h3>
@@ -1691,17 +1726,23 @@
       </div>
       <div class="rule-section">
         <h3><span class="rule-num">07</span>操作说明</h3>
-        <p>参加三强争霸赛时，先选择一人或两人模式，并选择经典玩法或移形换影，再将勇士的名字投入火焰杯。人机对战时需为人类勇士命名，也可以自定义人机名称；人机名称也会投入火焰杯。选择“再来一局”会沿用上一局的名称与玩法。</p>
+        <p>参加三强争霸赛时，先选择一人或两人模式，并选择经典玩法或移形换影，再将勇士的名字投入火焰杯。人机对战时需为人类勇士命名，也可以自定义人机名称；人机名称也会投入火焰杯。自定义房间可以将玩家二设为人机，并使用相同的棋盘、棋子与难度设置。选择“再来一局”会沿用上一局的名称与玩法。</p>
         <p>轮到己方时，先在下方选择棋子，再点击棋盘上的高亮落点。上一手落下的棋子会以黄圈标出，所在格右上角也标有“上一手”，便于确认当前轮次的约束来源。经典玩法中选择箭头棋后点击落点，会出现四方向罗盘；移形换影的终点选择方式见第 08 节。双方各有“认输”按钮，认输前会二次确认。</p>
       </div>
       <div class="rule-section">
         <h3><span class="rule-num">08</span>移形换影（进阶玩法）</h3>
         <p>一人游戏、两人同屏与自定义房间都可以选择移形换影。一人游戏与两人同屏中，经典玩法箭头基础数量为 5 枚，移形换影提升为 7 枚；自定义房间的箭头数量以设置为准。</p>
         <p>使用移形换影时，选择箭头棋后先确定起点：若上一步是三角棋，从高亮的相邻格中选择一个作为起点；其他情况下若只有一个合法起点，系统会直接采用该格。起点的整行与整列都会高亮，随后选择同一行或同一列的终点。箭头只能沿上、下、左、右直线延伸，不能拐弯。</p>
-        <p>落子时，只在起点落下一枚箭头棋；其余消耗的箭头棋数量等于起点到终点的距离。例如在 5 × 5 棋盘中从 C3 选择 C1，会消耗 2 枚箭头棋。对手下一步只能落在该终点；若对手在终点无法落子，则按第 04 节规则由对手获得任意棋。</p>
+        <p>落子时，只在起点落下一枚箭头棋；其余消耗的箭头棋数量等于起点到终点的距离。例如在 5 × 5 棋盘中从 C3 选择 C1，会消耗 2 枚箭头棋。对手下一步只能落在该终点；若终点已满，对手获得任意棋；若终点未满但对手缺少可放入的棋子，则由你获得任意棋，对手本轮停一手。</p>
+      </div>
+      <div class="rule-section">
+        <h3><span class="rule-num">09</span>悔棋</h3>
+        <p>每方在每局中拥有 <strong>3 次</strong>悔棋机会，可在任意时刻通过自己面板上的“悔棋”按钮发起。点击后会先弹出二次确认；确认即消耗一次机会，即使对手随后拒绝也不会返还。</p>
+        <p>双人同屏和自定义双人房间中，悔棋申请需要对手明确同意；一人游戏与自定义房间的人机对手会自动同意。对方拒绝时，棋局继续，已消耗的机会仍然扣除。</p>
+        <p>同意后，棋局会回溯到发起者最近一次轮次的开始，恢复当时的棋盘、棋子、分数与落点约束；回合计时重新开始。超时次数和悔棋机会不会随回溯恢复。没有可用机会、尚未形成上一轮次或对局已经结束时，不能发起悔棋。</p>
       </div>
       <div class="note-block">
-        <b>本作采用的补充约定：</b>箭头仅支持上、下、左、右四个正交方向；每格只计一次共鸣分（即使之后放入三枚同方棋子也不重复计分）；无法依约落子时由系统自动给予当前玩家任意棋；移形换影玩法中箭头基础数量为 7 枚（自定义房间以设置的棋子数量为准）；一方棋子耗尽时若双方同分，则判平局；弹窗打开期间暂停回合计时。这些约定在处理原始规则未明确之处时使用。
+        <b>本作采用的补充约定：</b>箭头仅支持上、下、左、右四个正交方向；每格只计一次共鸣分（即使之后放入三枚同方棋子也不重复计分）；无法依约落子时，若目标格未满但己方棋子耗尽，由对手获得任意棋且己方停一手，若目标格已满则由己方获得任意棋；移形换影玩法中箭头基础数量为 7 枚（自定义房间以设置的棋子数量为准）；一方棋子耗尽时若双方同分，则判平局；弹窗打开期间暂停回合计时。这些约定在处理原始规则未明确之处时使用。
       </div>
     </div>
     <div class="modal-actions">
@@ -1744,7 +1785,7 @@
         </select>
       </div>
     </div>
-    <p class="settings-foot">提示：若当前正在人机对局中，打开此面板会暂停对手思考与回合计时，关闭后继续。人机难度请在一人游戏开始前的姓名页设置，对局中不可更改。</p>
+    <p class="settings-foot">提示：若当前正在人机对局中，打开此面板会暂停对手思考与回合计时，关闭后继续。人机难度请在一人游戏姓名页或自定义房间设置中调整，对局中不可更改。</p>
     <div class="modal-actions">
       <button class="btn btn-primary" data-close="modal-settings">完成</button>
     </div>
@@ -1774,6 +1815,18 @@
     <div class="modal-actions">
       <button class="btn btn-ghost" id="confirm-cancel">取消</button>
       <button class="btn btn-danger" id="confirm-ok">确认</button>
+    </div>
+  </div>
+</div>
+
+<!-- 悔棋请求 -->
+<div class="modal-layer confirm-modal" id="modal-undo" aria-hidden="true">
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="undo-request-title">
+    <h2 id="undo-request-title">悔棋请求</h2>
+    <p class="confirm-text" id="undo-request-text"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="undo-reject">拒绝</button>
+      <button class="btn btn-primary" id="undo-approve">同意悔棋</button>
     </div>
   </div>
 </div>
@@ -2093,6 +2146,7 @@
     size: 5,
     arrowVariant: false,
     firstPlayer: 'random',
+    playerTwoAI: false,
     counts: { triangle: 5, circle: 5, arrow: 5 }
   };
 
@@ -2121,9 +2175,12 @@
     endReason: '',
     humanColor: null,
     aiColor: null,
+    customAI: false,
     labels: { red: '', blue: '' },
     player1Color: null,
     moveCount: 0,
+    undoLeft: { red: 3, blue: 3 },
+    history: [],
     gameId: 0,
     isAiThinking: false,
     eventText: '三强争霸赛即将开始。',
@@ -2275,7 +2332,164 @@
   }
 
   function cloneBoard(board) {
-    return board.map(row => row.map(cell => cell.map(piece => ({ ...piece }))));
+    return board.map(row => row.map(cell => cell.map(piece => ({
+      ...piece,
+      ...(piece.arrowTarget ? { arrowTarget: { ...piece.arrowTarget } } : {})
+    }))));
+  }
+
+  function isAiSide(color) {
+    if (!state.aiColor || color !== state.aiColor) return false;
+    return state.mode === 'solo' || (state.mode === 'custom' && state.customAI);
+  }
+
+  function clonePlayers(players) {
+    return {
+      red: { pieces: { ...players.red.pieces }, score: players.red.score },
+      blue: { pieces: { ...players.blue.pieces }, score: players.blue.score }
+    };
+  }
+
+  function cloneLastMove(piece) {
+    if (!piece) return null;
+    return {
+      ...piece,
+      ...(piece.arrowTarget ? { arrowTarget: { ...piece.arrowTarget } } : {})
+    };
+  }
+
+  function makeHistorySnapshot() {
+    return {
+      board: cloneBoard(state.board),
+      players: clonePlayers(state.players),
+      scored: new Set(state.scored),
+      turn: state.turn,
+      freeMove: state.freeMove,
+      lastPiece: cloneLastMove(state.lastPiece),
+      lastPlaced: cloneLastMove(state.lastPlaced),
+      moveCount: state.moveCount
+    };
+  }
+
+  function pushHistorySnapshot() {
+    state.history.push(makeHistorySnapshot());
+  }
+
+  function undoSnapshotIndex(color) {
+    for (let i = state.history.length - 1; i >= 0; i--) {
+      if (state.history[i].turn === color) return i;
+    }
+    return -1;
+  }
+
+  function canUndo(color) {
+    if (state.gameOver || state.screen !== 'game') return false;
+    if (!state.undoLeft || state.undoLeft[color] <= 0) return false;
+    if (isAiSide(color)) return false;
+    return undoSnapshotIndex(color) >= 0;
+  }
+
+  function restoreUndoSnapshot(snapshot) {
+    state.board = snapshot.board;
+    state.players = snapshot.players;
+    state.scored = snapshot.scored;
+    state.turn = snapshot.turn;
+    state.freeMove = snapshot.freeMove;
+    state.lastPiece = snapshot.lastPiece;
+    state.lastPlaced = snapshot.lastPlaced;
+    state.moveCount = snapshot.moveCount;
+    state.selectedShape = null;
+    state.pendingArrow = null;
+    state.pendingShift = null;
+    state.gameOver = false;
+    state.winner = null;
+    state.endReason = '';
+    state.isAiThinking = false;
+    state.aiPausedByModal = false;
+  }
+
+  function executeUndo(color) {
+    const index = undoSnapshotIndex(color);
+    if (index < 0) return false;
+    const snapshot = state.history[index];
+    clearTimeout(aiTimer);
+    aiTimer = null;
+    clearVictoryTimers();
+    clearEntryTimers();
+    state.history = state.history.slice(0, index);
+    restoreUndoSnapshot(snapshot);
+    closeAllModals();
+    setEventText(
+      `${displayNameIn(color, 'zh')}悔棋成功，棋局回溯至其上一个轮次。`,
+      `${displayNameIn(color, 'en')} undid the move; the game returned to their previous turn.`
+    );
+    renderAll();
+    startTurnClock();
+    if (getAiTurn()) maybeScheduleAI();
+    playSound('pass');
+    return true;
+  }
+
+  function requestUndo(color) {
+    if (!canUndo(color)) {
+      showToast(isAiSide(color)
+        ? tr('人机不会发起悔棋。', 'The AI does not request undo.')
+        : tr('当前无法悔棋：次数不足或没有可回溯的己方轮次。', 'Undo is unavailable: no chances or no previous turn to return to.'), 'error');
+      return;
+    }
+    const opponentIsAI = isAiSide(otherColor(color));
+    openConfirm({
+      title: tr(`${displayName(color)}发起悔棋？`, `${displayName(color)} request an undo?`),
+      text: tr(
+        `确认后将消耗一次悔棋机会${opponentIsAI ? '；人机会自动同意。' : '；随后需要对手同意才能回溯。'}`,
+        `Confirming uses one undo chance${opponentIsAI ? '; the AI will approve automatically.' : '; the opponent must then approve.'}`
+      ),
+      confirmText: tr('发起悔棋', 'Request Undo'),
+      danger: false,
+      onConfirm: () => {
+        closeConfirm();
+        state.undoLeft[color] = Math.max(0, state.undoLeft[color] - 1);
+        renderPanels();
+        if (opponentIsAI) {
+          executeUndo(color);
+        } else {
+          openUndoApproval(color);
+        }
+      }
+    });
+  }
+
+  let undoRequestColor = null;
+
+  function openUndoApproval(color) {
+    undoRequestColor = color;
+    $('#undo-request-title').textContent = tr(`${displayName(color)}请求悔棋`, `${displayName(color)} requests an undo`);
+    $('#undo-request-text').textContent = tr(
+      `同意后，棋局将回溯到${displayName(color)}的上一个轮次；拒绝则不回溯，但已消耗的悔棋机会不会返还。`,
+      `If you agree, the game returns to the start of ${displayName(color)}'s previous turn. If you decline, the move is not undone and the spent chance is not refunded.`
+    );
+    $('#undo-approve').textContent = tr('同意悔棋', 'Approve Undo');
+    $('#undo-reject').textContent = tr('拒绝', 'Decline');
+    openModal('modal-undo');
+  }
+
+  function rejectUndo() {
+    const color = undoRequestColor;
+    undoRequestColor = null;
+    closeModal('modal-undo');
+    if (color) {
+      showToast(tr(
+        `${displayName(color)}的悔棋请求被拒绝，机会已消耗。`,
+        `${displayName(color)}'s undo request was declined. The chance is spent.`
+      ), 'info', 2600);
+    }
+  }
+
+  function approveUndo() {
+    const color = undoRequestColor;
+    undoRequestColor = null;
+    closeModal('modal-undo');
+    if (color) executeUndo(color);
   }
 
   function shapeLabel(shape, withDirection = false, dir = null) {
@@ -2341,9 +2555,13 @@
     </div>
     <div class="rule-section">
       <h3><span class="rule-num">04</span>Blocked Moves and Free Moves</h3>
-      <p>If the current player has no legal placement among the squares allowed by the rule—because they lack the required shape or the target is full—they immediately receive one <strong>free move</strong> instead of passing. After that move, the following player is bound by the new piece's rule.</p>
-      <p>Special rule for Triangles: a player is considered unable to move only if all four orthogonal directions are <strong>unavailable</strong>. If any direction has a legal placement, they must place there.</p>
-      <p>The game detects this automatically, grants the current player a free move, and explains it in the Match Log and prompts.</p>
+      <p>If the current player has no legal placement among the squares allowed by the rule, the penalty depends on why:</p>
+      <ul class="rule-list">
+        <li><strong>Their available pieces are exhausted:</strong> if even one required target still has an empty shape slot but the current player has no piece that can fill it (for example, the target already holds a Triangle and a Circle and their Arrows are gone), the <strong>opponent receives a free move</strong>. The current player is forced to <strong>skip this turn</strong>.</li>
+        <li><strong>The target cell is full:</strong> if every required target is already filled by all three shapes, the <strong>current player receives a free move</strong> and does not skip.</li>
+      </ul>
+      <p>If some targets are full while another is not, the exhausted-piece rule applies, because the blocking reason is still the lack of an available piece. Special rule for Triangles: a player is considered unable to move only if all four orthogonal directions are <strong>unavailable</strong>. If any direction has a legal placement, they must place there.</p>
+      <p>The game detects the reason automatically, applies the matching penalty, and explains it in the Match Log and prompts.</p>
     </div>
     <div class="rule-section">
       <h3><span class="rule-num">05</span>Timing and Timeouts</h3>
@@ -2362,17 +2580,23 @@
     </div>
     <div class="rule-section">
       <h3><span class="rule-num">07</span>How to Play</h3>
-      <p>Choose Single Player or Two Players, choose Classic or Shifting Arrow, then cast the champions' names into the Goblet. In Single Player, name the human champion and optionally customize the AI opponent; both names are cast into the Goblet. Play Again keeps the previous names and playstyle.</p>
+      <p>Choose Single Player or Two Players, choose Classic or Shifting Arrow, then cast the champions' names into the Goblet. In Single Player, name the human champion and optionally customize the AI opponent; both names are cast into the Goblet. Custom Room can make Player Two an AI using the same custom board, pieces and difficulty settings. Play Again keeps the previous names and playstyle.</p>
       <p>On your turn, choose a shape below, then click a highlighted square. The last piece placed is marked with a gold ring and a <strong>Last move</strong> tag. In Classic play, choosing an Arrow opens a four-direction compass; see section 08 for Shifting Arrow destinations. Each side has a Resign button with a confirmation step.</p>
     </div>
     <div class="rule-section">
       <h3><span class="rule-num">08</span>Shifting Arrow (Advanced)</h3>
       <p>Shifting Arrow is available in Single Player, Two Players and Custom Room. In Single Player and Two Players, Classic uses 5 base Arrows while Shifting Arrow uses 7; Custom Room uses its configured Arrow count.</p>
       <p>With Shifting Arrow, select an Arrow and choose its start. If the previous piece was a Triangle, choose one of the highlighted adjacent squares as the start; otherwise, if there is only one legal start, the game uses it automatically. The start's entire row and column are highlighted. Choose a destination in the same row or column. The Arrow may only extend up, down, left or right—it cannot turn.</p>
-      <p>Only one Arrow is placed at the start; additional Arrows are spent equal to the distance from the start to the destination. For example, on a 5 × 5 board, choosing C1 from C3 spends 2 Arrows. The opponent's next move must be played at that destination. If the opponent cannot play there, section 04 grants the opponent a free move.</p>
+      <p>Only one Arrow is placed at the start; additional Arrows are spent equal to the distance from the start to the destination. For example, on a 5 × 5 board, choosing C1 from C3 spends 2 Arrows. The opponent's next move must be played at that destination. If the destination is full, the opponent receives a free move; if it is not full but the opponent lacks a usable piece, you receive a free move and the opponent skips this turn.</p>
+    </div>
+    <div class="rule-section">
+      <h3><span class="rule-num">09</span>Undo</h3>
+      <p>Each side has <strong>3 undo chances per match</strong>, available from its own panel's Undo button at any time. The first click opens a confirmation; confirming spends one chance even if the opponent then declines.</p>
+      <p>In Two Players and human Custom Room matches, the opponent must explicitly approve. In Single Player and Custom Room against the AI, the AI approves automatically. A declined request leaves the game running, but the spent chance is not refunded.</p>
+      <p>If approved, the game returns to the start of the requester's most recent turn, restoring the board, pieces, score and previous move constraint; the turn timer restarts. Timeouts and undo chances are not restored. Undo is unavailable with no chances, no previous turn to return to, or after the match has ended.</p>
     </div>
     <div class="note-block">
-      <b>House conventions:</b> Arrows use only the four orthogonal directions; a square awards at most one resonance point (even if three same-side pieces later occupy it); when a player cannot follow the last rule, the game automatically grants that player a free move; Shifting Arrow play uses 7 base Arrows (Custom Room uses its configured piece counts); if both sides are tied when a side runs out of pieces, the game is a draw; and the turn clock pauses while any modal is open. These conventions resolve points the original rules leave open.
+      <b>House conventions:</b> Arrows use only the four orthogonal directions; a square awards at most one resonance point (even if three same-side pieces later occupy it); when a player cannot follow the last rule, a full target grants that player a free move, while exhausted pieces grant the opponent a free move and skip the player's turn; Shifting Arrow play uses 7 base Arrows (Custom Room uses its configured piece counts); if both sides are tied when a side runs out of pieces, the game is a draw; and the turn clock pauses while any modal is open. These conventions resolve points the original rules leave open.
     </div>`;
 
   const STATIC_I18N = [
@@ -2394,7 +2618,7 @@
     { sel: '#screen-mode .subscreen h2', en: 'The Triwizard Tournament' },
     { sel: '#screen-mode .subscreen > .subtitle', en: 'The first move is chosen at random; Custom Room can override it. Red begins; Blue follows.' },
     { sel: '#mode-solo h3', en: 'Single Player' },
-    { sel: '#mode-solo p', en: 'Face a numbered Warrior. Your opponent reads the board and receives a free move when no legal move remains.' },
+    { sel: '#mode-solo p', en: 'Face a numbered Warrior. Your opponent reads the board; a full target grants it a free move, while exhausted pieces grant the other side the free move.' },
     { sel: '#mode-duo h3', en: 'Two Players' },
     { sel: '#mode-duo p', en: 'Two champions take turns on one screen. Every move defines where the next player may place.' },
     { sel: '#mode-duo .diff-pill', en: 'Shared Screen · Alternate Turns' },
@@ -2414,6 +2638,15 @@
     { sel: '#custom-first option[value="p1"]', en: 'Player One First' },
     { sel: '#custom-first option[value="p2"]', en: 'Player Two First' },
     { sel: '#custom-first option[value="random"]', en: 'Random First' },
+    { sel: '#custom-ai-label', en: 'Player Two is AI' },
+    { sel: '#custom-ai-desc', en: 'When enabled, the AI plays as Player Two and uses the same custom board and piece counts. The AI will not request undo.' },
+    { sel: '#custom-ai', attr: 'aria-label', en: 'Player Two controlled by AI' },
+    { sel: '#custom-ai-difficulty-label', en: 'AI Difficulty' },
+    { sel: '#custom-ai-difficulty-desc', en: 'Easy guides you toward victory, Standard balances both sides, Hard plays to win with multi-turn lookahead; locked once the match begins.' },
+    { sel: '#custom-ai-difficulty', attr: 'aria-label', en: 'AI difficulty' },
+    { sel: '#custom-ai-difficulty option[value="easy"]', en: 'Easy' },
+    { sel: '#custom-ai-difficulty option[value="normal"]', en: 'Standard' },
+    { sel: '#custom-ai-difficulty option[value="hard"]', en: 'Hard' },
     { sel: '#custom-size-label', en: 'Board Size' },
     { sel: '#custom-size-desc', en: 'Use an n × n square, where n can be 3 to 8.' },
     { sel: '#custom-size', attr: 'aria-label', en: 'Board size' },
@@ -2464,7 +2697,7 @@
     { sel: '#modal-settings .setting-row:nth-child(4) strong', en: 'Language' },
     { sel: '#modal-settings .setting-row:nth-child(4) .setting-info span', en: 'Switch the interface and rules between Chinese and English' },
     { sel: '#set-language', attr: 'aria-label', en: 'Interface language' },
-    { sel: '#modal-settings .settings-foot', en: 'Tip: opening this panel during a single-player game pauses the AI and the turn clock until it closes. Set AI difficulty on the Single Player name page before the match; it cannot be changed mid-game.' },
+    { sel: '#modal-settings .settings-foot', en: 'Tip: opening this panel during a single-player game pauses the AI and the turn clock until it closes. Set AI difficulty on the Single Player name page or in Custom Room setup; it cannot be changed mid-game.' },
     { sel: '#modal-settings .modal-actions .btn', en: 'Done' },
     { sel: '#arrow-close-x', attr: 'aria-label', en: 'Cancel arrow direction' },
     { sel: '#arrow-title', en: 'Choose Arrow Direction' },
@@ -2806,13 +3039,12 @@
   }
 
   function getAiTurn() {
-    return state.mode === 'solo' && state.turn === state.aiColor;
+    return isAiSide(state.turn);
   }
 
   function isHumanTurn() {
     if (state.gameOver) return false;
-    if (state.mode === 'solo') return state.turn === state.humanColor;
-    return true;
+    return !isAiSide(state.turn);
   }
 
   function anyModalOpen() {
@@ -2909,7 +3141,7 @@
         boardEl.appendChild(cellEl);
       }
     }
-    boardEl.classList.toggle('board-locked', state.gameOver || (state.mode === 'solo' && state.turn === state.aiColor));
+    boardEl.classList.toggle('board-locked', state.gameOver || getAiTurn());
   }
 
   function renderPanels() {
@@ -2917,7 +3149,7 @@
       const panel = $(`#panel-${color}`);
       const player = state.players[color];
       const label = displayName(color);
-      const isAi = state.mode === 'solo' && color === state.aiColor;
+      const isAi = isAiSide(color);
       const isActive = state.turn === color && !state.gameOver;
       const sideName = colorName(color);
       const role = color === 'red' ? tr('先手', 'First') : tr('后手', 'Second');
@@ -2971,10 +3203,20 @@
       }
 
       const surrender = $(`#surrender-${color}`);
-      surrender.disabled = state.gameOver || (state.mode === 'solo' && color === state.aiColor);
-      surrender.title = state.mode === 'solo' && color === state.aiColor
+      surrender.disabled = state.gameOver || isAi;
+      surrender.title = isAi
         ? tr('对手不会认输', 'The AI will not resign')
         : tr('认输并结束本局', 'Resign and end this game');
+
+      const undoButton = $(`#undo-${color}`);
+      if (undoButton) {
+        undoButton.classList.toggle('hidden', isAi);
+        undoButton.textContent = isEn()
+          ? `Undo ${state.undoLeft[color] || 0}`
+          : `悔棋 ${state.undoLeft[color] || 0}`;
+        undoButton.disabled = !canUndo(color);
+        undoButton.title = tr('悔棋需要确认，并消耗一次机会', 'Undo requires confirmation and spends one chance');
+      }
     }
   }
 
@@ -3004,7 +3246,7 @@
   }
 
   function renderAction() {
-    const isAi = state.mode === 'solo' && state.turn === state.aiColor && !state.gameOver;
+    const isAi = getAiTurn() && !state.gameOver;
     const isHuman = isHumanTurn();
     const titleEl = $('#action-title');
     const subEl = $('#action-sub');
@@ -3107,8 +3349,8 @@
     if (!visible) return;
     $('#solo-difficulty-title').textContent = tr('人机难度', 'AI Difficulty');
     $('#solo-difficulty-desc').textContent = tr(
-      '开始对局后不可更改；需退出对局并重新进入人机设置。',
-      'Locked once the match begins; exit and reconfigure to change it.'
+      '轻松会引导你取胜，标准攻守均衡，困难以取胜为目标并会预判后续回合；开始后不可更改。',
+      'Easy guides you toward victory, Standard balances both sides, Hard plays to win with multi-turn lookahead; locked once the match begins.'
     );
     const select = $('#solo-difficulty-select');
     select.value = settings.difficulty;
@@ -3177,6 +3419,11 @@
     const toggle = $('#custom-arrow');
     toggle.classList.toggle('on', !!customConfig.arrowVariant);
     toggle.setAttribute('aria-checked', String(!!customConfig.arrowVariant));
+    const aiToggle = $('#custom-ai');
+    aiToggle.classList.toggle('on', !!customConfig.playerTwoAI);
+    aiToggle.setAttribute('aria-checked', String(!!customConfig.playerTwoAI));
+    $('#custom-ai-difficulty-row').classList.toggle('hidden', !customConfig.playerTwoAI);
+    $('#custom-ai-difficulty').value = settings.difficulty;
     const cells = customCells();
     SHAPES.forEach(shape => {
       const input = customCountInput(shape);
@@ -3270,6 +3517,7 @@
       size: draft.size,
       arrowVariant: draft.arrowVariant,
       firstPlayer: draft.firstPlayer,
+      playerTwoAI: customConfig.playerTwoAI,
       counts: draft.counts
     };
     renderCustomSetup();
@@ -3311,7 +3559,7 @@
   }
 
   function pauseAiForModal() {
-    if (state.mode === 'solo' && state.turn === state.aiColor && !state.gameOver) {
+    if (getAiTurn() && !state.gameOver) {
       state.aiPausedByModal = true;
     }
     if (aiTimer) {
@@ -3364,6 +3612,7 @@
     } else {
       state.aiPausedByModal = false;
     }
+    undoRequestColor = null;
   }
 
   function startTurnClock() {
@@ -3588,39 +3837,51 @@
     state.pendingMode = mode;
     const isSolo = mode === 'solo';
     const isCustom = mode === 'custom';
+    const isCustomAI = isCustom && customConfig.playerTwoAI;
+    const isAIEntry = isSolo || isCustomAI;
     const en = isEn();
     updatePlaystylePicker();
-    const aiDefault = isSolo ? (presetValues.ai || generateAiName(presetValues.human || '')) : '';
+    const aiDefault = isAIEntry ? (presetValues.ai || generateAiName(presetValues.human || '')) : '';
     $('#name-subtitle').textContent = isSolo
       ? tr(
         '写下名字，投入火焰杯，等待它选出参加三强争霸赛的勇士。',
         'Write your name, cast it into the Goblet, and let it choose the champion of the Triwizard Tournament.'
       )
-      : isCustom
+      : isCustomAI
         ? tr(
-          '两位勇士写下名字，进入这场由你们亲自定制的对局。',
-          'Both champions enter their names for this custom-built match.'
+          '玩家一写下名字，人机玩家二也将带着自己的名字进入棋盘。',
+          'Player One enters a name; the AI Player Two will enter the board under its own name as well.'
         )
-        : tr(
-          '两位勇士各自写下名字，将纸条一同投入火焰杯。',
-          'Both champions write their names and cast the slips into the Goblet together.'
-        );
+        : isCustom
+          ? tr(
+            '两位勇士写下名字，进入这场由你们亲自定制的对局。',
+            'Both champions enter their names for this custom-built match.'
+          )
+          : tr(
+            '两位勇士各自写下名字，将纸条一同投入火焰杯。',
+            'Both champions write their names and cast the slips into the Goblet together.'
+          );
     $('#name-note').innerHTML = isSolo
       ? tr(
         '先手由系统随机决定；人机对手默认名为「勇士###」，你也可以自定义。',
         'The first move is chosen at random. The AI opponent is a numbered Warrior by default; you can give them a custom name.'
       )
-      : isCustom
+      : isCustomAI
         ? tr(
-          '棋盘大小、棋子数量与先手均已确定；先手玩家执红并先行。',
-          'Board size, piece counts and the first player are set; the first player takes Red and moves first.'
+          '玩家二由人机控制；先手、棋盘大小、棋子数量与箭头规则均按自定义房间设置执行。',
+          'Player Two is controlled by the AI; the first player, board size, piece counts and Arrow rules follow the Custom Room settings.'
         )
-        : tr(
-          '红蓝阵营与先手将在进入棋盘时随机分配；两张姓名纸条会一同投入火焰杯。',
-          'Red and Blue, along with the first move, are randomly assigned when you enter the board; both slips are cast into the Goblet together.'
-        );
+        : isCustom
+          ? tr(
+            '棋盘大小、棋子数量与先手均已确定；先手玩家执红并先行。',
+            'Board size, piece counts and the first player are set; the first player takes Red and moves first.'
+          )
+          : tr(
+            '红蓝阵营与先手将在进入棋盘时随机分配；两张姓名纸条会一同投入火焰杯。',
+            'Red and Blue, along with the first move, are randomly assigned when you enter the board; both slips are cast into the Goblet together.'
+          );
     const fields = $('#name-fields');
-    if (isSolo) {
+    if (isAIEntry) {
       fields.className = 'name-fields single';
       fields.innerHTML = en
         ? `
@@ -3672,7 +3933,7 @@
         </label>`;
     }
     const values = { ...presetValues };
-    if (isSolo && !values.ai) values.ai = aiDefault;
+    if (isAIEntry && !values.ai) values.ai = aiDefault;
     $$('#name-fields input').forEach(input => {
       const value = values[input.dataset.slot];
       if (typeof value === 'string') input.value = value;
@@ -3695,7 +3956,7 @@
     }
     const errorEl = $('#name-error');
     errorEl.textContent = '';
-    if (mode === 'solo') {
+    if (mode === 'solo' || (mode === 'custom' && customConfig.playerTwoAI)) {
       const input = $('#name-human');
       const aiInput = $('#name-ai');
       const human = normalizeName(input ? input.value : '');
@@ -3717,8 +3978,10 @@
         }
         return;
       }
-      state.activeNames = { human, ai };
-      beginGobletEntry('solo', state.activeNames);
+      state.activeNames = mode === 'custom'
+        ? { p1: human, p2: ai, human, ai }
+        : { human, ai };
+      beginGobletEntry(mode, state.activeNames);
     } else {
       const input1 = $('#name-p1');
       const input2 = $('#name-p2');
@@ -3771,8 +4034,13 @@
         p1Red = Math.random() < 0.5;
       }
       state.player1Color = p1Red ? 'red' : 'blue';
-      state.humanColor = null;
-      state.aiColor = null;
+      if (state.mode === 'custom' && state.customAI) {
+        state.humanColor = p1Red ? 'red' : 'blue';
+        state.aiColor = p1Red ? 'blue' : 'red';
+      } else {
+        state.humanColor = null;
+        state.aiColor = null;
+      }
       state.labels = {
         red: p1Red ? p1Name : p2Name,
         blue: p1Red ? p2Name : p1Name
@@ -3789,6 +4057,7 @@
     state.gameId += 1;
     state.mode = mode;
     const isCustom = mode === 'custom';
+    state.customAI = isCustom && customConfig.playerTwoAI;
     const selectedStyle = isCustom
       ? (customConfig.arrowVariant ? 'shift' : 'classic')
       : (playStyle || state.playStyle || 'classic');
@@ -3816,6 +4085,8 @@
     state.aiPausedByModal = false;
     state.pendingMode = null;
     state.timeouts = { red: 0, blue: 0 };
+    state.undoLeft = { red: 3, blue: 3 };
+    state.history = [];
     state.turnTimeLeft = TURN_SECONDS;
     state.turnTimerActive = false;
     assignRoles();
@@ -3826,7 +4097,7 @@
     showScreen('game');
     renderAll();
     startTurnClock();
-    if (state.mode === 'solo' && state.turn === state.aiColor) maybeScheduleAI();
+    if (getAiTurn()) maybeScheduleAI();
   }
 
   /* ============================================================
@@ -3856,7 +4127,7 @@
 
   function onBoardClick(r, c) {
     if (state.screen !== 'game' || state.gameOver) return;
-    if (state.mode === 'solo' && state.turn === state.aiColor) {
+    if (getAiTurn()) {
       showToast(tr(
         `${displayName(state.aiColor)}正在思考，请稍候。`,
         `${displayName(state.aiColor)} is thinking. Please wait.`
@@ -4058,6 +4329,7 @@
       return;
     }
     const cell = state.board[r][c];
+    pushHistorySnapshot();
     const piece = { owner: color, shape, dir };
     if (shiftTarget) {
       piece.arrowTarget = shiftTarget;
@@ -4118,10 +4390,47 @@
     maybeScheduleAI();
   }
 
+  function cellIsFull(cell) {
+    return SHAPES.every(shape => cellHasShape(cell, shape));
+  }
+
+  function forcedFreeMoveReason() {
+    const targets = state.freeMove || !state.lastPiece ? allCoords() : targetCellsFrom(state.lastPiece);
+    if (!targets.length) return 'full';
+    // If even one required target still has an empty shape slot, the blocker is
+    // the current player's exhausted piece supply, not a completely full cell.
+    return targets.some(({ r, c }) => !cellIsFull(state.board[r][c])) ? 'exhausted' : 'full';
+  }
+
   function resolveForcedFreeMove() {
     if (state.gameOver) return;
     if (getLegalMoves(state.turn).length > 0) return;
     const stuck = state.turn;
+    const reason = forcedFreeMoveReason();
+
+    if (reason === 'exhausted') {
+      const beneficiary = otherColor(stuck);
+      state.turn = beneficiary;
+      state.freeMove = true;
+      if (getLegalMoves(beneficiary).length === 0) {
+        endGame(null, tr(
+          '双方都没有任何可落子的位置，本局平局。',
+          'Neither side has a legal placement. The game is a draw.'
+        ));
+        return;
+      }
+      setEventText(
+        `${fullDisplayNameIn(stuck, 'zh')}因可用棋子耗尽无法依约落子，本轮停一手；${fullDisplayNameIn(beneficiary, 'zh')}获得任意棋。`,
+        `${fullDisplayNameIn(stuck, 'en')} cannot follow the last rule because their available pieces are exhausted; their turn is skipped and ${fullDisplayNameIn(beneficiary, 'en')} receives a free move.`
+      );
+      showToast(tr(
+        `${displayName(stuck)}可用棋子耗尽，本轮停一手；${displayName(beneficiary)}获得任意棋。`,
+        `${displayName(stuck)} has no available piece and skips this turn; ${displayName(beneficiary)} receives a free move.`
+      ), 'pass', 3300);
+      playSound('pass');
+      return;
+    }
+
     state.freeMove = true;
     if (getLegalMoves(stuck).length === 0) {
       endGame(null, tr(
@@ -4131,12 +4440,12 @@
       return;
     }
     setEventText(
-      `${fullDisplayNameIn(stuck, 'zh')}无法依约落子，获得任意棋。`,
-      `${fullDisplayNameIn(stuck, 'en')} cannot follow the last rule and receives a free move.`
+      `${fullDisplayNameIn(stuck, 'zh')}的目标格已满，获得任意棋。`,
+      `${fullDisplayNameIn(stuck, 'en')} cannot follow the last rule because the target cell is full, and receives a free move.`
     );
     showToast(tr(
-      `${displayName(stuck)}无法依约落子，获得任意棋。`,
-      `${displayName(stuck)} cannot follow the last rule and receives a free move.`
+      `${displayName(stuck)}的目标格已满，获得任意棋。`,
+      `${displayName(stuck)}'s target cell is full; they receive a free move.`
     ), 'pass', 3000);
     playSound('pass');
   }
@@ -4331,7 +4640,7 @@
      人机对手
   ============================================================ */
   function maybeScheduleAI() {
-    if (state.mode !== 'solo' || state.gameOver || !getAiTurn()) return;
+    if (state.gameOver || !getAiTurn()) return;
     if (anyModalOpen()) return;
     if (aiTimer) clearTimeout(aiTimer);
     state.isAiThinking = true;
@@ -4361,26 +4670,47 @@
         maybeScheduleAI();
         return;
       }
-      if (move.shape === 'arrow' && state.arrowVariant) {
+      if (move.shape === 'arrow' && state.arrowVariant && !move.shiftTarget) {
         move = chooseAiShiftMove(move);
       }
       commitMove(move);
     }, delay);
   }
 
+  function moveTieKey(move) {
+    return `${move.r},${move.c},${SHAPES.indexOf(move.shape)},${move.dir ?? -1}`;
+  }
+
   function chooseAiMove(moves) {
     if (!moves.length) return null;
-    if (settings.difficulty === 'easy') return moves[Math.floor(Math.random() * moves.length)];
-
-    const scored = moves.map(move => ({ move, value: evaluateAiMove(move) }));
-    scored.sort((a, b) => b.value - a.value);
-    if (settings.difficulty === 'normal') {
-      const poolSize = Math.max(1, Math.ceil(scored.length * 0.32));
-      const pool = scored.slice(0, poolSize);
-      return pool[Math.floor(Math.random() * pool.length)].move;
+    const difficulty = settings.difficulty;
+    if (difficulty === 'hard') return chooseHardMove(moves);
+    const scored = moves.map(move => ({ move, value: evaluateAiMove(move, difficulty) }));
+    // Keep the evaluation board-driven, but vary between near-equal candidates
+    // so the AI does not repeat a fixed opening or perimeter pattern every game.
+    const jitter = difficulty === 'hard' ? 55 : difficulty === 'normal' ? 190 : 380;
+    scored.forEach(item => { item.value += (Math.random() - 0.5) * jitter; });
+    scored.sort((a, b) => {
+      if (Math.abs(b.value - a.value) > 0.0001) return b.value - a.value;
+      return moveTieKey(a.move).localeCompare(moveTieKey(b.move));
+    });
+    const opening = state.moveCount === 0;
+    if (opening) {
+      // The first free move has no prior board shape to read. Vary the opening
+      // shape and square instead of always repeating the same formation.
+      const shapeBests = SHAPES.map(shape => {
+        const candidates = scored.filter(item => item.move.shape === shape);
+        return candidates.length ? { shape, value: candidates[0].value, candidates } : null;
+      }).filter(Boolean).sort((a, b) => b.value - a.value);
+      const shapePool = shapeBests.slice(0, difficulty === 'hard' ? 2 : 3);
+      const chosen = shapePool[Math.floor(Math.random() * shapePool.length)];
+      const positions = chosen.candidates.slice(0, 4);
+      return positions[Math.floor(Math.random() * positions.length)].move;
     }
+    const margin = difficulty === 'hard' ? 170 : difficulty === 'normal' ? 420 : 760;
+    const maxPool = difficulty === 'hard' ? 2 : difficulty === 'normal' ? 3 : 4;
     const best = scored[0].value;
-    const pool = scored.filter(item => item.value >= best - 0.001);
+    const pool = scored.filter(item => best - item.value <= margin).slice(0, maxPool);
     return pool[Math.floor(Math.random() * pool.length)].move;
   }
 
@@ -4423,13 +4753,27 @@
           false,
           lastPiece
         );
-        let value = -opponentMoves.length * 20;
-        if (opponentMoves.length === 0) value -= 5000;
-        const targetCell = simulatedBoard[target.r][target.c];
-        if (!isScored(target.r, target.c, opponent) && countOwned(targetCell, opponent) >= 1) {
-          value -= 1500;
+        let opponentScoring = 0;
+        const scoringCells = new Set();
+        for (const oppMove of opponentMoves) {
+          if (isScored(oppMove.r, oppMove.c, opponent)) continue;
+          if (countOwned(simulatedBoard[oppMove.r][oppMove.c], opponent) >= 1) {
+            scoringCells.add(`${oppMove.r},${oppMove.c}`);
+          }
         }
-        value += Math.random() * 6;
+        opponentScoring = scoringCells.size;
+        let value;
+        if (settings.difficulty === 'easy') {
+          value = opponentMoves.length * 25 + opponentScoring * 1200;
+          if (opponentMoves.length === 0) value += 2500;
+          value -= distance * 2;
+        } else if (settings.difficulty === 'normal') {
+          value = -opponentMoves.length * 20 - opponentScoring * 1600 - distance * 3;
+          if (opponentMoves.length === 0) value -= 5000;
+        } else {
+          value = -opponentMoves.length * 32 - opponentScoring * 7000 - distance * 4;
+          if (opponentMoves.length === 0) value -= 6500;
+        }
         options.push({
           ...move,
           dir: direction.dir,
@@ -4440,11 +4784,19 @@
       }
     }
     if (!options.length) return move;
-    options.sort((a, b) => b._value - a._value);
-    return options[0];
+    const jitter = settings.difficulty === 'hard' ? 40 : settings.difficulty === 'normal' ? 150 : 300;
+    options.forEach(option => { option._value += (Math.random() - 0.5) * jitter; });
+    options.sort((a, b) => {
+      if (Math.abs(b._value - a._value) > 0.0001) return b._value - a._value;
+      return moveTieKey(a).localeCompare(moveTieKey(b));
+    });
+    const best = options[0]._value;
+    const margin = settings.difficulty === 'hard' ? 120 : settings.difficulty === 'normal' ? 280 : 520;
+    const pool = options.filter(option => best - option._value <= margin).slice(0, 3);
+    return pool[Math.floor(Math.random() * pool.length)];
   }
 
-  function evaluateAiMove(move) {
+  function evaluateAiMove(move, difficulty = settings.difficulty) {
     const ai = state.turn;
     const opponent = otherColor(ai);
     const { r, c, shape, dir } = move;
@@ -4454,17 +4806,9 @@
     const cell = state.board[r][c];
     const alreadyScored = isScored(r, c, ai);
     const gainsPoint = !alreadyScored && countOwned(cell, ai) >= 1 ? 1 : 0;
-    let value = gainsPoint * 6200;
-
-    if (state.players[ai].score + gainsPoint >= 3) value += 1000000;
-    if (gainsPoint) value += 1200;
-
-    // 略微偏好中心格，并把棋子打散，避免无谓堆积
-    value += (2 - (Math.abs(r - 2) + Math.abs(c - 2)) / 2) * 18;
-    if (shape === 'triangle') value += 8;
-    if (shape === 'arrow') value += 12;
-    if (state.players[ai].pieces[shape] === 1) value -= 45;
-    if (state.players[ai].score === 2 && !gainsPoint) value -= 120;
+    const aiWins = state.players[ai].score + gainsPoint >= 3;
+    const center = (SIZE - 1) / 2;
+    const centerBonus = (center - (Math.abs(r - center) + Math.abs(c - center)) / 2) * 18;
 
     const opponentMoves = collectLegalMoves(
       simulatedBoard,
@@ -4474,31 +4818,437 @@
       { owner: ai, shape, dir: dir ?? null, r, c }
     );
 
-    if (opponentMoves.length === 0) {
-      value += 1700;
-    } else {
-      const scoringCells = new Set();
-      let opponentCanWin = false;
-      for (const oppMove of opponentMoves) {
-        if (isScored(oppMove.r, oppMove.c, opponent)) continue;
-        const oppCell = simulatedBoard[oppMove.r][oppMove.c];
-        if (countOwned(oppCell, opponent) >= 1) {
-          scoringCells.add(`${oppMove.r},${oppMove.c}`);
-          if (state.players[opponent].score + 1 >= 3) opponentCanWin = true;
-        }
+    const scoringCells = new Set();
+    let opponentCanWin = false;
+    for (const oppMove of opponentMoves) {
+      if (isScored(oppMove.r, oppMove.c, opponent)) continue;
+      const oppCell = simulatedBoard[oppMove.r][oppMove.c];
+      if (countOwned(oppCell, opponent) >= 1) {
+        scoringCells.add(`${oppMove.r},${oppMove.c}`);
+        if (state.players[opponent].score + 1 >= 3) opponentCanWin = true;
       }
-      if (opponentCanWin) {
-        value -= 800000;
-      } else {
-        value -= scoringCells.size * 1550;
-      }
-      value -= opponentMoves.length * 4;
     }
 
-    // 给自己之后的自由落子留下空格；避免把单格塞满
-    value -= Math.max(0, simulatedBoard[r][c].length - 2) * 35;
-    value += Math.random() * 9;
+    if (difficulty === 'easy') {
+      let value = scoringCells.size * 12000 + opponentMoves.length * 30;
+      if (opponentCanWin) value += 400000;
+      if (opponentMoves.length === 0) value += 8000;
+      value -= gainsPoint * 9000;
+      if (aiWins) value -= 1000000;
+      return value + centerBonus * 0.4;
+    }
+
+    if (difficulty === 'normal') {
+      let value = gainsPoint * 6200 + (aiWins ? 1000000 : 0);
+      if (opponentCanWin) value -= 800000;
+      else value -= scoringCells.size * 1550;
+      value -= opponentMoves.length * 4;
+      value -= Math.max(0, simulatedBoard[r][c].length - 2) * 35;
+      if (state.players[ai].pieces[shape] === 1) value -= 45;
+      return value + centerBonus;
+    }
+
+    // Hard: value immediate progress, avoid defeat, and look one reply ahead.
+    if (aiWins) return 1000000000;
+    if (opponentCanWin) return -1000000000;
+    let value = gainsPoint * 9000;
+    value -= scoringCells.size * 7000;
+    value -= opponentMoves.length * 12;
+    value -= Math.max(0, simulatedBoard[r][c].length - 2) * 55;
+    if (state.players[ai].pieces[shape] === 1) value -= 60;
+
+    if (opponentMoves.length === 0) {
+      value -= 5500;
+    } else {
+      let bestReply = null;
+      let bestReplyValue = -Infinity;
+      for (const oppMove of opponentMoves) {
+        let replyValue = 0;
+        if (!isScored(oppMove.r, oppMove.c, opponent)
+          && countOwned(simulatedBoard[oppMove.r][oppMove.c], opponent) >= 1) {
+          replyValue += 100000;
+        }
+        replyValue -= (Math.abs(oppMove.r - center) + Math.abs(oppMove.c - center)) * 2;
+        if (replyValue > bestReplyValue
+          || (replyValue === bestReplyValue && bestReply
+            && moveTieKey(oppMove).localeCompare(moveTieKey(bestReply)) < 0)) {
+          bestReplyValue = replyValue;
+          bestReply = oppMove;
+        }
+      }
+      if (bestReply) {
+        const replied = cloneBoard(simulatedBoard);
+        replied[bestReply.r][bestReply.c].push({
+          owner: opponent,
+          shape: bestReply.shape,
+          dir: bestReply.dir ?? null
+        });
+        const aiNextMoves = collectLegalMoves(
+          replied,
+          state.players[ai].pieces,
+          ai,
+          false,
+          {
+            owner: opponent,
+            shape: bestReply.shape,
+            dir: bestReply.dir ?? null,
+            r: bestReply.r,
+            c: bestReply.c
+          }
+        );
+        const futureScoring = new Set();
+        let futureWin = false;
+        for (const nextMove of aiNextMoves) {
+          if (isScored(nextMove.r, nextMove.c, ai)) continue;
+          const nextCell = replied[nextMove.r][nextMove.c];
+          if (countOwned(nextCell, ai) >= 1) {
+            futureScoring.add(`${nextMove.r},${nextMove.c}`);
+            if (state.players[ai].score + gainsPoint + 1 >= 3) futureWin = true;
+          }
+        }
+        value += futureScoring.size * 3200;
+        if (futureWin) value += 260000;
+        value -= aiNextMoves.length * 3;
+      }
+    }
+
+    return value + centerBonus;
+  }
+
+  /* ============================================================
+     困难人机：带强制任意棋规则的前瞻搜索
+  ============================================================ */
+  const SEARCH_WIN = 1e12;
+
+  function cloneSearchState(s) {
+    return {
+      board: cloneBoard(s.board),
+      pieces: {
+        red: { ...s.pieces.red },
+        blue: { ...s.pieces.blue }
+      },
+      scores: { red: s.scores.red, blue: s.scores.blue },
+      scored: new Set(s.scored),
+      turn: s.turn,
+      freeMove: s.freeMove,
+      arrowVariant: s.arrowVariant,
+      lastPiece: cloneLastMove(s.lastPiece)
+    };
+  }
+
+  function makeSearchState() {
+    return {
+      board: cloneBoard(state.board),
+      pieces: {
+        red: { ...state.players.red.pieces },
+        blue: { ...state.players.blue.pieces }
+      },
+      scores: {
+        red: state.players.red.score,
+        blue: state.players.blue.score
+      },
+      scored: new Set(state.scored),
+      turn: state.turn,
+      freeMove: state.freeMove,
+      arrowVariant: state.arrowVariant,
+      lastPiece: cloneLastMove(state.lastPiece)
+    };
+  }
+
+  function searchTotalPieces(s, color) {
+    return SHAPES.reduce((sum, shape) => sum + s.pieces[color][shape], 0);
+  }
+
+  function searchLegalMoves(s, color) {
+    if (!s.arrowVariant) {
+      return collectLegalMoves(s.board, s.pieces[color], color, s.freeMove, s.lastPiece);
+    }
+    const targets = s.freeMove || !s.lastPiece ? allCoords() : targetCellsFrom(s.lastPiece);
+    const pieces = s.pieces[color];
+    const moves = [];
+    for (const { r, c } of targets) {
+      const cell = s.board[r] && s.board[r][c];
+      if (!cell) continue;
+      for (const shape of SHAPES) {
+        if (pieces[shape] <= 0 || cellHasShape(cell, shape)) continue;
+        if (shape !== 'arrow') {
+          moves.push({ r, c, shape, dir: null });
+          continue;
+        }
+        for (let dir = 0; dir < DIRS.length; dir++) {
+          for (let distance = 1; distance <= pieces.arrow; distance++) {
+            const nr = r + DIRS[dir].dr * distance;
+            const nc = c + DIRS[dir].dc * distance;
+            if (!inBounds(nr, nc)) break;
+            moves.push({
+              r,
+              c,
+              shape: 'arrow',
+              dir,
+              shiftTarget: { r: nr, c: nc },
+              shiftCost: distance
+            });
+          }
+        }
+      }
+    }
+    return moves;
+  }
+
+  function searchWouldScore(s, move, color) {
+    if (s.scored.has(scoreKey(move.r, move.c, color))) return false;
+    return countOwned(s.board[move.r][move.c], color) >= 1;
+  }
+
+  function searchThreatCount(s, color, moves) {
+    const cells = new Set();
+    for (const move of moves) {
+      if (searchWouldScore(s, move, color)) cells.add(`${move.r},${move.c}`);
+    }
+    return cells.size;
+  }
+
+  function searchPotential(s, color) {
+    let count = 0;
+    for (let r = 0; r < s.board.length; r++) {
+      for (let c = 0; c < s.board[r].length; c++) {
+        if (s.scored.has(scoreKey(r, c, color))) continue;
+        const cell = s.board[r][c];
+        if (countOwned(cell, color) !== 1) continue;
+        if (SHAPES.some(shape => !cellHasShape(cell, shape) && s.pieces[color][shape] > 0)) {
+          count += 1;
+        }
+      }
+    }
+    return count;
+  }
+
+  function searchWinnerByScore(s) {
+    if (s.scores.red > s.scores.blue) return 'red';
+    if (s.scores.blue > s.scores.red) return 'blue';
+    return null;
+  }
+
+  function searchForcedReason(s) {
+    const targets = s.lastPiece ? targetCellsFrom(s.lastPiece) : allCoords();
+    if (!targets.length) return 'full';
+    return targets.some(({ r, c }) => !cellIsFull(s.board[r][c])) ? 'exhausted' : 'full';
+  }
+
+  function searchApplyMove(s, move, color) {
+    const next = cloneSearchState(s);
+    const cell = next.board[move.r][move.c];
+    const cost = move.shiftCost || 1;
+    cell.push({
+      owner: color,
+      shape: move.shape,
+      dir: move.dir ?? null,
+      ...(move.shiftTarget ? { arrowTarget: { ...move.shiftTarget }, shiftCost: cost } : {})
+    });
+    next.pieces[color][move.shape] -= cost;
+    if (!next.scored.has(scoreKey(move.r, move.c, color)) && countOwned(cell, color) >= 2) {
+      next.scored.add(scoreKey(move.r, move.c, color));
+      next.scores[color] += 1;
+    }
+    next.lastPiece = {
+      owner: color,
+      shape: move.shape,
+      dir: move.dir ?? null,
+      r: move.r,
+      c: move.c,
+      ...(move.shiftTarget ? { arrowTarget: { ...move.shiftTarget }, shiftCost: cost } : {})
+    };
+    next.freeMove = false;
+
+    if (next.scores[color] >= 3) {
+      return { state: next, terminal: 'win', winner: color };
+    }
+    if (searchTotalPieces(next, 'red') === 0 || searchTotalPieces(next, 'blue') === 0) {
+      return { state: next, terminal: 'end', winner: searchWinnerByScore(next) };
+    }
+
+    const opponent = otherColor(color);
+    next.turn = opponent;
+    if (searchLegalMoves(next, opponent).length === 0) {
+      const reason = searchForcedReason(next);
+      if (reason === 'exhausted') {
+        next.turn = color;
+        next.freeMove = true;
+        if (searchLegalMoves(next, color).length === 0) {
+          return { state: next, terminal: 'draw', winner: null };
+        }
+      } else {
+        next.freeMove = true;
+        if (searchLegalMoves(next, opponent).length === 0) {
+          return { state: next, terminal: 'draw', winner: null };
+        }
+      }
+    }
+    return { state: next, terminal: null, winner: null };
+  }
+
+  function searchEvaluate(s, aiColor) {
+    const opponent = otherColor(aiColor);
+    const aiScore = s.scores[aiColor];
+    const oppScore = s.scores[opponent];
+    const aiMoves = searchLegalMoves(s, aiColor);
+    const oppMoves = searchLegalMoves(s, opponent);
+    const aiThreats = searchThreatCount(s, aiColor, aiMoves);
+    const oppThreats = searchThreatCount(s, opponent, oppMoves);
+    const aiPotential = searchPotential(s, aiColor);
+    const oppPotential = searchPotential(s, opponent);
+
+    let value = (aiScore - oppScore) * 140000;
+    value += aiThreats * 7200 - oppThreats * 11200;
+    value += aiPotential * 190 - oppPotential * 280;
+    value += aiMoves.length * 4 - oppMoves.length * 4;
+    value += s.turn === aiColor ? 90 : -90;
+
+    if (aiScore + 1 >= 3 && aiThreats > 0) {
+      value += s.turn === aiColor ? 760000 : 220000;
+    }
+    if (oppScore + 1 >= 3 && oppThreats > 0) {
+      value -= s.turn === opponent ? 820000 : 260000;
+    }
     return value;
+  }
+
+  function searchOrderScore(s, move, color) {
+    let value = 0;
+    if (searchWouldScore(s, move, color)) value += 1200;
+    if (s.scores[color] + 1 >= 3 && searchWouldScore(s, move, color)) value += 5000;
+    const center = (s.board.length - 1) / 2;
+    value += (center - (Math.abs(move.r - center) + Math.abs(move.c - center)) / 2) * 3;
+    if (move.shape === 'arrow') value += 2;
+    if (move.shiftTarget) {
+      const targetCell = s.board[move.shiftTarget.r][move.shiftTarget.c];
+      const next = otherColor(color);
+      if (countOwned(targetCell, color) > 0) value += 130;
+      if (countOwned(targetCell, next) > 0) value -= 190;
+      if (cellIsFull(targetCell)) value -= 60;
+      value -= (move.shiftCost || 1) * 2;
+    }
+    return value;
+  }
+
+  function searchOrderedMoves(s, color, limit) {
+    const moves = searchLegalMoves(s, color);
+    moves.sort((a, b) => {
+      const av = searchOrderScore(s, a, color);
+      const bv = searchOrderScore(s, b, color);
+      if (Math.abs(bv - av) > 0.0001) return bv - av;
+      return moveTieKey(a).localeCompare(moveTieKey(b));
+    });
+    return moves.slice(0, limit);
+  }
+
+  function searchTerminalValue(result, aiColor) {
+    if (result.terminal === 'win') return result.winner === aiColor ? SEARCH_WIN : -SEARCH_WIN;
+    if (result.terminal === 'draw') return 0;
+    if (result.terminal === 'end') {
+      if (!result.winner) return 0;
+      return result.winner === aiColor ? SEARCH_WIN : -SEARCH_WIN;
+    }
+    return 0;
+  }
+
+  function searchValue(s, depth, alpha, beta, aiColor) {
+    if (s.scores[aiColor] >= 3) return SEARCH_WIN;
+    if (s.scores[otherColor(aiColor)] >= 3) return -SEARCH_WIN;
+    if (searchTotalPieces(s, 'red') === 0 || searchTotalPieces(s, 'blue') === 0) {
+      return searchEvaluate(s, aiColor);
+    }
+    if (depth <= 0) return searchEvaluate(s, aiColor);
+
+    const color = s.turn;
+    const maximizing = color === aiColor;
+    // The opponent's immediate replies are searched exhaustively so the hard AI
+    // cannot be beaten by a single move hidden outside a narrow candidate list.
+    const branchLimit = maximizing
+      ? 32
+      : (s.arrowVariant ? 96 : Number.MAX_SAFE_INTEGER);
+    const moves = searchOrderedMoves(s, color, branchLimit);
+    if (!moves.length) return searchEvaluate(s, aiColor);
+
+    let best = maximizing ? -Infinity : Infinity;
+    for (const move of moves) {
+      const result = searchApplyMove(s, move, color);
+      let value;
+      if (result.terminal) {
+        value = searchTerminalValue(result, aiColor);
+      } else {
+        value = searchValue(result.state, depth - 1, alpha, beta, aiColor);
+      }
+      if (maximizing) {
+        best = Math.max(best, value);
+        alpha = Math.max(alpha, best);
+      } else {
+        best = Math.min(best, value);
+        beta = Math.min(beta, best);
+      }
+      if (beta <= alpha) break;
+    }
+    return best;
+  }
+
+  function chooseHardMove(moves) {
+    const aiColor = state.turn;
+    const root = makeSearchState();
+    const rootMoves = state.arrowVariant ? searchLegalMoves(root, aiColor) : moves;
+    if (!rootMoves.length) return null;
+
+    let ordered;
+    if (state.arrowVariant) {
+      ordered = rootMoves.map(move => {
+        const result = searchApplyMove(root, move, aiColor);
+        const order = result.terminal
+          ? searchTerminalValue(result, aiColor)
+          : searchEvaluate(result.state, aiColor);
+        return { move, order, result };
+      });
+    } else {
+      ordered = rootMoves.map(move => ({
+        move,
+        order: evaluateAiMove(move, 'hard'),
+        result: null
+      }));
+    }
+    ordered.sort((a, b) => {
+      if (Math.abs(b.order - a.order) > 0.0001) return b.order - a.order;
+      return moveTieKey(a.move).localeCompare(moveTieKey(b.move));
+    });
+    const rootLimit = state.arrowVariant ? Math.min(120, ordered.length) : ordered.length;
+    const tieTolerance = 0.001;
+    const evaluated = [];
+
+    for (const item of ordered.slice(0, rootLimit)) {
+      const result = item.result || searchApplyMove(root, item.move, aiColor);
+      let value;
+      if (result.terminal) {
+        value = searchTerminalValue(result, aiColor);
+      } else {
+        value = searchValue(result.state, 2, -Infinity, Infinity, aiColor);
+      }
+      evaluated.push({ move: item.move, value, result });
+    }
+
+    evaluated.sort((a, b) => {
+      if (Math.abs(b.value - a.value) > 0.0001) return b.value - a.value;
+      return moveTieKey(a.move).localeCompare(moveTieKey(b.move));
+    });
+
+    let best = -Infinity;
+    let bestMoves = [];
+    for (const entry of evaluated) {
+      if (entry.value > best + tieTolerance) {
+        best = entry.value;
+        bestMoves = [entry.move];
+      } else if (entry.value >= best - tieTolerance) {
+        bestMoves.push(entry.move);
+      }
+    }
+    if (!bestMoves.length) return evaluated[0].move;
+    return bestMoves[Math.floor(Math.random() * bestMoves.length)];
   }
 
   /* ============================================================
@@ -4536,7 +5286,7 @@
 
   function surrender(color) {
     if (state.gameOver || state.screen !== 'game') return;
-    if (state.mode === 'solo' && color === state.aiColor) return;
+    if (isAiSide(color)) return;
     openConfirm({
       title: tr(`${displayName(color)}认输？`, `Should ${displayName(color)} resign?`),
       text: tr(
@@ -4622,6 +5372,18 @@
       toggle.setAttribute('aria-checked', String(customConfig.arrowVariant));
       playSound('click');
     });
+    $('#custom-ai').addEventListener('click', () => {
+      customConfig.playerTwoAI = !customConfig.playerTwoAI;
+      renderCustomSetup();
+      playSound('click');
+    });
+    $('#custom-ai-difficulty').addEventListener('change', event => {
+      settings.difficulty = event.target.value;
+      saveSettings();
+      updateDifficultyPill();
+      updateSoloDifficultyPicker();
+      playSound('click');
+    });
     $('#custom-first').addEventListener('change', event => {
       customConfig.firstPlayer = event.target.value;
     });
@@ -4661,6 +5423,10 @@
 
     $('#surrender-red').addEventListener('click', () => surrender('red'));
     $('#surrender-blue').addEventListener('click', () => surrender('blue'));
+    $('#undo-red').addEventListener('click', () => requestUndo('red'));
+    $('#undo-blue').addEventListener('click', () => requestUndo('blue'));
+    $('#undo-approve').addEventListener('click', approveUndo);
+    $('#undo-reject').addEventListener('click', rejectUndo);
 
     $$('[data-close]').forEach(el => {
       el.addEventListener('click', () => {
@@ -4681,6 +5447,8 @@
           cancelArrowDialog();
         } else if (layer.id === 'modal-confirm') {
           closeConfirm();
+        } else if (layer.id === 'modal-undo') {
+          rejectUndo();
         } else {
           closeModal(layer.id);
         }
@@ -4763,6 +5531,7 @@
       }
       if (top.id === 'modal-arrow') cancelArrowDialog();
       else if (top.id === 'modal-confirm') closeConfirm();
+      else if (top.id === 'modal-undo') rejectUndo();
       else closeModal(top.id);
     });
 
