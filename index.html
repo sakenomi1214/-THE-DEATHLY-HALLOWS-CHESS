@@ -91,6 +91,28 @@
   .top-btn:hover{color:var(--gold-bright);border-color:var(--line);background:rgba(216,182,108,.06)}
   .top-btn.exit{color:var(--gold);border-color:rgba(216,182,108,.22)}
   .lang-btn{min-width:48px;color:var(--gold);border-color:rgba(216,182,108,.22);font-weight:600;letter-spacing:.04em}
+  .topbar-left{display:flex;align-items:center;gap:8px;min-width:0}
+  .back-wrap{position:relative;flex:none}
+  .back-menu-trigger{
+    display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(216,182,108,.24);border-radius:999px;
+    background:rgba(216,182,108,.055);color:var(--gold-bright);padding:7px 11px 7px 8px;
+    font-size:11.5px;letter-spacing:.08em;cursor:pointer;transition:.22s;white-space:nowrap;
+  }
+  .back-menu-trigger:hover{border-color:rgba(216,182,108,.55);background:rgba(216,182,108,.12)}
+  .back-menu-trigger svg{width:17px;height:17px;flex:none}
+  .back-menu{
+    position:absolute;left:0;top:calc(100% + 9px);z-index:70;min-width:186px;padding:5px;
+    border:1px solid rgba(216,182,108,.26);border-radius:13px;
+    background:linear-gradient(160deg,rgba(19,24,43,.98),rgba(8,11,21,.99));
+    box-shadow:0 18px 42px rgba(0,0,0,.48);
+  }
+  .back-menu-option{
+    width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:9px;
+    background:transparent;color:#e9dfcc;padding:10px 11px;text-align:left;font-size:12px;
+    letter-spacing:.05em;cursor:pointer;transition:.2s;
+  }
+  .back-menu-option:hover{background:rgba(216,182,108,.11);color:var(--gold-bright)}
+  .back-menu-option svg{width:19px;height:19px;color:var(--gold);flex:none}
   html[lang="en"] .hero-title{font-size:clamp(38px,6.4vw,68px);letter-spacing:.035em;padding-left:.035em}
   html[lang="en"] .brand-text{font-size:16px;letter-spacing:.08em}
   html[lang="en"] .tagline{font-family:var(--sans);font-size:13px;letter-spacing:.2em;padding-left:.2em}
@@ -248,6 +270,10 @@
   }
   .playstyle-option:hover{border-color:rgba(216,182,108,.42);color:var(--gold-bright)}
   .playstyle-option.active{border-color:rgba(216,182,108,.62);background:rgba(216,182,108,.12);color:var(--gold-bright);box-shadow:inset 0 0 0 1px rgba(216,182,108,.1)}
+  .solo-difficulty-row{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(216,182,108,.1)}
+  .solo-difficulty-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .solo-difficulty-copy>span:first-child{font-size:10px;letter-spacing:.12em;color:var(--gold-bright)}
+  .solo-difficulty-desc{font-size:9px;line-height:1.55;color:var(--muted-2);letter-spacing:.02em}
   .playstyle-picker + .name-form{margin-top:18px}
   .name-form{width:min(650px,100%);margin:29px auto 0;text-align:left}
   .name-fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}
@@ -1164,6 +1190,9 @@
     .brand-sub{display:none}
     .brand-text{font-size:15px;letter-spacing:.11em}
     html[lang="en"] .brand-text{font-size:12px;letter-spacing:.03em;white-space:nowrap}
+    body.back-visible .brand-text{display:none}
+    .back-menu-trigger{padding:6px;gap:0}
+    .back-label{display:none}
     .brand-mark{width:23px;height:23px}
     .top-btn{padding:6px 5px;font-size:9.5px;letter-spacing:.02em}
     .top-actions{gap:0;flex-wrap:nowrap}
@@ -1195,6 +1224,8 @@
     .name-actions .btn-primary{width:100%;min-width:0}
     .name-input{font-size:18px}
     .name-field-foot{min-height:0}
+    .solo-difficulty-row{flex-direction:column;align-items:stretch;gap:8px}
+    .solo-difficulty-row .setting-select{width:100%}
     .back-link{margin-bottom:10px}
     #screen-game{padding:12px 10px 24px}
     .game-topline{padding:0}
@@ -1282,17 +1313,35 @@
 
 <div class="app">
   <header class="topbar">
-    <button class="brand" id="brand-home" aria-label="返回死亡圣棋主页">
-      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M32 5 59 56H5Z" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/>
-        <circle cx="32" cy="38" r="13.5" fill="none" stroke="currentColor" stroke-width="2.3"/>
-        <path d="M32 5v51" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
-      </svg>
-      <span>
-        <span class="brand-text">死亡圣棋</span>
-        <span class="brand-sub">THE DEATHLY HALLOWS CHESS</span>
-      </span>
-    </button>
+    <div class="topbar-left">
+      <div class="back-wrap">
+        <button class="back-menu-trigger hidden" id="btn-back-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="back-menu" aria-label="返回菜单">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4 7 12l8 8"/></svg>
+          <span class="back-label">返回</span>
+        </button>
+        <div class="back-menu hidden" id="back-menu" role="menu" aria-hidden="true">
+          <button class="back-menu-option" type="button" role="menuitem" data-back-dest="home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.2 12 3l9 8.2V21h-6v-6H9v6H3Z"/></svg>
+            <span id="back-home-text">回到主页</span>
+          </button>
+          <button class="back-menu-option" type="button" role="menuitem" data-back-dest="mode">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <span id="back-mode-text">模式选择</span>
+          </button>
+        </div>
+      </div>
+      <button class="brand" id="brand-home" aria-label="返回死亡圣棋主页">
+        <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M32 5 59 56H5Z" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/>
+          <circle cx="32" cy="38" r="13.5" fill="none" stroke="currentColor" stroke-width="2.3"/>
+          <path d="M32 5v51" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
+        </svg>
+        <span>
+          <span class="brand-text">死亡圣棋</span>
+          <span class="brand-sub">THE DEATHLY HALLOWS CHESS</span>
+        </span>
+      </button>
+    </div>
     <div class="top-actions">
       <button class="top-btn lang-btn" id="btn-lang" type="button" aria-label="切换到英文">EN</button>
       <button class="top-btn" id="btn-rules-top">比赛规则</button>
@@ -1482,6 +1531,17 @@
           <div class="playstyle-options">
             <button class="playstyle-option active" type="button" data-style="classic" id="playstyle-classic">经典玩法</button>
             <button class="playstyle-option" type="button" data-style="shift" id="playstyle-shift">移形换影</button>
+          </div>
+          <div class="solo-difficulty-row hidden" id="solo-difficulty-row">
+            <div class="solo-difficulty-copy">
+              <span id="solo-difficulty-title">人机难度</span>
+              <span class="solo-difficulty-desc" id="solo-difficulty-desc"></span>
+            </div>
+            <select class="setting-select" id="solo-difficulty-select" aria-label="人机难度">
+              <option value="easy">轻松</option>
+              <option value="normal">标准</option>
+              <option value="hard">困难</option>
+            </select>
           </div>
         </div>
         <form class="name-form" id="names-form" novalidate>
@@ -1726,16 +1786,8 @@
           <option value="en">English</option>
         </select>
       </div>
-      <div class="setting-row">
-        <div class="setting-info"><strong>对手难度</strong><span>仅在一人游戏时生效。难度会在下一局或对手下一步思考时应用。</span></div>
-        <select class="setting-select" id="set-difficulty" aria-label="对手难度">
-          <option value="easy">轻松</option>
-          <option value="normal">标准</option>
-          <option value="hard">困难</option>
-        </select>
-      </div>
     </div>
-    <p class="settings-foot">提示：若当前正在人机对局中，打开此面板会暂停对手思考与回合计时，关闭后继续。</p>
+    <p class="settings-foot">提示：若当前正在人机对局中，打开此面板会暂停对手思考与回合计时，关闭后继续。人机难度请在一人游戏开始前的姓名页设置，对局中不可更改。</p>
     <div class="modal-actions">
       <button class="btn btn-primary" data-close="modal-settings">完成</button>
     </div>
@@ -2455,13 +2507,7 @@
     { sel: '#modal-settings .setting-row:nth-child(4) strong', en: 'Language' },
     { sel: '#modal-settings .setting-row:nth-child(4) .setting-info span', en: 'Switch the interface and rules between Chinese and English' },
     { sel: '#set-language', attr: 'aria-label', en: 'Interface language' },
-    { sel: '#modal-settings .setting-row:nth-child(5) strong', en: 'Opponent Difficulty' },
-    { sel: '#modal-settings .setting-row:nth-child(5) .setting-info span', en: 'Applies only in Single Player. Takes effect next game or when the AI next thinks.' },
-    { sel: '#set-difficulty', attr: 'aria-label', en: 'Opponent difficulty' },
-    { sel: '#set-difficulty option[value="easy"]', en: 'Easy' },
-    { sel: '#set-difficulty option[value="normal"]', en: 'Standard' },
-    { sel: '#set-difficulty option[value="hard"]', en: 'Hard' },
-    { sel: '#modal-settings .settings-foot', en: 'Tip: opening this panel during a single-player game pauses the AI and the turn clock until it closes.' },
+    { sel: '#modal-settings .settings-foot', en: 'Tip: opening this panel during a single-player game pauses the AI and the turn clock until it closes. Set AI difficulty on the Single Player name page before the match; it cannot be changed mid-game.' },
     { sel: '#modal-settings .modal-actions .btn', en: 'Done' },
     { sel: '#arrow-close-x', attr: 'aria-label', en: 'Cancel arrow direction' },
     { sel: '#arrow-title', en: 'Choose Arrow Direction' },
@@ -3096,11 +3142,31 @@
       : `难度 · ${DIFFICULTY_LABEL[settings.difficulty]}`;
   }
 
+  function updateSoloDifficultyPicker() {
+    const row = $('#solo-difficulty-row');
+    if (!row) return;
+    const visible = state.pendingMode === 'solo';
+    row.classList.toggle('hidden', !visible);
+    if (!visible) return;
+    $('#solo-difficulty-title').textContent = tr('人机难度', 'AI Difficulty');
+    $('#solo-difficulty-desc').textContent = tr(
+      '开始对局后不可更改；需退出对局并重新进入人机设置。',
+      'Locked once the match begins; exit and reconfigure to change it.'
+    );
+    const select = $('#solo-difficulty-select');
+    select.value = settings.difficulty;
+    select.setAttribute('aria-label', tr('人机难度', 'AI difficulty'));
+    select.querySelector('option[value="easy"]').textContent = tr('轻松', 'Easy');
+    select.querySelector('option[value="normal"]').textContent = tr('标准', 'Standard');
+    select.querySelector('option[value="hard"]').textContent = tr('困难', 'Hard');
+  }
+
   function updatePlaystylePicker() {
     const picker = $('#playstyle-picker');
     if (!picker) return;
     const visible = state.pendingMode === 'solo' || state.pendingMode === 'duo';
     picker.classList.toggle('hidden', !visible);
+    updateSoloDifficultyPicker();
     if (!visible) return;
     $('#playstyle-title').textContent = tr('玩法', 'Playstyle');
     $('#playstyle-classic').textContent = tr('经典玩法', 'Classic');
@@ -3265,7 +3331,6 @@
     anim.setAttribute('aria-checked', String(settings.animations));
     const languageSelect = $('#set-language');
     if (languageSelect) languageSelect.value = settings.language;
-    $('#set-difficulty').value = settings.difficulty;
     updateLanguageToggle();
     updateDifficultyPill();
   }
@@ -4707,10 +4772,11 @@
       renderSettingsUI();
       playSound('click');
     });
-    $('#set-difficulty').addEventListener('change', event => {
+    $('#solo-difficulty-select').addEventListener('change', event => {
       settings.difficulty = event.target.value;
       saveSettings();
       updateDifficultyPill();
+      updateSoloDifficultyPicker();
       playSound('click');
     });
     $('#set-language').addEventListener('change', event => {
