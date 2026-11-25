@@ -169,7 +169,40 @@
   .ornament .diamond{width:5px;height:5px;border:1px solid currentColor;transform:rotate(45deg)}
 
   /* ---------- mode select ---------- */
-  #screen-select,#screen-mode{align-items:center;justify-content:center;padding:clamp(24px,5vh,58px) 22px 50px}
+  #screen-select,#screen-mode,#screen-online{align-items:center;justify-content:center;padding:clamp(24px,5vh,58px) 22px 50px}
+  .online-shell{width:min(760px,100%)}
+  .online-card{
+    margin-top:28px;padding:22px 24px;border:1px solid rgba(216,182,108,.19);border-radius:18px;
+    background:linear-gradient(145deg,rgba(26,31,53,.82),rgba(12,15,28,.9));text-align:left;
+  }
+  .online-kicker{font-size:10px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin:0 0 15px}
+  .online-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .online-field{display:flex;flex-direction:column;gap:7px;font-size:10px;letter-spacing:.08em;color:var(--muted)}
+  .online-field input{
+    width:100%;border:1px solid rgba(216,182,108,.2);border-radius:10px;background:rgba(5,8,16,.55);
+    color:var(--ink);padding:11px 12px;font-size:13px;outline:none;transition:.2s;
+  }
+  .online-field input:focus{border-color:rgba(216,182,108,.58);box-shadow:0 0 0 2px rgba(216,182,108,.08)}
+  .online-error{min-height:16px;margin:10px 0 0;color:var(--red-bright);font-size:11px;line-height:1.6}
+  .online-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .online-profile{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+  .online-name{font-family:var(--serif);font-size:24px;color:#f4ead4;letter-spacing:.08em}
+  .online-rank{display:inline-flex;margin-left:10px;padding:4px 9px;border:1px solid rgba(216,182,108,.25);border-radius:999px;color:var(--gold);font-size:10px;letter-spacing:.08em}
+  .online-points{color:var(--gold-bright);font-size:13px;letter-spacing:.08em;white-space:nowrap}
+  .online-record{margin:10px 0 0;color:var(--muted);font-size:11px;line-height:1.7}
+  .online-mode-picker{margin-top:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .online-mode-label{font-size:10px;letter-spacing:.1em;color:var(--muted)}
+  .online-mode-options{display:inline-flex;padding:3px;border:1px solid rgba(216,182,108,.18);border-radius:999px;background:rgba(4,7,14,.42)}
+  .online-mode-option{
+    border:0;border-radius:999px;background:transparent;color:var(--muted);padding:6px 12px;
+    font-size:10.5px;letter-spacing:.08em;cursor:pointer;transition:.2s;
+  }
+  .online-mode-option.active{background:rgba(216,182,108,.14);color:var(--gold-bright)}
+  .online-mode-option:disabled{opacity:.38;cursor:not-allowed}
+  .online-mode-hint{font-size:9px;letter-spacing:.05em;color:var(--muted-2)}
+  .online-status{margin:14px 0 0;color:var(--muted);font-size:12px;line-height:1.8;min-height:22px}
+  .online-status.is-queued{color:var(--gold-bright)}
+  .online-status.is-error{color:var(--red-bright)}
   .subscreen{width:min(1000px,100%);text-align:center}
   .back-link{
     display:inline-flex;align-items:center;gap:8px;border:0;background:none;color:var(--muted);
@@ -1303,7 +1336,10 @@
     .home-meta{gap:8px 14px;margin-top:29px;font-size:9.5px}
     .mode-grid{grid-template-columns:1fr;margin-top:26px}
     .mode-card{min-height:198px;padding:23px 22px}
-    #screen-select,#screen-mode{padding-top:22px}
+    #screen-select,#screen-mode,#screen-online{padding-top:22px}
+    .online-fields{grid-template-columns:1fr}
+    .online-card{padding:18px}
+    .online-profile{flex-direction:column;gap:8px}
     #screen-names{padding-top:22px}
     #screen-custom{padding-top:22px}
     .custom-card{padding:6px 16px 18px}
@@ -1469,7 +1505,7 @@
       <div class="subscreen">
         <button class="back-link" id="btn-select-back"><span aria-hidden="true">←</span> 返回首页</button>
         <h2>模式选择</h2>
-        <p class="subtitle">选择离线模式开始本地对局；联机模式将在后续开放。</p>
+        <p class="subtitle">选择离线本地对局，或登录账号进行联机匹配。</p>
         <div class="mode-grid select-grid">
           <button class="mode-card" id="mode-offline">
             <span class="mode-icon">
@@ -1487,10 +1523,75 @@
               <span class="arrow" aria-hidden="true">→</span>
             </div>
           </button>
-          <div class="mode-card placeholder" id="mode-online" aria-disabled="true">
+          <button class="mode-card" id="mode-online">
+            <span class="mode-icon">
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+                <circle cx="16" cy="16" r="11"/>
+                <path d="M5 16h22M16 5c3.2 3 4.8 6.7 4.8 11S19.2 24 16 27c-3.2-3-4.8-6.7-4.8-11S12.8 8 16 5Z"/>
+              </svg>
+            </span>
             <div class="mode-en">Online</div>
             <h3>联机模式</h3>
-            <p>暂未开放</p>
+            <p>登录账号，与另一位玩家随机匹配，用户名将直接投入火焰杯。</p>
+            <div class="mode-foot">
+              <span class="diff-pill">账号 · 随机匹配</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 联机模式 -->
+    <section class="screen" id="screen-online">
+      <div class="subscreen online-shell">
+        <button class="back-link" id="btn-online-back"><span aria-hidden="true">←</span> 返回模式选择</button>
+        <h2>联机模式</h2>
+        <p class="subtitle">登录账号后随机匹配另一位玩家。对局采用经典规则，用户名会直接投入火焰杯。</p>
+
+        <div class="online-card" id="online-auth-card">
+          <p class="online-kicker">账号登录</p>
+          <form id="online-auth-form" novalidate>
+            <div class="online-fields">
+              <label class="online-field">
+                <span>用户名</span>
+                <input id="online-username" type="text" maxlength="12" autocomplete="username" placeholder="2–12 个字符">
+              </label>
+              <label class="online-field">
+                <span>密码</span>
+                <input id="online-password" type="password" maxlength="64" autocomplete="current-password" placeholder="至少 6 位">
+              </label>
+            </div>
+            <p class="online-error" id="online-auth-error" role="alert"></p>
+            <div class="online-actions">
+              <button class="btn btn-primary" id="online-login" type="submit">登录</button>
+              <button class="btn btn-ghost" id="online-register" type="button">注册新账号</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="online-card hidden" id="online-lobby">
+          <div class="online-profile">
+            <div>
+              <span class="online-name" id="online-name"></span>
+              <span class="online-rank" id="online-rank"></span>
+            </div>
+            <span class="online-points" id="online-points"></span>
+          </div>
+          <p class="online-record" id="online-record"></p>
+          <div class="online-mode-picker" id="online-mode-picker">
+            <span class="online-mode-label">对局模式</span>
+            <div class="online-mode-options">
+              <button class="online-mode-option active" id="btn-online-classic" type="button" data-mode="classic">经典</button>
+              <button class="online-mode-option" id="btn-online-shift" type="button" data-mode="shift">移形换影</button>
+            </div>
+            <span class="online-mode-hint" id="online-shift-lock">正式棋手解锁</span>
+          </div>
+          <p class="online-status" id="online-status">准备就绪。</p>
+          <div class="online-actions">
+            <button class="btn btn-primary" id="btn-online-match" type="button">随机匹配</button>
+            <button class="btn btn-ghost hidden" id="btn-online-cancel" type="button">取消匹配</button>
+            <button class="btn btn-ghost" id="btn-online-logout" type="button">退出登录</button>
           </div>
         </div>
       </div>
@@ -1885,6 +1986,22 @@
         <p>每方在每局中拥有 <strong>3 次</strong>悔棋机会，可在任意时刻通过自己面板上的“悔棋”按钮发起。点击后会先弹出二次确认；确认即消耗一次机会，即使对手随后拒绝也不会返还。</p>
         <p>双人同屏和自定义双人房间中，悔棋申请需要对手明确同意；一人游戏与自定义房间的人机对手会自动同意。对方拒绝时，棋局继续，已消耗的机会仍然扣除。</p>
         <p>同意后，棋局会回溯到发起者最近一次轮次的开始，恢复当时的棋盘、棋子、分数与落点约束；回合计时重新开始。超时次数和悔棋机会不会随回溯恢复。没有可用机会、尚未形成上一轮次或对局已经结束时，不能发起悔棋。</p>
+        <p>联机模式同样启用悔棋，双方各有 3 次机会；发起后需己方二次确认、对方明确同意，无论最终是否回溯都会扣除发起方一次机会。</p>
+      </div>
+      <div class="rule-section">
+        <h3><span class="rule-num">10</span>联机模式与段位积分</h3>
+        <p>联机模式使用注册账号登录，直接以用户名称投入火焰杯并进入对局，不再进行姓名输入。联机采用经典 5 × 5 双人规则，并可在正式棋手解锁后选择“移形换影”进阶玩法。</p>
+        <p>移形换影在首次晋升为<strong>正式棋手</strong>时永久解锁；之后即使掉段，也不会重新封印。联机移形换影使用 7 枚基础箭头，并遵循第 08 节的起终点、消耗与终点限制规则。</p>
+        <p>段位依次为：学徒、见习棋手、正式棋手、中阶棋手、高阶棋手、传奇棋手、规则棋手、真理棋手、始祖棋手。学徒晋升需 50 分，见习晋升需 100 分，此后每级所需分数为上一级的 10 倍。</p>
+        <ul class="rule-list">
+          <li>经典模式每胜一局基础 +10 分；移形换影模式的所有积分增减按经典模式结果 ×2。</li>
+          <li>第三连胜起，单局得分按上一局得分的 1.2 倍递增；第十连胜起，改为按上一局得分的 1.5 倍递增。失败或平局会中断连胜并重置倍率。</li>
+          <li>失败扣分：学徒、见习不扣分；正式至传奇扣 5 分；规则至始祖扣 10 分。移形换影模式下扣分 ×2。</li>
+          <li>掉段保护：第一次因扣分跌破 0 分时只扣至 0 分并保留段位；第二次跌破 0 分才掉段。重新升回后再次获得掉段保护。</li>
+        </ul>
+        <p>匹配时优先寻找段位一致、积分接近的玩家；其次参考连胜数。若暂时找不到，等待范围会逐步扩大，直至匹配成功。经典与移形换影只会匹配相同玩法。</p>
+        <p>联机悔棋保留双方各 3 次机会，流程与双人模式一致：发起方二次确认后消耗一次机会，对方同意才回溯；拒绝不返还机会。</p>
+        <p>联机结算按每位玩家自己的视角显示：胜者看到 WIN，败者看到 LOSE，平局看到紫色平局画面。段位积分只由联机结算改变，离线模式不会影响账号积分。</p>
       </div>
       <div class="note-block">
         <b>本作采用的补充约定：</b>箭头仅支持上、下、左、右四个正交方向；每格只计一次共鸣分（即使之后放入三枚同方棋子也不重复计分）；无法依约落子时，若目标格未满但己方棋子耗尽，由对手获得任意棋且己方停一手，若目标格已满则由己方获得任意棋；移形换影玩法中箭头基础数量为 7 枚（自定义房间以设置的棋子数量为准）；一方棋子耗尽时若双方同分，则判平局；弹窗打开期间暂停回合计时。这些约定在处理原始规则未明确之处时使用。
@@ -2340,8 +2457,26 @@
     timeouts: { red: 0, blue: 0 },
     turnTimeLeft: TURN_SECONDS,
     turnTimerActive: false,
-    turnTimerLastTick: 0
+    turnTimerLastTick: 0,
+    onlineRoomId: null,
+    onlineColor: null,
+    onlineVersion: -1,
+    onlineSubmitting: false,
+    onlineSettled: false,
+    onlinePendingUndo: null,
+    onlineUndoNoticeKey: null,
+    undoAvailable: { red: true, blue: true }
   };
+
+  const API_BASE = location.protocol === 'file:' ? 'http://127.0.0.1:8787' : '';
+  const RANK_EN = ['Apprentice', 'Trainee', 'Official', 'Intermediate', 'Advanced', 'Legend', 'Rule', 'Truth', 'Origin'];
+  let onlineToken = '';
+  try { onlineToken = localStorage.getItem('dc_online_token') || ''; } catch (err) { onlineToken = ''; }
+  let onlineUser = null;
+  let onlineMode = 'classic';
+  let onlinePollTimer = null;
+  let onlineMatchTimer = null;
+  let onlinePending = null;
 
   let aiTimer = null;
   let toastTimer = null;
@@ -2534,6 +2669,12 @@
     if (state.gameOver || state.screen !== 'game') return false;
     if (!state.undoLeft || state.undoLeft[color] <= 0) return false;
     if (isAiSide(color)) return false;
+    if (state.mode === 'online') {
+      return color === state.humanColor
+        && !state.onlineSubmitting
+        && !state.onlinePendingUndo
+        && !!state.undoAvailable?.[color];
+    }
     return undoSnapshotIndex(color) >= 0;
   }
 
@@ -2585,6 +2726,22 @@
         : tr('当前无法悔棋：次数不足或没有可回溯的己方轮次。', 'Undo is unavailable: no chances or no previous turn to return to.'), 'error');
       return;
     }
+    if (state.mode === 'online') {
+      openConfirm({
+        title: tr(`${displayName(color)}发起悔棋？`, `${displayName(color)} request an undo?`),
+        text: tr(
+          '确认后将消耗一次悔棋机会，并发送给对手；只有对手同意后才会回溯。',
+          'Confirming spends one undo chance and sends a request; the move is undone only if the opponent approves.'
+        ),
+        confirmText: tr('发起悔棋', 'Request Undo'),
+        danger: false,
+        onConfirm: () => {
+          closeConfirm();
+          onlineUndoRequest(color);
+        }
+      });
+      return;
+    }
     const opponentIsAI = isAiSide(otherColor(color));
     openConfirm({
       title: tr(`${displayName(color)}发起悔棋？`, `${displayName(color)} request an undo?`),
@@ -2625,6 +2782,10 @@
     const color = undoRequestColor;
     undoRequestColor = null;
     closeModal('modal-undo');
+    if (state.mode === 'online') {
+      onlineUndoRespond(false);
+      return;
+    }
     if (color) {
       showToast(tr(
         `${displayName(color)}的悔棋请求被拒绝，机会已消耗。`,
@@ -2637,6 +2798,10 @@
     const color = undoRequestColor;
     undoRequestColor = null;
     closeModal('modal-undo');
+    if (state.mode === 'online') {
+      onlineUndoRespond(true);
+      return;
+    }
     if (color) executeUndo(color);
   }
 
@@ -2742,6 +2907,22 @@
       <p>Each side has <strong>3 undo chances per match</strong>, available from its own panel's Undo button at any time. The first click opens a confirmation; confirming spends one chance even if the opponent then declines.</p>
       <p>In Two Players and human Custom Room matches, the opponent must explicitly approve. In Single Player and Custom Room against the AI, the AI approves automatically. A declined request leaves the game running, but the spent chance is not refunded.</p>
       <p>If approved, the game returns to the start of the requester's most recent turn, restoring the board, pieces, score and previous move constraint; the turn timer restarts. Timeouts and undo chances are not restored. Undo is unavailable with no chances, no previous turn to return to, or after the match has ended.</p>
+      <p>Online Mode uses the same undo rules: each side has 3 chances, the requester confirms twice and the opponent must explicitly approve; the chance is spent whether or not the undo is approved.</p>
+    </div>
+    <div class="rule-section">
+      <h3><span class="rule-num">10</span>Online Play and Rating</h3>
+      <p>Online play uses a registered account. Your username is cast into the Goblet and used directly in the match; there is no name-entry step. Online matches use Classic 5 × 5 two-player rules, with Shifting Arrow available as an advanced mode after reaching Official rank.</p>
+      <p>Shifting Arrow unlocks permanently when you first reach <strong>Official</strong> rank. A later demotion never re-locks it. Online Shifting Arrow uses 7 base Arrows and follows the start, destination, cost and forced-destination rules in section 08.</p>
+      <p>Ranks: Apprentice, Trainee, Official, Intermediate, Advanced, Legend, Rule, Truth, Origin. Apprentice promotes at 50 points, Trainee at 100, and each later rank requires 10× the previous requirement.</p>
+      <ul class="rule-list">
+        <li>Classic wins award a base 10 points. In Shifting Arrow, every point gain or loss is doubled relative to the Classic result.</li>
+        <li>From the third consecutive win, each win's gain becomes 1.2× the previous win's gain. From the tenth consecutive win onward, it becomes 1.5× the previous win's gain. A loss or draw breaks the streak and resets the multiplier.</li>
+        <li>Loss penalties: Apprentice and Trainee lose nothing; Official through Legend lose 5; Rule through Origin lose 10. These losses are doubled in Shifting Arrow.</li>
+        <li>Demotion protection: the first time a loss would take you below 0, points stop at 0 and you keep your rank; only the second such loss demotes you. Reaching the rank again restores the protection.</li>
+      </ul>
+      <p>Matching first looks for the same rank and similar points, then similar win streaks. If no suitable opponent is found, the search range expands gradually until a match is made. Classic and Shifting Arrow only match against the same mode.</p>
+      <p>Online undo keeps 3 chances per side and follows the same flow as Two Players: after the requester confirms and spends a chance, the opponent must approve; declining does not refund the chance.</p>
+      <p>Each player sees the result from their own perspective: the winner sees WIN, the loser sees LOSE, and a draw shows the purple draw screen. Rating changes only come from online results; offline modes never affect the account.</p>
     </div>
     <div class="note-block">
       <b>House conventions:</b> Arrows use only the four orthogonal directions; a square awards at most one resonance point (even if three same-side pieces later occupy it); when a player cannot follow the last rule, a full target grants that player a free move, while exhausted pieces grant the opponent a free move and skip the player's turn; Shifting Arrow play uses 7 base Arrows (Custom Room uses its configured piece counts); if both sides are tied when a side runs out of pieces, the game is a draw; and the turn clock pauses while any modal is open. These conventions resolve points the original rules leave open.
@@ -2764,12 +2945,31 @@
     { sel: '#screen-home .home-meta span:nth-child(3)', html: true, en: '<i></i>Random First Move' },
     { sel: '#btn-select-back', html: true, en: '<span aria-hidden="true">←</span> Back to Home' },
     { sel: '#screen-select .subscreen h2', en: 'Choose Mode' },
-    { sel: '#screen-select .subscreen > .subtitle', en: 'Choose Offline for a local match. Online play will be available in a future update.' },
+    { sel: '#screen-select .subscreen > .subtitle', en: 'Choose Offline for a local match, or log in for online matching.' },
     { sel: '#mode-offline h3', en: 'Offline Mode' },
     { sel: '#mode-offline p', en: 'Single Player, Two Players and Custom Room all live here.' },
     { sel: '#mode-offline .diff-pill', en: 'Local Match' },
     { sel: '#mode-online h3', en: 'Online Mode' },
-    { sel: '#mode-online p', en: 'Not available yet' },
+    { sel: '#mode-online p', en: 'Log in and match with another player. Your username is cast into the Goblet.' },
+    { sel: '#mode-online .diff-pill', en: 'Account · Random Match' },
+    { sel: '#btn-online-back', html: true, en: '<span aria-hidden="true">←</span> Back to Mode Select' },
+    { sel: '#screen-online .subscreen h2', en: 'Online Mode' },
+    { sel: '#screen-online .subscreen > .subtitle', en: 'Log in and match with another player. Classic rules apply and your username is cast into the Goblet.' },
+    { sel: '#online-auth-card .online-kicker', en: 'Account Login' },
+    { sel: '#online-username', attr: 'placeholder', en: '2–12 characters' },
+    { sel: '#online-password', attr: 'placeholder', en: 'At least 6 characters' },
+    { sel: '#online-auth-card .online-field:nth-child(1) > span', en: 'Username' },
+    { sel: '#online-auth-card .online-field:nth-child(2) > span', en: 'Password' },
+    { sel: '#online-login', en: 'Log In' },
+    { sel: '#online-register', en: 'Register' },
+    { sel: '#online-lobby #online-status', en: 'Ready.' },
+    { sel: '#online-mode-picker .online-mode-label', en: 'Mode' },
+    { sel: '#btn-online-classic', en: 'Classic' },
+    { sel: '#btn-online-shift', en: 'Shifting Arrow' },
+    { sel: '#online-shift-lock', en: 'Unlocks at Official rank' },
+    { sel: '#btn-online-match', en: 'Random Match' },
+    { sel: '#btn-online-cancel', en: 'Cancel Matching' },
+    { sel: '#btn-online-logout', en: 'Log Out' },
     { sel: '#btn-mode-back', html: true, en: '<span aria-hidden="true">←</span> Back to Mode Select' },
     { sel: '#screen-mode .subscreen h2', en: 'Offline Mode' },
     { sel: '#screen-mode .subscreen > .subtitle', en: 'The first move is chosen at random; Custom Room can override it. Red begins; Blue follows.' },
@@ -2932,6 +3132,9 @@
       refreshNameEntry();
     } else if (state.screen === 'custom') {
       renderCustomSetup();
+    } else if (state.screen === 'online' && onlineUser) {
+      updateOnlineLobby();
+      if (onlineMatchTimer) setOnlineStatus(tr('正在寻找对手……', 'Searching for an opponent…'), 'queued');
     }
     if (state.screen !== 'game') {
       setEventText('争霸赛即将开始。', 'The Tournament is about to begin.');
@@ -3200,6 +3403,11 @@
 
   function isHumanTurn() {
     if (state.gameOver) return false;
+    if (state.mode === 'online') {
+      return state.turn === state.humanColor
+        && !state.onlineSubmitting
+        && !state.onlinePendingUndo;
+    }
     return !isAiSide(state.turn);
   }
 
@@ -3297,7 +3505,9 @@
         boardEl.appendChild(cellEl);
       }
     }
-    boardEl.classList.toggle('board-locked', state.gameOver || getAiTurn());
+    const onlineLocked = state.mode === 'online'
+      && (state.turn !== state.humanColor || state.onlineSubmitting || !!state.onlinePendingUndo);
+    boardEl.classList.toggle('board-locked', state.gameOver || getAiTurn() || onlineLocked);
   }
 
   function renderPanels() {
@@ -3353,16 +3563,21 @@
           ? tr('火焰杯认可', 'Chosen by the Goblet')
           : (state.winner ? tr('胜负已分', 'Defeated') : tr('双方战平', 'Draw'));
       } else if (state.turn === color) {
-        foot.textContent = isAi ? tr('对手思考中', 'Opponent thinking') : tr('请落子', 'Your move');
+        foot.textContent = state.mode === 'online' && color !== state.humanColor
+          ? tr('对手回合', 'Opponent move')
+          : (isAi ? tr('对手思考中', 'Opponent thinking') : tr('请落子', 'Your move'));
       } else {
         foot.textContent = tr('等待对方', 'Waiting');
       }
 
+      const onlineOpponent = state.mode === 'online' && color !== state.humanColor;
       const surrender = $(`#surrender-${color}`);
-      surrender.disabled = state.gameOver || isAi;
-      surrender.title = isAi
-        ? tr('对手不会认输', 'The AI will not resign')
-        : tr('认输并结束本局', 'Resign and end this game');
+      surrender.disabled = state.gameOver || isAi || onlineOpponent;
+      surrender.title = onlineOpponent
+        ? tr('不能替对手认输', 'You cannot resign for the opponent')
+        : isAi
+          ? tr('对手不会认输', 'The AI will not resign')
+          : tr('认输并结束本局', 'Resign and end this game');
 
       const undoButton = $(`#undo-${color}`);
       if (undoButton) {
@@ -3393,11 +3608,15 @@
         : `第 ${state.moveCount + 1} 手 · ${mode}`;
     }
     $('#constraint-text').textContent = constraintText();
-    $('#mode-tag').textContent = state.mode === 'solo'
-      ? tr('一人游戏', 'Single Player')
-      : state.mode === 'custom'
-        ? tr('自定义房间', 'Custom Room')
-        : tr('两人游戏', 'Two Players');
+    $('#mode-tag').textContent = state.mode === 'online'
+      ? (state.arrowVariant
+        ? tr('联机 · 移形换影', 'Online · Shifting Arrow')
+        : tr('联机 · 经典', 'Online · Classic'))
+      : state.mode === 'solo'
+        ? tr('一人游戏', 'Single Player')
+        : state.mode === 'custom'
+          ? tr('自定义房间', 'Custom Room')
+          : tr('两人游戏', 'Two Players');
     $('#event-text').textContent = state.eventText;
   }
 
@@ -3792,7 +4011,11 @@
     const timer = $('#move-timer');
     if (!timer) return;
     const remaining = Math.max(0, Number(state.turnTimeLeft) || 0);
-    const display = state.gameOver ? 0 : state.turnTimerActive ? Math.ceil(remaining) : TURN_SECONDS;
+    const display = state.gameOver
+      ? 0
+      : (state.turnTimerActive || state.mode === 'online')
+        ? Math.ceil(remaining)
+        : TURN_SECONDS;
     const value = $('#timer-value');
     if (value) value.textContent = String(display).padStart(2, '0');
     const progress = $('#timer-progress');
@@ -3830,6 +4053,7 @@
 
   function handleTurnTimeout() {
     if (!state.turnTimerActive || state.gameOver) return;
+    if (state.mode === 'online') return;
     const color = state.turn;
     state.turnTimerActive = false;
     state.timeouts[color] = Math.min(TIMEOUT_LIMIT, (state.timeouts[color] || 0) + 1);
@@ -3985,7 +4209,11 @@
     entryTimers = [];
     setTimeout(() => {
       closeModal('modal-entry', { resume: false });
-      if (mode) startGame(mode, names, state.pendingPlayStyle);
+      if (mode === 'online') {
+        startOnlineGame();
+      } else if (mode) {
+        startGame(mode, names, state.pendingPlayStyle);
+      }
     }, 340);
   }
 
@@ -4210,8 +4438,20 @@
     clearVictoryTimers();
     clearEntryTimers();
     closeAllModals();
+    stopOnlinePoll();
+    stopOnlineMatchPoll();
+    const replayButton = $('#btn-replay');
+    if (replayButton) replayButton.classList.remove('hidden');
+    const homeButton = $('#btn-go-home');
+    if (homeButton) homeButton.textContent = tr('返回首页', 'Back to Home');
     state.gameId += 1;
     state.mode = mode;
+    state.onlineRoomId = null;
+    state.onlineColor = null;
+    state.onlineSettled = false;
+    state.onlineSubmitting = false;
+    state.onlinePendingUndo = null;
+    state.onlineUndoNoticeKey = null;
     const isCustom = mode === 'custom';
     state.customAI = isCustom && customConfig.playerTwoAI;
     const selectedStyle = isCustom
@@ -4457,6 +4697,10 @@
 
   function commitMove(move) {
     if (state.gameOver) return;
+    if (state.mode === 'online') {
+      submitOnlineMove(move);
+      return;
+    }
     const color = state.turn;
     const legal = getLegalMoves(color);
     if (!legal.some(candidate => moveMatches(candidate, move))) {
@@ -4711,14 +4955,15 @@
     const winnerName = winner ? displayName(winner) : '';
     const firstName = winner ? winnerName : displayName('red');
     const secondName = winner ? '' : displayName('blue');
-    const isSoloAIResult = state.mode === 'solo' && !!state.aiColor && !!winner;
-    const humanWon = isSoloAIResult && winner === state.humanColor;
-    const humanLost = isSoloAIResult && winner !== state.humanColor;
+    const isPerspectiveResult = ((state.mode === 'solo' && !!state.aiColor) || state.mode === 'online') && !!winner;
+    const viewerColor = state.mode === 'online' ? state.onlineColor : state.humanColor;
+    const humanWon = isPerspectiveResult && winner === viewerColor;
+    const humanLost = isPerspectiveResult && winner !== viewerColor;
     const scene = $('#victory-cinematic');
     scene.className = [
       'victory-cinematic',
       winner ? '' : 'is-draw',
-      isSoloAIResult ? 'is-solo-result' : '',
+      isPerspectiveResult ? 'is-solo-result' : '',
       humanLost ? 'is-defeat' : ''
     ].filter(Boolean).join(' ');
     $('#modal-gameover').classList.toggle('is-defeat', humanLost);
@@ -4729,11 +4974,11 @@
     $('#paper-name-ghost-2').textContent = secondName;
     $('#paper-name-fire-2').textContent = secondName;
     $('#paper-result-word').textContent = 'WIN';
-    $('#win-word').textContent = isSoloAIResult
+    $('#win-word').textContent = isPerspectiveResult
       ? (humanWon ? 'WIN' : 'LOSE')
       : (winner ? 'WIN' : 'TWIN STARS');
     const drawCarvedName = `${displayName('red')} & ${displayName('blue')}`;
-    $('#carved-name').textContent = isSoloAIResult ? '' : (winner ? winnerName : drawCarvedName);
+    $('#carved-name').textContent = isPerspectiveResult ? '' : (winner ? winnerName : drawCarvedName);
     const longestName = [firstName, secondName].sort((a, b) => Array.from(b).length - Array.from(a).length)[0] || '';
     const sizes = victoryNameSizes(longestName);
     const drawCarvedSize = Math.min(18, 160 / Math.max(1, Array.from(drawCarvedName).length));
@@ -5427,14 +5672,21 @@
       goHome();
       return;
     }
+    const online = state.mode === 'online';
     openConfirm({
       title: tr('离开当前对局？', 'Leave the current match?'),
-      text: tr('本局进度不会保存。离开后可随时开始新的对局。', 'This match will not be saved. You can start a new match at any time.'),
+      text: online
+        ? tr('联机对局中离开会被判负，并返回联机大厅。', 'Leaving an online match counts as a loss and returns you to the online lobby.')
+        : tr('本局进度不会保存。离开后可随时开始新的对局。', 'This match will not be saved. You can start a new match at any time.'),
       confirmText: tr('离开对局', 'Leave Match'),
       danger: true,
       onConfirm: () => {
         closeConfirm();
-        goHome();
+        if (online) {
+          onlineRoomAction('leave').finally(() => returnToOnlineLobby());
+        } else {
+          goHome();
+        }
       }
     });
   }
@@ -5445,8 +5697,13 @@
     aiTimer = null;
     clearVictoryTimers();
     clearEntryTimers();
+    stopOnlinePoll();
+    stopOnlineMatchPoll();
     state.isAiThinking = false;
     state.pendingShift = null;
+    state.mode = null;
+    state.onlineRoomId = null;
+    state.onlineSettled = false;
     stopTurnClock();
     closeAllModals();
     showScreen('home');
@@ -5455,6 +5712,7 @@
   function surrender(color) {
     if (state.gameOver || state.screen !== 'game') return;
     if (isAiSide(color)) return;
+    if (state.mode === 'online' && color !== state.humanColor) return;
     openConfirm({
       title: tr(`${displayName(color)}认输？`, `Should ${displayName(color)} resign?`),
       text: tr(
@@ -5465,6 +5723,10 @@
       danger: true,
       onConfirm: () => {
         closeConfirm();
+        if (state.mode === 'online') {
+          onlineRoomAction('resign');
+          return;
+        }
         if (!state.gameOver) {
           endGame(otherColor(color), tr(
             `${fullDisplayName(color)}认输，本局胜利归于${fullDisplayName(otherColor(color))}。`,
@@ -5473,6 +5735,595 @@
         }
       }
     });
+  }
+
+  /* ============================================================
+     联机账号、匹配与对局
+  ============================================================ */
+  function onlineRankLabel(user) {
+    if (!user) return '';
+    return isEn() ? (RANK_EN[user.rank] || user.rankName) : user.rankName;
+  }
+
+  function onlineShiftUnlocked() {
+    return !!(onlineUser && (onlineUser.shiftUnlocked || onlineUser.rank >= 2));
+  }
+
+  function updateOnlineModePicker() {
+    if (!onlineUser) return;
+    const unlocked = onlineShiftUnlocked();
+    if (!unlocked && onlineMode === 'shift') onlineMode = 'classic';
+    $('#btn-online-classic').classList.toggle('active', onlineMode === 'classic');
+    $('#btn-online-shift').classList.toggle('active', onlineMode === 'shift');
+    $('#btn-online-shift').disabled = !unlocked;
+    $('#btn-online-shift').title = unlocked
+      ? tr('移形换影：积分与扣分按经典模式 ×2。', 'Shifting Arrow: points and losses are doubled.')
+      : tr('达到正式棋手后永久解锁。', 'Permanently unlocked at Official rank.');
+    $('#online-shift-lock').textContent = unlocked
+      ? tr('进阶玩法 · 积分与扣分 ×2', 'Advanced · points and losses ×2')
+      : tr('正式棋手解锁', 'Unlocks at Official rank');
+  }
+
+  function setOnlineMode(mode) {
+    if (onlineMatchTimer) {
+      setOnlineStatus(tr('匹配中不能切换玩法，请先取消匹配。', 'Cancel matching before changing the mode.'), 'error');
+      return;
+    }
+    if (mode === 'shift' && !onlineShiftUnlocked()) {
+      setOnlineStatus(tr('移形换影需要正式棋手才能解锁。', 'Shifting Arrow unlocks at Official rank.'), 'error');
+      return;
+    }
+    onlineMode = mode === 'shift' ? 'shift' : 'classic';
+    updateOnlineModePicker();
+  }
+
+  function onlineAuthError(message = '') {
+    const el = $('#online-auth-error');
+    if (el) el.textContent = message;
+  }
+
+  function setOnlineStatus(message, type = '') {
+    const el = $('#online-status');
+    if (!el) return;
+    el.textContent = message;
+    el.classList.toggle('is-queued', type === 'queued');
+    el.classList.toggle('is-error', type === 'error');
+  }
+
+  function updateOnlineLobby() {
+    if (!onlineUser) return;
+    $('#online-name').textContent = onlineUser.username;
+    $('#online-rank').textContent = onlineRankLabel(onlineUser);
+    $('#online-points').textContent = onlineUser.nextRequirement
+      ? tr(`积分 ${onlineUser.points} / ${onlineUser.nextRequirement}`, `Points ${onlineUser.points} / ${onlineUser.nextRequirement}`)
+      : tr(`积分 ${onlineUser.points} · 最高等级`, `Points ${onlineUser.points} · Max rank`);
+    const streak = onlineUser.winStreak || 0;
+    const streakLabel = streak > 0
+      ? tr(` · 连胜 ${streak}`, ` · ${streak}-win streak`)
+      : '';
+    $('#online-record').textContent = tr(
+      `胜 ${onlineUser.wins} · 负 ${onlineUser.losses} · 平 ${onlineUser.draws}${streakLabel}`,
+      `${onlineUser.wins}W · ${onlineUser.losses}L · ${onlineUser.draws}D${streakLabel}`
+    );
+    updateOnlineModePicker();
+  }
+
+  function showOnlineAuth(message = '') {
+    onlineMode = 'classic';
+    $('#online-auth-card').classList.remove('hidden');
+    $('#online-lobby').classList.add('hidden');
+    onlineAuthError(message);
+    setTimeout(() => { const input = $('#online-username'); if (input) input.focus({ preventScroll: true }); }, 50);
+  }
+
+  function showOnlineLobby() {
+    $('#online-auth-card').classList.add('hidden');
+    $('#online-lobby').classList.remove('hidden');
+    updateOnlineLobby();
+    updateOnlineModePicker();
+    setOnlineStatus(tr('准备就绪。', 'Ready.'));
+    $('#btn-online-match').classList.remove('hidden');
+    $('#btn-online-match').disabled = false;
+    $('#btn-online-cancel').classList.add('hidden');
+  }
+
+  async function onlineApi(pathname, options = {}) {
+    const headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
+    if (onlineToken) headers.Authorization = `Bearer ${onlineToken}`;
+    let response;
+    try {
+      response = await fetch(API_BASE + pathname, { ...options, headers });
+    } catch (err) {
+      throw new Error(tr('无法连接联机服务器，请确认服务已启动。', 'Cannot reach the online server. Make sure it is running.'));
+    }
+    let data = {};
+    try { data = await response.json(); } catch (err) { data = {}; }
+    if (!response.ok) {
+      const error = new Error(data.error || tr('联机请求失败。', 'Online request failed.'));
+      error.status = response.status;
+      throw error;
+    }
+    return data;
+  }
+
+  function setOnlineToken(token) {
+    onlineToken = token || '';
+    try {
+      if (onlineToken) localStorage.setItem('dc_online_token', onlineToken);
+      else localStorage.removeItem('dc_online_token');
+    } catch (err) { /* ignore */ }
+  }
+
+  async function refreshOnlineUser() {
+    if (!onlineToken) return null;
+    try {
+      const data = await onlineApi('/api/me');
+      onlineUser = data.user;
+      if (state.screen === 'online') updateOnlineLobby();
+      return onlineUser;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  async function enterOnlineScreen() {
+    stopOnlinePoll();
+    stopOnlineMatchPoll();
+    showScreen('online');
+    onlineAuthError('');
+    if (!onlineToken) {
+      onlineUser = null;
+      showOnlineAuth();
+      return;
+    }
+    try {
+      const data = await onlineApi('/api/me');
+      onlineUser = data.user;
+      showOnlineLobby();
+      const status = await onlineApi('/api/match/status');
+      if (status.status === 'matched') {
+        beginOnlineMatch(status);
+      } else if (status.status === 'queued') {
+        setOnlineStatus(tr('正在寻找对手……', 'Searching for an opponent…'), 'queued');
+        $('#btn-online-match').classList.add('hidden');
+        $('#btn-online-cancel').classList.remove('hidden');
+        startOnlineMatchPoll();
+      }
+    } catch (err) {
+      if (err.status === 401) {
+        setOnlineToken('');
+        onlineUser = null;
+      }
+      showOnlineAuth(err.message);
+    }
+  }
+
+  async function submitOnlineAuth(register) {
+    const username = $('#online-username').value.trim();
+    const password = $('#online-password').value;
+    onlineAuthError('');
+    if (!username || !password) {
+      onlineAuthError(tr('请输入用户名和密码。', 'Enter a username and password.'));
+      return;
+    }
+    if (password.length < 6) {
+      onlineAuthError(tr('密码至少需要 6 位。', 'The password must be at least 6 characters.'));
+      return;
+    }
+    $('#online-login').disabled = true;
+    $('#online-register').disabled = true;
+    try {
+      const data = await onlineApi(register ? '/api/register' : '/api/login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password })
+      });
+      setOnlineToken(data.token);
+      onlineUser = data.user;
+      $('#online-password').value = '';
+      showOnlineLobby();
+      setOnlineStatus(tr(`欢迎，${onlineUser.username}。`, `Welcome, ${onlineUser.username}.`));
+    } catch (err) {
+      onlineAuthError(err.message);
+    } finally {
+      $('#online-login').disabled = false;
+      $('#online-register').disabled = false;
+    }
+  }
+
+  async function logoutOnline() {
+    try { await onlineApi('/api/logout', { method: 'POST', body: '{}' }); } catch (err) { /* ignore */ }
+    setOnlineToken('');
+    onlineUser = null;
+    stopOnlineMatchPoll();
+    stopOnlinePoll();
+    showOnlineAuth();
+    setOnlineStatus(tr('已退出登录。', 'Logged out.'));
+  }
+
+  function stopOnlineMatchPoll() {
+    if (onlineMatchTimer) {
+      clearInterval(onlineMatchTimer);
+      onlineMatchTimer = null;
+    }
+  }
+
+  function startOnlineMatchPoll() {
+    stopOnlineMatchPoll();
+    onlineMatchTimer = setInterval(async () => {
+      if (state.screen !== 'online') {
+        stopOnlineMatchPoll();
+        return;
+      }
+      try {
+        const status = await onlineApi('/api/match/status');
+        if (status.status === 'matched') {
+          beginOnlineMatch(status);
+        } else if (status.status === 'idle') {
+          stopOnlineMatchPoll();
+          $('#btn-online-match').classList.remove('hidden');
+          $('#btn-online-match').disabled = false;
+          $('#btn-online-cancel').classList.add('hidden');
+          setOnlineStatus(tr('匹配已结束。', 'Matching stopped.'));
+        }
+      } catch (err) {
+        /* keep polling; a temporary error should not clear the queue UI */
+      }
+    }, 900);
+  }
+
+  async function startOnlineMatch() {
+    if (!onlineUser) {
+      showOnlineAuth(tr('请先登录。', 'Please log in first.'));
+      return;
+    }
+    $('#btn-online-match').disabled = true;
+    setOnlineStatus(
+      onlineMode === 'shift'
+        ? tr('正在寻找移形换影对手……', 'Searching for a Shifting Arrow opponent…')
+        : tr('正在寻找经典对局对手……', 'Searching for a Classic opponent…'),
+      'queued'
+    );
+    try {
+      const data = await onlineApi('/api/match', {
+        method: 'POST',
+        body: JSON.stringify({ mode: onlineMode })
+      });
+      if (data.status === 'matched') {
+        beginOnlineMatch(data);
+        return;
+      }
+      $('#btn-online-match').classList.add('hidden');
+      $('#btn-online-cancel').classList.remove('hidden');
+      startOnlineMatchPoll();
+    } catch (err) {
+      $('#btn-online-match').disabled = false;
+      setOnlineStatus(err.message, 'error');
+    }
+  }
+
+  async function cancelOnlineMatch() {
+    stopOnlineMatchPoll();
+    try { await onlineApi('/api/match/cancel', { method: 'POST', body: '{}' }); } catch (err) { /* ignore */ }
+    $('#btn-online-match').classList.remove('hidden');
+    $('#btn-online-match').disabled = false;
+    $('#btn-online-cancel').classList.add('hidden');
+    setOnlineStatus(tr('已取消匹配。', 'Matching cancelled.'));
+  }
+
+  function beginOnlineMatch(info) {
+    stopOnlineMatchPoll();
+    onlinePending = {
+      roomId: info.roomId,
+      color: info.color,
+      names: info.names,
+      mode: info.mode === 'shift' ? 'shift' : 'classic'
+    };
+    state.pendingOnline = onlinePending;
+    state.pendingMode = 'online';
+    state.activeNames = { p1: info.names.red, p2: info.names.blue };
+    beginGobletEntry('online', state.activeNames);
+  }
+
+  async function startOnlineGame() {
+    const info = onlinePending || state.pendingOnline;
+    if (!info) return;
+    try {
+      const snapshot = await onlineApi(`/api/room?id=${encodeURIComponent(info.roomId)}`);
+      applyOnlineStart(snapshot);
+    } catch (err) {
+      showToast(err.message, 'error', 3600);
+      returnToOnlineLobby();
+    }
+  }
+
+  function syncOnlineUndoPrompt() {
+    const pending = state.onlinePendingUndo;
+    if (!pending) {
+      state.onlineUndoNoticeKey = null;
+      if ($('#modal-undo').classList.contains('open') && undoRequestColor) {
+        undoRequestColor = null;
+        closeModal('modal-undo', { resume: false });
+      }
+      return;
+    }
+    if (pending.requester === state.onlineColor) {
+      if ($('#modal-undo').classList.contains('open') && undoRequestColor) {
+        undoRequestColor = null;
+        closeModal('modal-undo', { resume: false });
+      }
+      const key = `${state.onlineVersion}:${pending.requester}`;
+      if (state.onlineUndoNoticeKey !== key) {
+        state.onlineUndoNoticeKey = key;
+        showToast(tr('悔棋申请已发送，等待对手同意。', 'Undo request sent; waiting for approval.'), 'info', 2600);
+      }
+      return;
+    }
+    if (!($('#modal-undo').classList.contains('open') && undoRequestColor === pending.requester)) {
+      openUndoApproval(pending.requester);
+    }
+  }
+
+  function applyOnlineStart(snapshot) {
+    stopOnlinePoll();
+    state.mode = 'online';
+    state.onlineRoomId = snapshot.roomId;
+    state.onlineColor = snapshot.color;
+    state.onlineVersion = snapshot.version;
+    state.onlineSettled = false;
+    state.onlineSubmitting = false;
+    state.humanColor = snapshot.color;
+    state.aiColor = null;
+    state.customAI = false;
+    state.playStyle = snapshot.mode === 'shift' ? 'shift' : 'classic';
+    state.arrowVariant = snapshot.mode === 'shift';
+    state.size = 5;
+    SIZE = 5;
+    state.labels = { red: snapshot.labels.red, blue: snapshot.labels.blue };
+    state.activeNames = { p1: snapshot.labels.red, p2: snapshot.labels.blue };
+    state.board = snapshot.board;
+    state.players = {
+      red: { pieces: { ...snapshot.pieces.red }, score: snapshot.scores.red },
+      blue: { pieces: { ...snapshot.pieces.blue }, score: snapshot.scores.blue }
+    };
+    state.scored = new Set(snapshot.scored);
+    state.turn = snapshot.turn;
+    state.freeMove = snapshot.freeMove;
+    state.lastPiece = snapshot.lastPiece ? { ...snapshot.lastPiece } : null;
+    state.lastPlaced = snapshot.lastPiece ? { ...snapshot.lastPiece, at: Date.now() } : null;
+    state.moveCount = snapshot.moveCount;
+    state.gameOver = snapshot.gameOver;
+    state.winner = snapshot.winner;
+    state.endReason = isEn() ? snapshot.reasonEn : snapshot.reasonZh;
+    state.selectedShape = null;
+    state.pendingArrow = null;
+    state.pendingShift = null;
+    state.timeouts = { ...snapshot.timeouts };
+    state.undoLeft = { red: snapshot.undoLeft?.red ?? 3, blue: snapshot.undoLeft?.blue ?? 3 };
+    state.undoAvailable = { ...(snapshot.undoAvailable || { red: true, blue: true }) };
+    state.onlinePendingUndo = snapshot.pendingUndo || null;
+    state.onlineUndoNoticeKey = null;
+    state.turnTimerActive = !snapshot.gameOver && !snapshot.pendingUndo;
+    state.turnTimerLastTick = performance.now();
+    state.history = [];
+    state.pendingMode = null;
+    state.turnTimeLeft = snapshot.turnTimeLeft;
+    state.eventZh = snapshot.eventZh || tr('联机对局开始。', 'Online match started.');
+    state.eventEn = snapshot.eventEn || 'Online match started.';
+    state.eventText = isEn() ? state.eventEn : state.eventZh;
+    onlineUser = snapshot.rank || onlineUser;
+    const replay = $('#btn-replay');
+    if (replay) replay.classList.add('hidden');
+    const home = $('#btn-go-home');
+    if (home) home.textContent = tr('返回联机大厅', 'Online Lobby');
+    showScreen('game');
+    renderAll();
+    startTurnClock();
+    state.turnTimeLeft = snapshot.turnTimeLeft;
+    updateTurnTimerUI();
+    syncOnlineUndoPrompt();
+    if (snapshot.gameOver) {
+      settleOnlineGame(snapshot);
+    } else {
+      startOnlinePoll();
+    }
+  }
+
+  function applyOnlineSnapshot(snapshot) {
+    if (state.mode !== 'online' || !state.onlineRoomId || snapshot.roomId !== state.onlineRoomId) return;
+    if (snapshot.rank) onlineUser = snapshot.rank;
+    state.humanColor = snapshot.color;
+    state.turnTimeLeft = snapshot.turnTimeLeft;
+    if (snapshot.version === state.onlineVersion && !snapshot.gameOver) {
+      updateTurnTimerUI();
+      return;
+    }
+    state.onlineVersion = snapshot.version;
+    state.labels = { red: snapshot.labels.red, blue: snapshot.labels.blue };
+    state.board = snapshot.board;
+    state.players = {
+      red: { pieces: { ...snapshot.pieces.red }, score: snapshot.scores.red },
+      blue: { pieces: { ...snapshot.pieces.blue }, score: snapshot.scores.blue }
+    };
+    state.scored = new Set(snapshot.scored);
+    state.turn = snapshot.turn;
+    state.freeMove = snapshot.freeMove;
+    state.lastPiece = snapshot.lastPiece ? { ...snapshot.lastPiece } : null;
+    state.lastPlaced = snapshot.lastPiece ? { ...snapshot.lastPiece, at: Date.now() } : null;
+    state.moveCount = snapshot.moveCount;
+    state.gameOver = snapshot.gameOver;
+    state.winner = snapshot.winner;
+    state.endReason = isEn() ? snapshot.reasonEn : snapshot.reasonZh;
+    state.timeouts = { ...snapshot.timeouts };
+    state.undoLeft = { red: snapshot.undoLeft?.red ?? state.undoLeft.red, blue: snapshot.undoLeft?.blue ?? state.undoLeft.blue };
+    state.undoAvailable = { ...(snapshot.undoAvailable || state.undoAvailable) };
+    state.onlinePendingUndo = snapshot.pendingUndo || null;
+    state.turnTimerActive = !snapshot.gameOver && !snapshot.pendingUndo;
+    state.turnTimerLastTick = performance.now();
+    state.selectedShape = null;
+    state.pendingArrow = null;
+    state.pendingShift = null;
+    state.onlineSubmitting = false;
+    state.eventZh = snapshot.eventZh || state.eventZh;
+    state.eventEn = snapshot.eventEn || state.eventEn;
+    state.eventText = isEn() ? state.eventEn : state.eventZh;
+    renderAll();
+    updateTurnTimerUI();
+    syncOnlineUndoPrompt();
+    if (snapshot.gameOver) settleOnlineGame(snapshot);
+  }
+
+  function stopOnlinePoll() {
+    if (onlinePollTimer) {
+      clearTimeout(onlinePollTimer);
+      onlinePollTimer = null;
+    }
+  }
+
+  function startOnlinePoll() {
+    stopOnlinePoll();
+    const tick = async () => {
+      if (state.mode !== 'online' || state.screen !== 'game' || !state.onlineRoomId || state.onlineSettled) return;
+      try {
+        const snapshot = await onlineApi(`/api/room?id=${encodeURIComponent(state.onlineRoomId)}`);
+        applyOnlineSnapshot(snapshot);
+      } catch (err) {
+        /* transient errors are retried */
+      }
+      if (state.mode === 'online' && state.screen === 'game' && !state.onlineSettled) {
+        onlinePollTimer = setTimeout(tick, 700);
+      }
+    };
+    onlinePollTimer = setTimeout(tick, 450);
+  }
+
+  async function submitOnlineMove(move) {
+    if (state.mode !== 'online' || state.onlineSubmitting || state.gameOver) return;
+    if (state.onlinePendingUndo) return;
+    if (state.turn !== state.humanColor) return;
+    state.onlineSubmitting = true;
+    state.selectedShape = null;
+    state.pendingArrow = null;
+    state.pendingShift = null;
+    renderAll();
+    try {
+      const snapshot = await onlineApi('/api/room/action', {
+        method: 'POST',
+        body: JSON.stringify({
+          roomId: state.onlineRoomId,
+          type: 'move',
+          move: {
+            r: move.r,
+            c: move.c,
+            shape: move.shape,
+            dir: move.dir ?? null,
+            ...(move.shiftTarget ? {
+              shiftTarget: { ...move.shiftTarget },
+              shiftCost: Math.max(1, Number(move.shiftCost) || 1)
+            } : {})
+          }
+        })
+      });
+      applyOnlineSnapshot(snapshot);
+    } catch (err) {
+      showToast(err.message, 'error', 3200);
+      playSound('error');
+    } finally {
+      if (state.mode === 'online') {
+        state.onlineSubmitting = false;
+        renderAll();
+      }
+    }
+  }
+
+  async function onlineRoomAction(type) {
+    if (state.mode !== 'online' || !state.onlineRoomId) return null;
+    try {
+      const snapshot = await onlineApi('/api/room/action', {
+        method: 'POST',
+        body: JSON.stringify({ roomId: state.onlineRoomId, type })
+      });
+      applyOnlineSnapshot(snapshot);
+      return snapshot;
+    } catch (err) {
+      showToast(err.message, 'error', 3200);
+      return null;
+    }
+  }
+
+  async function onlineUndoRequest(color) {
+    if (state.mode !== 'online' || !state.onlineRoomId) return;
+    try {
+      const snapshot = await onlineApi('/api/room/action', {
+        method: 'POST',
+        body: JSON.stringify({ roomId: state.onlineRoomId, type: 'undoRequest', color })
+      });
+      applyOnlineSnapshot(snapshot);
+      showToast(tr('悔棋申请已发送，等待对手同意。', 'Undo request sent; waiting for approval.'), 'info', 2800);
+    } catch (err) {
+      showToast(err.message, 'error', 3200);
+    }
+  }
+
+  async function onlineUndoRespond(approve) {
+    if (state.mode !== 'online' || !state.onlineRoomId) return;
+    try {
+      const snapshot = await onlineApi('/api/room/action', {
+        method: 'POST',
+        body: JSON.stringify({ roomId: state.onlineRoomId, type: 'undoRespond', approve: !!approve })
+      });
+      applyOnlineSnapshot(snapshot);
+      if (!approve) {
+        showToast(tr('已拒绝对手的悔棋申请。', 'Opponent undo request declined.'), 'info', 2400);
+      }
+    } catch (err) {
+      showToast(err.message, 'error', 3200);
+    }
+  }
+
+  async function settleOnlineGame(snapshot) {
+    if (state.onlineSettled) return;
+    state.onlineSettled = true;
+    state.onlinePendingUndo = null;
+    undoRequestColor = null;
+    if ($('#modal-undo').classList.contains('open')) closeModal('modal-undo', { resume: false });
+    stopOnlinePoll();
+    stopTurnClock();
+    state.gameOver = true;
+    state.winner = snapshot.winner;
+    state.endReason = isEn() ? snapshot.reasonEn : snapshot.reasonZh;
+    renderAll();
+    const reason = isEn() ? snapshot.reasonEn : snapshot.reasonZh;
+    populateGameOver(snapshot.winner, reason);
+    openModal('modal-gameover');
+    beginVictorySequence(snapshot.winner);
+    const replay = $('#btn-replay');
+    if (replay) replay.classList.add('hidden');
+    const home = $('#btn-go-home');
+    if (home) home.textContent = tr('返回联机大厅', 'Online Lobby');
+    await refreshOnlineUser();
+  }
+
+  function returnToOnlineLobby() {
+    stopOnlinePoll();
+    stopOnlineMatchPoll();
+    stopTurnClock();
+    closeAllModals();
+    state.mode = null;
+    state.onlineRoomId = null;
+    state.onlineSettled = false;
+    state.onlineSubmitting = false;
+    state.onlinePendingUndo = null;
+    state.onlineUndoNoticeKey = null;
+    undoRequestColor = null;
+    if ($('#modal-undo').classList.contains('open')) closeModal('modal-undo', { resume: false });
+    state.gameOver = false;
+    showScreen('online');
+    if (onlineUser) {
+      showOnlineLobby();
+      refreshOnlineUser();
+    } else {
+      showOnlineAuth();
+    }
   }
 
   /* ============================================================
@@ -5507,6 +6358,23 @@
     $('#btn-start').addEventListener('click', () => { playSound('click'); showScreen('select'); });
     $('#btn-select-back').addEventListener('click', () => { playSound('click'); showScreen('home'); });
     $('#mode-offline').addEventListener('click', () => { playSound('click'); showScreen('mode'); });
+    $('#mode-online').addEventListener('click', () => { playSound('click'); enterOnlineScreen(); });
+    $('#btn-online-back').addEventListener('click', () => {
+      playSound('click');
+      stopOnlineMatchPoll();
+      if (onlineToken) onlineApi('/api/match/cancel', { method: 'POST', body: '{}' }).catch(() => {});
+      showScreen('select');
+    });
+    $('#online-auth-form').addEventListener('submit', event => {
+      event.preventDefault();
+      submitOnlineAuth(false);
+    });
+    $('#online-register').addEventListener('click', () => submitOnlineAuth(true));
+    $('#btn-online-logout').addEventListener('click', () => logoutOnline());
+    $('#btn-online-match').addEventListener('click', () => startOnlineMatch());
+    $('#btn-online-cancel').addEventListener('click', () => cancelOnlineMatch());
+    $('#btn-online-classic').addEventListener('click', () => setOnlineMode('classic'));
+    $('#btn-online-shift').addEventListener('click', () => setOnlineMode('shift'));
     $('#btn-rules-home').addEventListener('click', () => { playSound('click'); openModal('modal-rules'); });
     $('#btn-settings-home').addEventListener('click', () => { playSound('click'); renderSettingsUI(); openModal('modal-settings'); });
     $('#btn-rules-top').addEventListener('click', () => { playSound('click'); openModal('modal-rules'); });
@@ -5635,12 +6503,20 @@
 
     $('#victory-skip').addEventListener('click', () => finishVictorySequence(true));
     $('#btn-replay').addEventListener('click', () => {
+      if (state.mode === 'online') {
+        returnToOnlineLobby();
+        return;
+      }
       const mode = state.mode;
       const names = state.activeNames;
       closeAllModals();
       startGame(mode, names, state.playStyle);
     });
     $('#btn-go-home').addEventListener('click', () => {
+      if (state.mode === 'online') {
+        returnToOnlineLobby();
+        return;
+      }
       closeAllModals();
       goHome();
     });

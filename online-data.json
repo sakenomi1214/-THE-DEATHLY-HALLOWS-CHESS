@@ -1,0 +1,29 @@
+{
+  "nextUserId": 2,
+  "users": {
+    "1": {
+      "id": "1",
+      "username": "酒客",
+      "usernameLower": "酒客",
+      "salt": "4cb5045dbca77913c6eb5a875cb3a906",
+      "hash": "16e9ecde9e7643c8548eb817054c5c68acd7820c02febf5e299e07d54a2dc9ec1f4e5009d147fa56535d8bde9a7fd772018c3d695c94662c418ac8a01d54fb98",
+      "rank": 0,
+      "points": 0,
+      "protection": false,
+      "shiftUnlocked": false,
+      "wins": 0,
+      "losses": 0,
+      "draws": 0,
+      "createdAt": 1795595892877
+    }
+  },
+  "sessions": {
+    "de01426cd784bdde7eb188dd4ce75d58c97f6829d10dd6a5": {
+      "userId": "1",
+      "createdAt": 1795595903166
+    }
+  },
+  "usernames": {
+    "酒客": "1"
+  }
+}
