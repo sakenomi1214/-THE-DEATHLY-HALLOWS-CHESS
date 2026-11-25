@@ -7,8 +7,11 @@ const crypto = require('crypto');
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT) || 8787;
-const DATA_FILE = path.join(ROOT, 'online-data.json');
+const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : ROOT;
+const DATA_FILE = path.join(DATA_DIR, 'online-data.json');
 const INDEX_FILE = path.join(ROOT, 'index.html');
+const CONFIG_FILE = path.join(ROOT, 'online-config.js');
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || '*';
 const BOARD_SIZE = 5;
 const TURN_MS = 60 * 1000;
 const SHAPES = ['triangle', 'circle', 'arrow'];
@@ -20,6 +23,8 @@ const DIRS = [
   { dr: 1, dc: 0, dir: 2 },
   { dr: 0, dc: -1, dir: 3 }
 ];
+
+fs.mkdirSync(DATA_DIR, { recursive: true });
 
 let db = { nextUserId: 1, users: {}, sessions: {}, usernames: {} };
 try {
@@ -561,7 +566,7 @@ function json(res, status, data) {
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'no-store',
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
   });
@@ -688,7 +693,7 @@ function matchResponseFor(userId) {
 async function handleApi(req, res, pathname) {
   if (req.method === 'OPTIONS') {
     res.writeHead(204, {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
     });
@@ -748,6 +753,10 @@ async function handleApi(req, res, pathname) {
       }
       const token = createSession(user);
       return json(res, 200, { token, user: publicUser(user) });
+    }
+
+    if (pathname === '/api/health' && req.method === 'GET') {
+      return json(res, 200, { ok: true, service: 'deathly-hallows-chess' });
     }
 
     const user = authUser(req);
@@ -918,6 +927,23 @@ const server = http.createServer(async (req, res) => {
   const parsed = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   if (parsed.pathname.startsWith('/api/')) {
     return handleApi(req, res, parsed.pathname);
+  }
+  if (parsed.pathname === '/online-config.js') {
+    try {
+      const config = fs.readFileSync(CONFIG_FILE);
+      res.writeHead(200, {
+        'Content-Type': 'application/javascript; charset=utf-8',
+        'Cache-Control': 'no-store'
+      });
+      res.end(config);
+    } catch (err) {
+      res.writeHead(200, {
+        'Content-Type': 'application/javascript; charset=utf-8',
+        'Cache-Control': 'no-store'
+      });
+      res.end('window.DC_ONLINE_API = "";\n');
+    }
+    return;
   }
   if (parsed.pathname === '/' || parsed.pathname === '/index.html') {
     try {

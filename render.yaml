@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: deathly-hallows-chess-online
+    runtime: node
+    plan: starter
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DATA_DIR
+        value: /var/data
+      - key: ALLOWED_ORIGIN
+        sync: false
+    disk:
+      name: online-data
+      mountPath: /var/data
+      sizeGB: 1

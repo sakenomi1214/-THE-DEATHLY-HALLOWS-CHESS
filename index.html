@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- GitHub Pages 等静态托管必须填写已部署的联机服务器地址，例如 https://your-server.example.com -->
+<meta name="dc-online-api" content="">
+<script src="./online-config.js"></script>
 <meta name="theme-color" content="#080a14">
 <title>死亡圣棋 · The Deathly Hallows Chess</title>
 <style>
@@ -2468,7 +2471,22 @@
     undoAvailable: { red: true, blue: true }
   };
 
-  const API_BASE = location.protocol === 'file:' ? 'http://127.0.0.1:8787' : '';
+  function resolveOnlineApiBase() {
+    const candidates = [
+      typeof window.DC_ONLINE_API === 'string' ? window.DC_ONLINE_API : '',
+      document.querySelector('meta[name="dc-online-api"]')?.content || '',
+      (() => { try { return localStorage.getItem('dc_online_api') || ''; } catch (err) { return ''; } })(),
+      new URLSearchParams(location.search).get('api') || ''
+    ];
+    const configured = candidates.map(value => String(value || '').trim()).find(Boolean);
+    if (configured) return configured.replace(/\/+$/, '');
+    if (location.protocol === 'file:') return 'http://127.0.0.1:8787';
+    return '';
+  }
+
+  const API_BASE = resolveOnlineApiBase();
+  const STATIC_ONLY_HOST = /(^|\.)github\.io$|(^|\.)gitlab\.io$|(^|\.)pages\.dev$|(^|\.)netlify\.app$/.test(location.hostname);
+  const ONLINE_CONFIG_HELP = '当前页面是静态托管，未配置联机服务器。请把已部署的 Node 服务地址填入 index.html 的 dc-online-api meta 标签，例如 https://your-server.example.com。GitHub Pages 本身不能运行 server.js。';
   const RANK_EN = ['Apprentice', 'Trainee', 'Official', 'Intermediate', 'Advanced', 'Legend', 'Rule', 'Truth', 'Origin'];
   let onlineToken = '';
   try { onlineToken = localStorage.getItem('dc_online_token') || ''; } catch (err) { onlineToken = ''; }
@@ -5828,6 +5846,9 @@
   }
 
   async function onlineApi(pathname, options = {}) {
+    if (!API_BASE && STATIC_ONLY_HOST) {
+      throw new Error(tr(ONLINE_CONFIG_HELP, 'This static deployment has no online server configured. Put your deployed Node server URL in the dc-online-api meta tag in index.html. GitHub Pages cannot run server.js.'));
+    }
     const headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
     if (onlineToken) headers.Authorization = `Bearer ${onlineToken}`;
     let response;
@@ -5871,6 +5892,18 @@
     stopOnlineMatchPoll();
     showScreen('online');
     onlineAuthError('');
+    if (!API_BASE && STATIC_ONLY_HOST) {
+      showOnlineAuth(tr(ONLINE_CONFIG_HELP, 'This static deployment has no online server configured. Put your deployed Node server URL in the dc-online-api meta tag in index.html. GitHub Pages cannot run server.js.'));
+      return;
+    }
+    if (!API_BASE && location.protocol !== 'file:') {
+      try {
+        await onlineApi('/api/health');
+      } catch (err) {
+        showOnlineAuth(tr(ONLINE_CONFIG_HELP, 'This static deployment has no online server configured. Put your deployed Node server URL in the dc-online-api meta tag in index.html. GitHub Pages cannot run server.js.'));
+        return;
+      }
+    }
     if (!onlineToken) {
       onlineUser = null;
       showOnlineAuth();

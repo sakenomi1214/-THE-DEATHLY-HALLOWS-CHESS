@@ -1,0 +1,12 @@
+online-data.json
+online-data.json.tmp
+.chrome-profile/
+.chrome-online/
+.chrome-undo/
+.test-*.js
+.shot-*.js
+.settle-*.png
+.online-lobby.png
+.select-screen.png
+.close-chrome.js
+.check.js

@@ -1,0 +1,12 @@
+{
+  "name": "deathly-hallows-chess-online",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deathly Hallows Chess with accounts, matchmaking and online play",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
